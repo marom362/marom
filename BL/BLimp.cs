@@ -21,17 +21,11 @@ namespace BL
 
             try
             {
-               // List<Guest> guests = GetListOfGuest();//if the function exists
-                                                                                    /*foreach (Guest person in guests)
-                                                                                    {
-                                                                                        if (person.ID == guest.ID)
-                                                                                            throw new InvalidOperationException();
-                                                                                    }*/
                 FactorySingletonDal.GetInstance.AddGuest(guest);// if the function exists
             }
             catch(InvalidOperationException x)
             {
-                throw x;// in logic way???
+                throw x;
             }
         }
         /// <summary>
@@ -66,6 +60,7 @@ namespace BL
         /// <returns>bool</returns>
         public bool CheckDates(GuestRequest request, HostingUnit unit)
         {
+            
             //HostingUnit unit = FactorySingletonDal.GetInstance.GetHostingUnit(order.HostingUnitKey);
             bool[,] diary = unit.Diary;
             for (int i = request.EntryDate.Month, j = request.EntryDate.Day + 1; i <= request.EntryDate.Month; i++)
@@ -313,8 +308,6 @@ namespace BL
 
                     orders1.Add(item);
 
-                //else if (dates >= numberOfDays) // what for do we need to write it twice
-                //    orders1.Add(item);
             }
             return orders1;
         }
@@ -567,6 +560,20 @@ namespace BL
              x.NumGuests);
 
         }
+        public IEnumerable<IGrouping<int, HostingUnit>> GetUnitsGroupingByOwner()
+        {
+
+            return FactorySingletonDal.GetInstance.GetAllHostingUnits().GroupBy(x =>
+             x.Owner.HostKey);
+
+        }
+        public IEnumerable<IGrouping<Areas, HostingUnit>> GetUnitssGroupingByAreas()
+        {
+
+            return FactorySingletonDal.GetInstance.GetAllHostingUnits().GroupBy(x =>
+             x.Area);
+
+        }
         public void UpdateHostingUnit(HostingUnit unit, string change)
         {
             try
@@ -587,10 +594,96 @@ namespace BL
                 throw n;
             }
         }
-        //public List<Host> GetListOfHosts()
-        //{
-        //    return FactorySingletonDal.GetInstance.GetAllHosts();
-        //}
+        public List<HostingUnit> AllUnitsOfOneHostFittingTorequest(int hostKey, GuestRequest request)
+        {
+            try
+            {
+                List<HostingUnit> units = FactorySingletonDal.GetInstance.GetAllHostingUnits().Where(x =>
+                x.Owner.HostKey == hostKey && IsFitting(x, request)).ToList();
+                return units;
+            }
+            catch (InvalidOperationException h)
+            {
+                throw h;
+            }
+            
+        }
+        public int NumOfClosedOrders(HostingUnit unit)
+        {
+            try
+            {
+                return FactorySingletonDal.GetInstance.GetAllOrders().Count(x =>
+               x.HostingUnitKey == unit.HostingUnitKey&& x.Status==StatusO.ClosedByClientsResponse);
+            }
+            catch (InvalidOperationException h)
+            {
+                throw h;
+            }
+        }
+        public List<HostingUnit> OrderUnitsByPopularity()
+        {
+            try
+            {
+                return FactorySingletonDal.GetInstance.GetAllHostingUnits().OrderByDescending(x => NumOfClosedOrders(x)).ToList();
+            }
+            catch(InvalidCastException x)
+            {
+                throw x;
+            }
+        }
+        public HostingUnit THeMostPopularUnit()
+        {
+            try
+            {
+                return OrderUnitsByPopularity().First();
+            }
+            catch (InvalidCastException x)
+            {
+                throw x;
+            }
+            
+        }
+        public List<HostingUnit> AllUnitsOfOneHost(int hostKey, GuestRequest request)
+        {
+            try
+            {
+                List<HostingUnit> units = FactorySingletonDal.GetInstance.GetAllHostingUnits().Where(x => x.Owner.HostKey == hostKey).ToList();
+                return units;
+            }
+            catch (InvalidCastException x)
+            {
+                throw x;
+            }
+
+        }
+        public List<GuestRequest> AllrequestFittingToUnit(int key, HostingUnit unit)
+        {
+            try
+            {
+                List<GuestRequest> requests = FactorySingletonDal.GetInstance.GetAllGuestRequests().Where(x =>
+                x.GuestRequestKey == key).ToList();
+                return requests;
+            }
+            catch (InvalidOperationException h)
+            {
+                throw h;
+            }
+
+        }
+        public int numOfUnits(Host host)
+        {
+            int num= FactorySingletonDal.GetInstance.GetAllHostingUnits().Count(x => x.Owner == host);
+            return num;
+        }
+        public IEnumerable<IGrouping<int, Host>> GethostsGroupingByNumOfUnits()
+        {
+
+            return FactorySingletonDal.GetInstance.GetAllHosts().GroupBy(x =>
+             numOfUnits(x));
+
+        }
+
+        
     }
 }
 

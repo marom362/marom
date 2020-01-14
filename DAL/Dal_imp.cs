@@ -67,7 +67,6 @@ namespace DAL
             List<HostingUnit> h = DataSource.HostingUnits;
             if (h.Exists(x => x.HostingUnitKey == hu.HostingUnitKey))
             {
-                hu.HostingUnitKey = ++Configuration.HostingUnitKey;
                 DataSource.HostingUnits.Remove(hu);
             }
             else
@@ -221,6 +220,56 @@ namespace DAL
                 DataSource.Guests.Add(guest);
             }
 
+        }
+        public void AddHost(Host host)
+        {
+            var h = DataSource.Hosts;
+            if (h.Exists(x => x.HostKey == host.HostKey))
+            {
+                throw new InvalidOperationException("The host already exists");
+            }
+            else
+            {
+                DataSource.Hosts.Add(host);
+            }
+        }
+        public void DelHost(Host host)
+        {
+            List<Host> h = DataSource.Hosts;
+            if (h.Exists(x => x.HostKey == host.HostKey))
+            {
+                DataSource.Hosts.Remove(host);
+            }
+            else
+            {
+                throw new InvalidOperationException("The host is not exists");
+            }
+        }
+        public void UpdatingHost(Host host)
+        {
+            Host h = DataSource.Hosts.Where(x =>
+            x.HostKey == host.HostKey).SingleOrDefault();
+            if (h == null)
+                throw new InvalidOperationException("This hosting unit is not exist");
+            else
+                h = host;
+        }
+        public Host GetHost(int key)
+        {
+            Host host = DataSource.Hosts.Where(x =>
+            x.HostKey == key).SingleOrDefault();
+            if (host == null)
+                throw new InvalidOperationException("no host has found");
+            else
+                return host;
+        }
+        public List<Host> GetAllHosts()
+        {
+            List<Host> hosts = DataSource.Hosts.Select(x => Copy(x)).ToList();
+            if (hosts == null)
+                throw new InvalidOperationException("no host has found");
+            else
+                return hosts;
         }
     }
 }

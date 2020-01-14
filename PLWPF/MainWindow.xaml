@@ -1,0 +1,54 @@
+﻿<Window x:Class="PLWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PLWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid Margin="0,0,0,0">
+        <Grid.Background>
+            <ImageBrush ImageSource="תמונה צימר.jpg"/>
+        </Grid.Background>
+
+        <Grid Name="StartGrid" Visibility="Collapsed" HorizontalAlignment="Left" Height="420" VerticalAlignment="Top" Width="794" Margin="0,0,-0.4,0">
+            <Image Margin="0,0,-6,0" Source="תמונה צימר.jpg" Stretch="Fill"/>
+            <Button Content="כניסה" HorizontalAlignment="Left" Margin="41,254,0,0" VerticalAlignment="Top" Width="117" Height="53" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"/>
+            <Button Content="הרשמה" HorizontalAlignment="Left" Margin="41,312,0,0" VerticalAlignment="Top" Width="117" Height="54" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="Button_Click"/>
+        </Grid>
+        <Grid Name="NewGuestGrid" Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="733*"/>
+                <ColumnDefinition Width="61*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Background>
+                <SolidColorBrush Color="#FFCAC538" Opacity="0.5"/>
+            </Grid.Background>
+            <TextBlock Name="PersonalDetails" HorizontalAlignment="Left" Margin="632,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="182" Width="128" Foreground="#FF000866" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2"><Run FlowDirection="RightToLeft" Text="תעודת זהות:"/><LineBreak/><Run/><LineBreak/><Run FlowDirection="RightToLeft" Text="שם:"/><LineBreak/><Run FlowDirection="RightToLeft"/><LineBreak/><Run FlowDirection="RightToLeft" Text="שם משפחה:"/><LineBreak/><Run FlowDirection="RightToLeft"/><LineBreak/><Run FlowDirection="RightToLeft" Text="כתובת אימייל:"/><LineBreak/><Run FlowDirection="RightToLeft"/><LineBreak/><Run FlowDirection="RightToLeft" Text="מספר פלאפון:"/><LineBreak/><Run FlowDirection="RightToLeft"/><LineBreak/><Run FlowDirection="RightToLeft"/></TextBlock>
+            <TextBox Name="InsertID" HorizontalAlignment="Left" Height="23" Margin="397,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="208" TextChanged="TextBox_TextChanged"/>
+            <TextBox Name="InsertName" HorizontalAlignment="Left" Height="23" Margin="397,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="208"/>
+            <TextBox Name="InsertFamilyName" HorizontalAlignment="Left" Height="23" Margin="397,195,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="208"/>
+            <TextBox Name="InsertEmail" HorizontalAlignment="Left" Height="23" Margin="397,233,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="208" RenderTransformOrigin="0.208,0.374" TextChanged="Email_TextChanged" CaretBrush="#FFF91111" />
+            <TextBox Name="InsertPhoneNumber" HorizontalAlignment="Left" Height="23" Margin="397,271,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="208" Background="White" Foreground="#FFD11313" BorderBrush="White" TextChanged="InsertPhoneNumber_TextChanged"/>
+            <TextBlock Name="WorngEmail" HorizontalAlignment="Left" Visibility="Collapsed" Margin="468,223,0,0" TextWrapping="Wrap" Text="המייל אינו תקין" VerticalAlignment="Top" FontSize="9" Height="13" RenderTransformOrigin="0.575,-0.933" Width="120" Foreground="Red">
+                <TextBlock.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="34.392"/>
+                    </TransformGroup>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="48" Width="379" FontSize="24" Background="#FFCAC538" Foreground="#FF040C62" Grid.ColumnSpan="2" Margin="415,0,-0.4,0"><Span FlowDirection="RightToLeft"><Run FontWeight="Bold" FontSize="36" Text=" "/><Run FontWeight="Bold" FontSize="36" Text="   "/><Run FontWeight="Bold" FontSize="36" Text="הרשמת אורח לאתר"/><Run FontWeight="Bold" FontSize="36" Text="         "/><Run FontWeight="Bold" FontSize="36" Text="   "/><Run Text="    "/><Run Text="                                                                                 "/></Span></TextBlock>
+            <Button Name="ContinueToRequest" Content="המשך&gt;&gt;" HorizontalAlignment="Left" Margin="111,311,0,0" VerticalAlignment="Top" Width="99" Height="33" Background="#FFCAC538" Foreground="#FF000866" FontWeight="Bold" Click="ContinueToRequest_Click"/>
+            <Rectangle Fill="#FFCAC538" HorizontalAlignment="Left" Height="48" Stroke="#FFCAC538" VerticalAlignment="Top" Width="415"/>
+        </Grid>
+        <Grid Name="NewRequestGrid" Visibility="Collapsed" HorizontalAlignment="Left" Height="420" Margin="0,0,-0.4,0" VerticalAlignment="Top" Width="794">
+            <Grid.Background>
+                <SolidColorBrush Color="#FF719C9F" Opacity="0.65"/>
+            </Grid.Background>
+            <TextBlock HorizontalAlignment="Left" Height="71" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="150" Margin="579,38,0,0"/>
+        </Grid>
+    </Grid>
+</Window>

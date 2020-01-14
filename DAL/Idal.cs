@@ -25,5 +25,10 @@ namespace DAL
         List<Guest> GetAllGuests();
         //List<Host> GetAllHosts();
         void AddGuest(Guest guest);
+        void AddHost(Host host);
+        void DelHost(Host host);
+        void UpdatingHost(Host host);
+        Host GetHost(int key);
+        List<Host> GetAllHosts();
     }
 }

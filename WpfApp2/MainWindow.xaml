@@ -1,0 +1,19 @@
+﻿<Window x:Class="WpfApp2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid Margin="1.2,-0.8,-1.2,0.4" Visibility="Visible">
+
+            <Button Name="Sign_in" Content="כניסה" HorizontalAlignment="Left" Margin="31,328,0,0" VerticalAlignment="Top" Width="92" Click="Sign_in_Click" Background="#FF395ACD" Height="36"/>
+
+            <Button Name ="Sign_up" Content="הרשמה" HorizontalAlignment="Left" Margin="31,281,0,0" VerticalAlignment="Top" Width="92" Click="Sign_up_Click" Height="29" Background="#FF4851B3"/>
+
+        </Grid>
+
+    </Grid>
+</Window>
