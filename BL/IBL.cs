@@ -9,8 +9,10 @@ using DAL;
 namespace BL
 {
     public delegate bool CheckGuestRequest(GuestRequest request);
+    public delegate bool CheckHostingUnit(HostingUnit request);
     public interface IBL
     {
+
         /// <summary>
         /// If the same Guest Request doesn't exist, sends it to DAL to add it
         /// </summary>
@@ -62,25 +64,37 @@ namespace BL
         /// <returns></returns>
         void SendingMail(Order order, GuestRequest request);
         int ClosingOrder(Order order, GuestRequest request, StatusO desiredStatus);
-        List<Order>GetListOfOrders();
+        List<Order> GetListOfOrders();
         /// <summary>
         /// returns list of bank branches
         /// </summary>
         /// <returns></returns>
         List<HostingUnit> AllAvailableOnDates(DateTime date, int num);
         List<HostingUnit> CreateListOfFittingUnits(GuestRequest request);
-        int NumDaysBetween(DateTime date1, DateTime date2=default(DateTime));
-        List<Order>  NumDaysEqualBigger(int num);
+        int NumDaysBetween(DateTime date1, DateTime date2 = default(DateTime));
+        List<Order> NumDaysEqualBigger(int num);
         List<GuestRequest> GuestRequestIf(CheckGuestRequest check);
         int NumOfOrders(GuestRequest request);
         int NumOfOrders(HostingUnit unit);
         IEnumerable<IGrouping<Areas, GuestRequest>> GetRequestsGroupingByAreas();
         IEnumerable<IGrouping<int, GuestRequest>> GetRequestsGroupingByNumGuests();
+        IEnumerable<IGrouping<int, HostingUnit>> GetUnitsGroupingByOwner();
+        IEnumerable<IGrouping<Areas, HostingUnit>> GetUnitssGroupingByAreas();
         List<Guest> GetListOfGuest();
         // List<Host> GetListOfHosts();
         List<BankBranch> getListOfBankBranches();
         void AddGuest(Guest guest);
         List<HostingUnit> CreateListOfFittingUnits(GuestRequest request, List<HostingUnit> myUnits);
         Guest GetGuest(int ID);
+        int NumOfClosedOrders(HostingUnit unit);
+        List<HostingUnit> OrderUnitsByPopularity();
+        HostingUnit THeMostPopularUnit();
+        List<HostingUnit> AllUnitsOfOneHost(int hostKey, GuestRequest request);
+        List<HostingUnit> AllUnitsOfOneHostFittingTorequest(int hostKey, GuestRequest request);
+        int numOfUnits(Host host);
+        bool GuestIsExist(int ID);
+        bool mailGuestIsExist(string mail);
+
+
     }
 }

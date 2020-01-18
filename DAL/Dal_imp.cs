@@ -27,7 +27,7 @@ namespace DAL
             gr.NumGuests = gr.Adults + gr.Children;
             DataSource.GuestRequests.Add(gr);
         }
-       public void UpdatingGuestRequest(GuestRequest gr)
+        public void UpdatingGuestRequest(GuestRequest gr)
         {
             GuestRequest request = DataSource.GuestRequests.Where(req =>
              req.GuestRequestKey == gr.GuestRequestKey).SingleOrDefault();
@@ -47,7 +47,7 @@ namespace DAL
             if (request == null)
                 throw new InvalidOperationException("Doesn't exist");
             return Copy(request);
-       
+
         }
         public void AddHostingUnit(HostingUnit hu)
         {
@@ -67,7 +67,6 @@ namespace DAL
             List<HostingUnit> h = DataSource.HostingUnits;
             if (h.Exists(x => x.HostingUnitKey == hu.HostingUnitKey))
             {
-                hu.HostingUnitKey = ++Configuration.HostingUnitKey;
                 DataSource.HostingUnits.Remove(hu);
             }
             else
@@ -138,7 +137,7 @@ namespace DAL
         }
         List<GuestRequest> Idal.GetAllGuestRequests()
         {
-            List<GuestRequest> requests = 
+            List<GuestRequest> requests =
             (from item in DS.DataSource.GuestRequests
              select Copy(item)
             ).ToList();
@@ -183,11 +182,11 @@ namespace DAL
         //}
         public List<Guest> GetAllGuests()
         {
-          if (DataSource.Guests == null)
+            if (DataSource.Guests == null)
                 throw new InvalidOperationException("thier is no orders");
             List<Guest> guests =
                 (from item in DS.DataSource.Guests
-           select Copy(item)
+                 select Copy(item)
           ).ToList();
 
             //Guest[] guests = new Guest[DataSource.Guests.Count];
@@ -217,10 +216,60 @@ namespace DAL
                 throw new InvalidOperationException("The order alredy exists");
             else
             {
-                
+
                 DataSource.Guests.Add(guest);
             }
 
+        }
+        public void AddHost(Host host)
+        {
+            var h = DataSource.Hosts;
+            if (h.Exists(x => x.HostKey == host.HostKey))
+            {
+                throw new InvalidOperationException("The host already exists");
+            }
+            else
+            {
+                DataSource.Hosts.Add(host);
+            }
+        }
+        public void DelHost(Host host)
+        {
+            List<Host> h = DataSource.Hosts;
+            if (h.Exists(x => x.HostKey == host.HostKey))
+            {
+                DataSource.Hosts.Remove(host);
+            }
+            else
+            {
+                throw new InvalidOperationException("The host is not exists");
+            }
+        }
+        public void UpdatingHost(Host host)
+        {
+            Host h = DataSource.Hosts.Where(x =>
+            x.HostKey == host.HostKey).SingleOrDefault();
+            if (h == null)
+                throw new InvalidOperationException("This hosting unit is not exist");
+            else
+                h = host;
+        }
+        public Host GetHost(int key)
+        {
+            Host host = DataSource.Hosts.Where(x =>
+            x.HostKey == key).SingleOrDefault();
+            if (host == null)
+                throw new InvalidOperationException("no host has found");
+            else
+                return host;
+        }
+        public List<Host> GetAllHosts()
+        {
+            List<Host> hosts = DataSource.Hosts.Select(x => Copy(x)).ToList();
+            if (hosts == null)
+                throw new InvalidOperationException("no host has found");
+            else
+                return hosts;
         }
     }
 }

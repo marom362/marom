@@ -29,7 +29,7 @@ namespace BE
         public int NumGuests { get; set;}
         public override string ToString()
         {
-            string s;
+            //string s;
                 /*$@"status : {Status} 
                 GuestRequestKey : {GuestRequestKey}
                 MailAddress: {MailAddress}

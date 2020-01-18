@@ -8,6 +8,7 @@ namespace BE
 {
     public class Guest
     {
+        public string passward { get; set; }
         public int ID { get; set; }
         public string PrivateName { get; set; }
         public string FamilyName { get; set; }
