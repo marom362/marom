@@ -9,7 +9,7 @@ namespace BE
     public class Guest
     {
         public string passward { get; set; }
-        public int ID { get; set; }
+        //public int ID { get; set; }
         public string PrivateName { get; set; }
         public string FamilyName { get; set; }
         public string MailAddress { get; set; }
@@ -20,8 +20,8 @@ namespace BE
         public override string ToString()
         {
             string information;
-            information = " ID: " + ID.ToString() + ',';
-            information += " PrivateName: " + PrivateName + ',' + " FamilyName: " + FamilyName + ',';
+            //information = " ID: " + ID.ToString() + ',';
+            information = " PrivateName: " + PrivateName + ',' + " FamilyName: " + FamilyName + ',';
             information += " MailAddress: " + MailAddress + '\n';
             information += " PhoneNumber: " + PhoneNumber + '\n';
             information += "BankBranchDetails:" + BankBranchDetails.ToString();

@@ -24,7 +24,7 @@ namespace DAL
         List<BankBranch> GetAllBankBranches();
         List<Guest> GetAllGuests();
         //List<Host> GetAllHosts();
-        void AddGuest(Guest guest);
+        //void AddGuest(Guest guest);
         void AddHost(Host host);
         void DelHost(Host host);
         void UpdatingHost(Host host);

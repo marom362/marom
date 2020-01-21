@@ -11,6 +11,7 @@ namespace DAL
 {
     public class Dal_imp : Idal
     {
+        
         public void AddGuestRequest(GuestRequest gr)
         {
             var g = DataSource.GuestRequests;
@@ -25,6 +26,7 @@ namespace DAL
             }
             gr.GuestRequestKey = ++Configuration.GuestRequestKey;
             gr.NumGuests = gr.Adults + gr.Children;
+            gr.RegistrationDate = DateTime.Now;
             DataSource.GuestRequests.Add(gr);
         }
         public void UpdatingGuestRequest(GuestRequest gr)
@@ -127,14 +129,24 @@ namespace DAL
             else
                 return order;
         }
-        List<HostingUnit> Idal.GetAllHostingUnits()
+        public List<HostingUnit> GetAllHostingUnits()
         {
-            HostingUnit[] units = new HostingUnit[DataSource.HostingUnits.Count];
-            DataSource.HostingUnits.CopyTo(units);
-            if (units == null)
-                throw new InvalidOperationException("thier is no units");
-            return units.ToList<HostingUnit>();
+            /*List<GuestRequest> units =
+            (from item in DS.DataSource.HostingUnits.
+             select Copy(item)
+            ).ToList();
+           if (units == null)
+               throw new InvalidOperationException("thier is no units");
+           return units.ToList<HostingUnit>();
+            List<HostingUnit> units = new List<HostingUnit>();
+            List<HostingUnit> units =
+            (from item in DS.DataSource.HostingUnits
+             select Copy(item)
+            ).ToList();*/
+            return DataSource.HostingUnits;
         }
+
+            
         List<GuestRequest> Idal.GetAllGuestRequests()
         {
             List<GuestRequest> requests =
@@ -157,7 +169,7 @@ namespace DAL
         }
         List<BankBranch> Idal.GetAllBankBranches()
         {
-            BankBranch[] branch = new BankBranch[DS.DataSource.BankBranchs.Count];
+            BankBranch[] branch = new BankBranch[DataSource.BankBranchs.Count];
             DS.DataSource.BankBranchs.CopyTo(branch);
             return branch.ToList();
         }
@@ -203,7 +215,7 @@ namespace DAL
         //        throw new InvalidOperationException("thier is no orders");
         //    return guests.ToList<Guest>();
         //}
-        public void AddGuest(Guest guest)
+        /*public void AddGuest(Guest guest)
         {
             List<Guest> g = DataSource.Guests;
             if (g == null)
@@ -220,7 +232,7 @@ namespace DAL
                 DataSource.Guests.Add(guest);
             }
 
-        }
+        }*/
         public void AddHost(Host host)
         {
             var h = DataSource.Hosts;

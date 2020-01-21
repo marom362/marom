@@ -30,15 +30,33 @@ namespace PLWPF
             {
                 ComboBoxItem newItem = new ComboBoxItem();
                 newItem.Content = (Areas)i;
-                AreaRequest.Items.Add(newItem);
+                insertArea.Items.Add(newItem);
             }
             for (int i = 0; i < 3; i++)
             {
                 ComboBoxItem newItem = new ComboBoxItem();
                 newItem.Content = (Types)i;
-                choseTheType.Items.Add(newItem);
+                insertTheType.Items.Add(newItem);
+            }
+
+
+
+
+            orders.ItemsSource = MyBl.GetListOfOrders();
+            units.ItemsSource = MyBl.AllUnitsOfOneHost(1);
+        }
+        public List<HostingUnit> MyHostingUnits
+        {
+            get
+            {
+                return MyBl.GetListOfUnits(); //MyBl.AllUnitsOfOneHost(tempHost.HostKey);
             }
         }
+        Host tempHost = new Host() { PrivateName = "Meir", HostKey = 1 };
+        GuestRequest currentRequest;
+        Guest currentGuest;
+        HostingUnit unit = new HostingUnit();
+        Order order = new Order();
 
 
 
@@ -115,10 +133,10 @@ namespace PLWPF
 
         private void ContinueToRequest_Click(object sender, RoutedEventArgs e)
         {
-            bool flag=true;
+            bool flag = true;
             try
             {
-                if (InsertID.Text.Length == 0)
+                /*if (InsertID.Text.Length == 0)
                 {
                     flag = false;
                     InsertID.BorderBrush = Brushes.Red;
@@ -131,15 +149,21 @@ namespace PLWPF
                     errorID.Text = "מספר תעודת הזהות אינו תקין";
 
                 }
+                else if (MyBl.GuestIsExist(int.Parse(InsertID.Text)))
+                {
+                    flag = false;
+                    InsertID.BorderBrush = Brushes.Red;
+                    errorID.Text = "מספר תעודת כבר קיים במערכת";
+                }*/
 
             }
-            catch(Exception)
+            catch (Exception)
             {
                 flag = false;
                 InsertID.BorderBrush = Brushes.Red;
                 errorID.Text = "מספר תעודת הזהות אינו תקין";
             }
-            if(InsertEmail.Text.Length==0)
+            if (InsertEmail.Text.Length == 0)
             {
                 flag = false;
                 InsertEmail.BorderBrush = Brushes.Red;
@@ -148,7 +172,13 @@ namespace PLWPF
             else if (!Validation.EmailIsValid(InsertEmail.Text))
             {
                 flag = false;
-                errorMail.Text="כתובת אימייל לא תקינה";
+                errorMail.Text = "כתובת אימייל לא תקינה";
+                InsertEmail.BorderBrush = Brushes.Red;
+            }
+            else if (MyBl.mailGuestIsExist(InsertEmail.Text))
+            {
+                flag = false;
+                errorMail.Text = "כתובת אימייל כבר קיימת במערכת";
                 InsertEmail.BorderBrush = Brushes.Red;
             }
             if (InsertPhoneNumber.Text.Length == 0)
@@ -163,13 +193,13 @@ namespace PLWPF
                 errorPhone.Text = "מספר טלפון לא תקין";
                 InsertPhoneNumber.BorderBrush = Brushes.Red;
             }
-            if(InsertName.Text.Length==0)
+            if (InsertName.Text.Length == 0)
             {
                 flag = false;
                 InsertName.BorderBrush = Brushes.Red;
                 errorName.Text = "שדה חובה";
             }
-            if(InsertFamilyName.Text.Length==0)
+            if (InsertFamilyName.Text.Length == 0)
             {
                 flag = false;
                 InsertFamilyName.BorderBrush = Brushes.Red;
@@ -177,6 +207,21 @@ namespace PLWPF
             }
             if (flag)
             {
+                currentGuest = new Guest();
+                BankBranch branch = new BankBranch();
+                //currentGuest.ID = int.Parse(InsertID.Text);
+                currentGuest.PrivateName = InsertName.Text;
+                currentGuest.FamilyName = InsertFamilyName.Text;
+                currentGuest.MailAddress = InsertEmail.Text;
+                currentGuest.PhoneNumber = InsertPhoneNumber.Text;
+                currentGuest.passward = InsertPassword.Password;
+                branch.BankName = bankName.Text;
+                branch.BankNumber = int.Parse(bankNumber.Text);
+                branch.BranchAddress = branchAddress.Text;
+                branch.BranchCity = branchCity.Text;
+                branch.BranchNumber = int.Parse(branchNumber.Text);
+                currentGuest.BankBranchDetails = branch;
+                currentGuest.BankAccountNumber = int.Parse(acountNumber.Text);
                 NewRequestGrid.Visibility = Visibility.Visible;
                 NewGuestGrid.Visibility = Visibility.Collapsed;
             }
@@ -185,21 +230,21 @@ namespace PLWPF
         {
             if (MyBl.mailGuestIsExist(InsertEmail.Text) || CheckEmail(InsertEmail.Text))
                 return false;
-            if (MyBl.GuestIsExist(int.Parse(InsertID.Text)))
-                return true;
+            //if (MyBl.GuestIsExist(int.Parse(InsertID.Text)))
             return true;
+            
 
         }
 
         private void InsertID_TextChanged(object sender, TextChangedEventArgs e)
         {
             InsertID.BorderBrush = ContinueToRequest.BorderBrush;
-            errorID.Text=string.Empty;
+            errorID.Text = string.Empty;
         }
 
         private void InsertName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            errorName.Text=string.Empty;
+            errorName.Text = string.Empty;
             InsertName.BorderBrush = ContinueToRequest.BorderBrush;
 
         }
@@ -224,31 +269,222 @@ namespace PLWPF
         }
         private bool allDetailsValid()
         {
-            return true;
+            bool flag = false;
+            if (insertNumOFAdults.Text.Length == 0)
+            {
+                flag = false;
+                insertNumOFAdults.BorderBrush = Brushes.Red;
+            }
+
+            return flag;
         }
         private void EndGuestRequest_Click(object sender, RoutedEventArgs e)
         {
-            if(allDetailsValid())
+            if (allDetailsValid())
             {
-                Guest guest = new Guest();
-               // guest.ID = int.Parse(InsertID.Text);
-                guest.MailAddress = InsertEmail.Text;
-                guest.PrivateName = InsertName.Text;
-                guest.FamilyName = InsertFamilyName.Text;
-                guest.passward = InsertPassword.Password;
-                //MyBl.AddGuest(guest);
-                GuestRequest request=new GuestRequest();
-                request.guest = guest;
-                
-                MyBl.AddRequest(request);
+                currentRequest = new GuestRequest();
+                currentRequest.guest = currentGuest;
+                currentRequest.Adults = int.Parse(insertNumOFAdults.Text);
+                currentRequest.Children = int.Parse(insertNumOfChildren.Text);
+                currentRequest.Area = (Areas)insertArea.SelectedIndex;
+                currentRequest.Type = (Types)insertTheType.SelectedIndex;
+                currentRequest.EntryDate = insertRequestDates.SelectedDates.First();
+                currentRequest.ReleaseDate = insertRequestDates.SelectedDates.Last();
+                //currentRequest.Pool = (Options)numberOfOption(insertPool);
+                try
+                {
+                    MyBl.AddRequest(currentRequest);
+                    //MyBl.AddGuest(currentGuest);
+                }
+                catch (Exception)
+                {
+
+                }
+                NewRequestGrid.Visibility = Visibility.Collapsed;
+                GuestGrid.Visibility = Visibility.Visible;
+                welcomeGuest.Text = currentGuest.PrivateName;
+                guestpersonalDedails.Text = currentGuest.ToString();
+                requestDetails.Text = currentRequest.ToString();
+
             }
+
+        }
+        private int numberOfOption(CheckBox a)
+        {
+            if (a.Content.ToString() == "checked")
+                return 0;
+            if (a.Content.ToString() == "unchecked")
+                return 1;
+            else
+                return 2;
 
         }
 
         private void GuestEntery_Click(object sender, RoutedEventArgs e)
         {
-            GuestEntery guest = new GuestEntery();
-            guest.Show();
+            
+        }
+
+        private void LogeOutRequest_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void GuestSignUp_Click(object sender, RoutedEventArgs e)
+        {
+            NewGuestGrid.Visibility = Visibility.Visible;
+            StartGrid.Visibility = Visibility.Hidden;
+        }
+        private void HostSignIn_Click(object sender, RoutedEventArgs e)
+        {
+            StartGrid.Visibility = Visibility.Hidden;
+            HostEntranceGrid.Visibility = Visibility.Visible;
+        }
+        public void GuestSignIn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void HostSignUp_Click(object sender, RoutedEventArgs e)
+        {
+            HostSignUpGrid.Visibility = Visibility.Visible;
+            StartGrid.Visibility = Visibility.Collapsed;
+            WhiteGrid.Visibility = Visibility.Visible;
+            tempHost.HostKey = 0;
+            tempHost.FamilyName = "\0";
+            tempHost.FhoneNumber = "\0";
+            tempHost.MailAddress = "\0";
+
+        }
+
+        //SignUpHost
+        private void ReturnFromSignUpHost_Click(object sender, RoutedEventArgs e)
+        {
+            StartGrid.Visibility = Visibility.Visible;
+            HostSignUpGrid.Visibility = Visibility.Collapsed;
+            WhiteGrid.Visibility = Visibility.Collapsed;
+        }
+        private void Host_Email_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (CheckEmail(HostMail.Text) || HostMail.Text.Length == 0)
+                {
+                    WrongEmail.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    WrongEmail.Visibility = Visibility.Visible;
+                }
+            }
+            catch (NullReferenceException)
+            {
+                WrongEmail = new TextBlock();
+            }
+        }
+        private void SignUpHost_Click(object sender, RoutedEventArgs e)
+        {
+            //bool invalid = false;
+
+            try
+            {
+                InvalidID.Visibility = Visibility.Collapsed;
+                tempHost.HostKey = Int32.Parse(HostID.Text);
+                //invalid = false;
+
+            }
+            catch (FormatException)
+            {
+                InvalidID.Visibility = Visibility.Visible;
+                HostID.Clear();
+                return;
+            }
+            try
+            {
+                InvalidPhone.Visibility = Visibility.Collapsed;
+                int phone = Int32.Parse(HostTelephone.Text);
+                tempHost.FhoneNumber = HostTelephone.Text;
+
+            }
+            catch (FormatException)
+            {
+                InvalidPhone.Visibility = Visibility.Visible;
+                HostTelephone.Clear();
+            }
+            tempHost.PrivateName = HostName.Text;
+            tempHost.FamilyName = HostFamilyName.Text;
+            tempHost.MailAddress = HostMail.Text;
+            bool added = MyBl.AddHost(tempHost);
+            if (!added)
+            {
+                HostAlreadyExists.Visibility = Visibility.Visible;
+                AlreadyExists_Host.Visibility = Visibility.Visible;
+                SignUpHost.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        
+        private void WatchYourRequest_Click(object sender, RoutedEventArgs e)
+        {
+
+
+
+        }
+
+        private void ToGuestPersonalDedails_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void GuestlogOut_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            currentRequest = null;
+            currentGuest = null;
+            InsertEmail.Text = string.Empty;
+            InsertName.Text = string.Empty;
+            InsertID.Text = string.Empty;
+            InsertFamilyName.Text = string.Empty;
+            InsertPassword.Password = string.Empty;
+            insertNumOFAdults.Text = string.Empty;
+            insertNumOfChildren.Text = string.Empty;
+            GuestGrid.Visibility = Visibility.Collapsed;
+            StartGrid.Visibility = Visibility.Visible;
+        }
+
+        private void HostEnter_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Orders_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+        private void closeOrder_Click(object sender, RoutedEventArgs e)
+        {
+            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
+                if (vis is DataGridRow)
+                {
+                    var row = (DataGridRow)vis;
+                    row.DetailsVisibility =
+                    row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                    break;
+                }
+        }
+        private void SendEmail_Click(object sender, RoutedEventArgs e)
+        {
+            orders.DataContext = (Order)((Button)sender).DataContext;
+            //MyBl.ChangeStatusOfOrder(MyBl.GetOrder(int.Parse(orders.DataContext.ToString())), StatusO.MailSent);
+            MyBl.ChangeStatusOfOrder((Order)((Button)sender).DataContext, StatusO.MailSent);
+            sendingEmail.Text = MyBl.SendingMail((Order)((Button)sender).DataContext);
+            sendingEmail.Text+= ((Order)((Button)sender).DataContext).ToString();
+            ((Button)sender).Visibility = Visibility.Collapsed;
+            
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
+

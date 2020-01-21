@@ -62,7 +62,7 @@ namespace BL
         /// returns list of orders
         /// </summary>
         /// <returns></returns>
-        void SendingMail(Order order, GuestRequest request);
+        string SendingMail(Order order);
         int ClosingOrder(Order order, GuestRequest request, StatusO desiredStatus);
         List<Order> GetListOfOrders();
         /// <summary>
@@ -83,17 +83,21 @@ namespace BL
         List<Guest> GetListOfGuest();
         // List<Host> GetListOfHosts();
         List<BankBranch> getListOfBankBranches();
-        void AddGuest(Guest guest);
+        //void AddGuest(Guest guest);
         List<HostingUnit> CreateListOfFittingUnits(GuestRequest request, List<HostingUnit> myUnits);
-        Guest GetGuest(int ID);
+        //Guest GetGuest(int ID);
         int NumOfClosedOrders(HostingUnit unit);
         List<HostingUnit> OrderUnitsByPopularity();
         HostingUnit THeMostPopularUnit();
-        List<HostingUnit> AllUnitsOfOneHost(int hostKey, GuestRequest request);
+        List<HostingUnit> AllUnitsOfOneHost(int hostKey);
         List<HostingUnit> AllUnitsOfOneHostFittingTorequest(int hostKey, GuestRequest request);
         int numOfUnits(Host host);
-        bool GuestIsExist(int ID);
+        //bool GuestIsExist(int ID);
         bool mailGuestIsExist(string mail);
+        bool AddHost(Host host);
+        GuestRequest GetRequest(int id);
+        Host GetHost(int key);
+        Order GetOrder(int key);
 
 
     }

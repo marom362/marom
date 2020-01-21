@@ -19,10 +19,10 @@ namespace BE
         public override string ToString()
         {
             string s;
-            s = $@"Host Key: {HostKey.ToString()}, 
-            Private Name: {PrivateName}, Family Name: {FamilyName}, 
-            Fhone Number: {FhoneNumber.ToString()}, MailAddress: {MailAddress}, 
-            bank Branch: {bankBranch.ToString()}, BankAccountNumber: {BankAccountNumber.ToString()}, CollectionClearance:{CollectionClearance.ToString()} \n";
+            s = "Host Key:" + HostKey.ToString();
+            s += " Private Name: " + PrivateName + "Family Name: " + FamilyName;
+            //s += " Fhone Number: " + FhoneNumber.ToString() + " MailAddress: " + MailAddress; 
+            //s+= " bank Branch: "+bankBranch.ToString()+ " BankAccountNumber: "+BankAccountNumber.ToString()+ " CollectionClearance: "+CollectionClearance.ToString()+ '\n';
             return s;
         }
 

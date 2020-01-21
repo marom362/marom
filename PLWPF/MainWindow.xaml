@@ -5,22 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1000" >
+        Title="MainWindow" Height="700" Width="1400"  >
     <Grid  Name="MainGrid" >
 
         <Grid.Background>
             <ImageBrush ImageSource="תמונה צימר.jpg"/>
         </Grid.Background>
 
-        <Grid Name="StartGrid" Visibility="Collapsed" HorizontalAlignment="Stretch" MinHeight="450" VerticalAlignment="Top" MinWidth="800" Margin="-6,0,-0.4,-30">
-            <Button Name="GuestEntery" Content="כניסה" HorizontalAlignment="Right" Margin="0,167,272,0" VerticalAlignment="Top" MinWidth="117" MinHeight="53" Background="#FFDDD07A" Click="GuestEntery_Click" />
-            <Button Content="הרשמת אורח" HorizontalAlignment="Left" Margin="94,155,0,0" VerticalAlignment="Top" Width="117" Height="54" Background="#FFDDD07A" />
-            <Button Content="כניסת אורח&#xD;&#xA;" Name="GuestEntry" HorizontalAlignment="Stretch" Margin="676,339,35,0" VerticalAlignment="Top" Width="89" Height="39"  Background="#FFDDD07A"/>
-            <Button Content="מארח" HorizontalAlignment="Stretch" Margin="676,81,39,0" VerticalAlignment="Top" Width="85" Height="29" Background="#FFDDD07A"  />
-            <Button Content="מנהל אתר" HorizontalAlignment="Stretch" Margin="267,168,448,0" VerticalAlignment="Top" Width="85" Height="29" RenderTransformOrigin="0.501,0.5" Background="#FFDDD07A" />
-            <Label Content="ברוכים הבאים" HorizontalAlignment="Stretch" Margin="307,10,307,0" VerticalAlignment="Top" Height="113" Width="186" FontSize="24" Foreground="#FF66B78A" FontWeight="Bold"/>
-            <ComboBox HorizontalAlignment="Left" Margin="292,81,0,0" VerticalAlignment="Top" Width="120"/>
-            <Button Content="Button" HorizontalAlignment="Left" Margin="250,281,0,0" VerticalAlignment="Top" Width="75"/>
+        <Grid Name="StartGrid" Visibility="Collapsed" HorizontalAlignment="Stretch" MinHeight="420" VerticalAlignment="Top" MinWidth="794" Margin="0,0,-0.4,0">
+            <Image Margin="0,0,-6,0" Source="תמונה צימר.jpg" Stretch="Fill"/>
+            <Button Name="HostEnter" Content="כניסה" HorizontalAlignment="Center" Margin="41,254,0,0" VerticalAlignment="Top" Width="117" Height="53" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="HostEnter_Click"/>
+            <Button Content="הרשמה" HorizontalAlignment="Center" Margin="41,312,0,0" VerticalAlignment="Top" Width="117" Height="54" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="Button_Click"/>
+            <Button Content="אורח" Name ="GuestSignUp" HorizontalAlignment="Center" Visibility="Collapsed" VerticalAlignment="Top" Width="75" Margin="210,312,0,0" Height="22" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="GuestSignUp_Click"/>
+            <Button Content="מארח" Name="HostSignUp" HorizontalAlignment="Center" Visibility="Collapsed" Height="22" Margin="210,339,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.513,1.305" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="HostSignUp_Click"/>
+            <Button Content="אורח" Name ="GuestSignIn" HorizontalAlignment="Center" Visibility="Collapsed" VerticalAlignment="Top" Width="75" Margin="210,285,0,0" Height="22" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="GuestSignIn_Click"/>
+            <Button Content="מארח" Name="HostSignIn" HorizontalAlignment="Center" Visibility="Collapsed" Height="22" Margin="210,254,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.513,1.305" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="HostSignIn_Click"/>
+        </Grid>
+
+        <Grid Name="WhiteGrid" Visibility="Collapsed" Background ="AntiqueWhite"></Grid>
+        <Grid Name ="HostSignUpGrid" Visibility="Collapsed" Opacity="0.8" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="794" Margin="0,0,-2,0" RenderTransformOrigin="0.531,0.512">
+            <Grid.Background>
+                <ImageBrush  ImageSource="SealPicture.jpg"></ImageBrush>
+            </Grid.Background>
+            <TextBox Name ="HostID" MaxLength="9" HorizontalAlignment="Left" Height="27" Margin="522,53,0,0"  TextWrapping="Wrap" Text="מספר זהות"  VerticalAlignment="Top" Width="216"/>
+            <TextBox Name ="HostName" HorizontalAlignment="Left" Height="27" Margin="522,95,0,0" TextWrapping="Wrap" Text="שם פרטי" VerticalAlignment="Top" Width="216"/>
+            <TextBox Name = "HostFamilyName" HorizontalAlignment="Left" Height="27" Margin="522,137,0,0" TextWrapping="Wrap" Text="שם משפחה" VerticalAlignment="Top" Width="216"/>
+            <TextBox Name ="HostTelephone" HorizontalAlignment="Left" Height="27" MaxLength ="10" Margin="522,179,0,0" TextWrapping="Wrap" Text="מספר טלפון" VerticalAlignment="Top" Width="216"/>
+            <TextBox Name ="HostMail" HorizontalAlignment="Left" Height="27" Margin="522,221,0,0" TextWrapping="Wrap" Text="כתובת אי מייל" TextChanged="Host_Email_TextChanged" VerticalAlignment="Top" Width="216"/>
+            <TextBlock x:Name="WrongEmail" HorizontalAlignment="Left" Height="27" Margin="374,221,0,0" Visibility ="Collapsed" Foreground="Red" TextWrapping="Wrap" FontSize = "18" FontWeight="Heavy" VerticalAlignment="Top" Width="216" Text="אי מייל לא תקין"></TextBlock>
+            <Button Name ="ReturnFromSignUpHost" Content="⇦" FontSize="25" FontWeight="Bold" Background="#4682AE" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.575,-0.933" Width="45" Height="45" Click ="ReturnFromSignUpHost_Click" Margin="41,10,0,0"/>
+            <Button Content="הרשם אותי" Name ="SignUpHost" FontSize ="20" Background="#6495ED" Foreground="#191970" HorizontalAlignment="Left" Height="58" Margin="67,327,0,0" VerticalAlignment="Top" Width="113" Click="SignUpHost_Click"/>
+            <TextBlock Name ="InvalidID" Visibility ="Collapsed" HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="Red"  Text="מספר זהות שהוקש מכיל תווים לא חוקיים" VerticalAlignment="Bottom" Margin="247,0,0,333" Width="270" Height="32"/>
+            <TextBlock Name ="InvalidPhone" Visibility ="Collapsed" HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="Red"  Text="מספר טלפון שהוקש מכיל תווים לא חוקיים" VerticalAlignment="Bottom" Margin="247,0,0,203" Width="270" Height="32"/>
+            <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <TextBlock Name="HostAlreadyExists" Visibility="Collapsed" HorizontalAlignment="Left" Height="37" Margin="522,327,-114,0" TextWrapping="Wrap" FontSize="20" FontWeight="Bold" Text="הנך כבר קיים במערכת" VerticalAlignment="Top" Width="386"/>
+            <Button Content="לעמוד האישי שלך" Name ="AlreadyExists_Host" FontSize="20" Visibility ="Collapsed" Background="#6495ED" Foreground="#191970" HorizontalAlignment="Left" Height="58" Margin="327,327,0,0" VerticalAlignment="Top" Width="164"/>
+
+
+        </Grid>
+        <Grid Name="HostEntranceGrid" HorizontalAlignment="Left" Height="448" Margin="0,-29,-2,0" Visibility ="Collapsed" VerticalAlignment="Top" Width="794">
+            <Grid.Background>
+                <ImageBrush  ImageSource="SeaPicyure.jpg"></ImageBrush>
+            </Grid.Background>
         </Grid>
         <Grid Name="NewGuestGrid" Visibility="Collapsed" HorizontalAlignment="Stretch"  >
             <Grid.Background>
@@ -58,47 +84,171 @@
             <TextBlock Name="ErrorNumberAcount"  HorizontalAlignment="Center" Margin="121,305,522.6,0" TextWrapping="Wrap" Foreground="Red" Text="שדה חובה" VerticalAlignment="Top" FontWeight="Bold" FontSize="9"/>
 
         </Grid>
-        <Grid Name="NewRequestGrid" Visibility="Visible" Margin="0,0,-0.4,0">
+        <Grid Name="NewRequestGrid" Visibility="Collapsed" Margin="0,0,-0.4,0">
             <Grid.Background>
                 <SolidColorBrush Color="White" Opacity="0.65"/>
             </Grid.Background>
-            <ComboBox Name="AreaRequest" HorizontalAlignment="Stretch" Margin="535,118,139,0" VerticalAlignment="Top" Width="120" />
-            <Label Content="איזור הנופש&#xA;" HorizontalAlignment="Stretch" Margin="686,116,17.6,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FF000866" Width="90" Height="41"/>
+            <ComboBox Name="insertArea" HorizontalAlignment="Center" Margin="407,174,770,0"  SelectedIndex="0" VerticalAlignment="Top" Width="217" Height="32" >
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="#FFFDFDFD" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+            </ComboBox>
+            <TextBlock HorizontalAlignment="Stretch" Margin="658,173,581,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="20" Foreground="#FF000866" Height="24" Text=":איזור הנופש"/>
             <GridSplitter HorizontalAlignment="Stretch" MinHeight="60" Margin="0,0,0,0" VerticalAlignment="Top" MinWidth="794" Background="#FFDDD07A" BorderBrush="#FFEBE1A4"/>
             <Rectangle  Fill="#FFF0EDA3" HorizontalAlignment="Stretch"  MinHeight="48" VerticalAlignment="Top" MinWidth="794" Margin="0,0,-0.4,0" Stroke="#FFF6F4C4"/>
 
-            <Label Content="עיר" HorizontalAlignment="Stretch" Margin="465,112,273,0" VerticalAlignment="Top" Width="56" FontSize="14" FontWeight="Bold" Foreground="#FF000866"/>
-            <TextBox HorizontalAlignment="Stretch" Height="23" Margin="340,117,334,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FFABADB3" />
-            <Button Content="סיום" Name="EndGuestRequest" HorizontalAlignment="Stretch" Margin="61,344,634.6,0" Width="98" Height="48" VerticalAlignment="Top" Background="#FF1A7E97" Foreground="#FFC3BE92" FontWeight="Bold" FontSize="16" Click="EndGuestRequest_Click" />
-            <Label Content="תאריך הנופש" HorizontalAlignment="Stretch" Margin="686,74,18,0" VerticalAlignment="Top" Width="90"/>
-            <Label Content="סוג הנופש" HorizontalAlignment="Stretch" Margin="686,157,28,0" VerticalAlignment="Top" Width="80"/>
-            <ComboBox HorizontalAlignment="Stretch" Name="choseTheType" Margin="535,160,139,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.088,0.576" />
-            <Label Content="מספר מבוגרים" Name="theNunber" HorizontalAlignment="Stretch" Margin="676,204,23,0" VerticalAlignment="Top"/>
-            <TextBox HorizontalAlignment="Stretch" Height="23" Margin="551,208,123,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-            <Label Content="מספר ילדים" HorizontalAlignment="Stretch" Margin="451,204,263,0" VerticalAlignment="Top" Width="80"/>
-            <TextBox HorizontalAlignment="Stretch" Height="23" Margin="315,208,359,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-            <TextBlock HorizontalAlignment="Stretch" Margin="676,266,49,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="69"><Run FlowDirection="RightToLeft" Text="בריכה:"/></TextBlock>
-            <StackPanel HorizontalAlignment="Center" Height="53" Margin="612,291,103,0" VerticalAlignment="Top">
-                <RadioButton Content="כן"/>
-                <RadioButton Content="לא" Margin="0,0,0.4,0"/>
-                <RadioButton Content="לא משנה"/>
-            </StackPanel>
-            <StackPanel HorizontalAlignment="Center" Height="53" Margin="483,291,244,0" VerticalAlignment="Top">
-                <RadioButton Content="כן"/>
-                <RadioButton Content="לא" Margin="0,0,0.4,0"/>
-                <RadioButton Content="לא משנה"/>
-            </StackPanel>
-            <StackPanel HorizontalAlignment="Center" Height="53" Margin="340,291,388,0" VerticalAlignment="Top">
-                <RadioButton Content="כן"/>
-                <RadioButton Content="לא" Margin="0,0,0.4,0"/>
-                <RadioButton Content="לא משנה"/>
-            </StackPanel>
-            <StackPanel HorizontalAlignment="Center" Height="53" Margin="195,291,532,0" VerticalAlignment="Top">
-                <RadioButton Content="כן"/>
-                <RadioButton Content="לא" Margin="0,0,0.4,0"/>
-                <RadioButton Content="לא משנה"/>
-            </StackPanel>
-            <Button Name="BackToFersonalDedails" Content="חזרה לפרטים אישיים" HorizontalAlignment="Left" Margin="628,373,0,0" VerticalAlignment="Top" Width="129" Click="BackToFersonalDedails_Click"/>
+            <Label Content=":עיר" HorizontalAlignment="Center" Margin="312,171,1026,0" VerticalAlignment="Top" Width="56" FontSize="20" FontWeight="Bold" Foreground="#FF000866" RenderTransformOrigin="-1.307,1.957"/>
+            <TextBox HorizontalAlignment="Center" Height="31" Margin="83,175,1102,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209" BorderBrush="#FFABADB3" />
+            <Button Content="סיום" Name="EndGuestRequest" HorizontalAlignment="Center" Margin="181,557,1115,0" Width="98" Height="48" VerticalAlignment="Top" Background="#FF1A7E97" Foreground="#FFC3BE92" FontWeight="Bold" FontSize="16" Click="EndGuestRequest_Click" />
+            <TextBlock Text="תאריך הנופש" HorizontalAlignment="Center" Margin="1067,127,152,0" VerticalAlignment="Top" Width="175" FontSize="24" Height="43" Foreground="#FF399427" FontWeight="Bold"/>
+            <TextBlock Text=":סוג הנופש" HorizontalAlignment="Center" Margin="692,378,565,0" VerticalAlignment="Top" Width="137" RenderTransformOrigin="0.485,1.216" FontSize="24" Height="41" FontWeight="Bold" Foreground="#FF399427"/>
+            <ComboBox HorizontalAlignment="Center" Name="insertTheType" Margin="433,377,770,0" VerticalAlignment="Top" Width="191" RenderTransformOrigin="0.088,0.576" Height="27" />
+            <TextBlock Text="מספר מבוגרים" Name="theNunber" HorizontalAlignment="Center" Margin="639,282,593,0" VerticalAlignment="Top"  FontSize="20" Height="35" Width="162" Foreground="#FF000866" FontWeight="Bold"/>
+            <TextBox Name="insertNumOFAdults" HorizontalAlignment="Center" Height="37" Margin="433,280,770,0" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="120" Width="191"/>
+            <TextBlock Text="מספר ילדים" HorizontalAlignment="Center" Margin="297,282,961,0" VerticalAlignment="Top" Width="136" FontSize="20" Height="25" Foreground="#FF000866" FontWeight="Bold" RenderTransformOrigin="0.529,3.808"/>
+            <TextBox Name="insertNumOfChildren" HorizontalAlignment="Center" Height="37" Margin="83,280,1102,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
+            <Button Name="BackToFersonalDedails" Content="חזרה לפרטים אישיים" HorizontalAlignment="Left" Margin="746,610,0,0" VerticalAlignment="Top" Width="129" Click="BackToFersonalDedails_Click"/>
+            <Calendar Name="insertRequestDates" SelectionMode="SingleRange"  HorizontalAlignment="Left" Margin="938,176,0,0" VerticalAlignment="Top" Height="182" Width="210"/>
+            <CheckBox Name="insertPool" IsThreeState="True" Content="בריכה" Foreground="#FF072251" HorizontalAlignment="Center" Margin="689,438,599,0" VerticalAlignment="Top" Height="34" Width="106" FontSize="20" FontWeight="Bold" Background="White" />
+            <CheckBox Name="insertJacuzz" IsThreeState="True" Content="ג'קוזי" Foreground="#FF072251" HorizontalAlignment="Center" Margin="542,438,746,0" VerticalAlignment="Top" Height="34" Width="106" FontSize="20" FontWeight="Bold" Background="White" />
+            <CheckBox Name="insertGarden" IsThreeState="True" Content="גינה" Foreground="#FF072251" HorizontalAlignment="Center" Margin="407,438,872,0" VerticalAlignment="Top" Height="34" Width="115" FontSize="20" FontWeight="Bold" Background="White" />
+            <CheckBox Name="insertAtrctions" IsThreeState="True" Content="אטרקציות" Foreground="#FF072251" HorizontalAlignment="Center" Margin="252,438,1006,0" VerticalAlignment="Top" Height="34" Width="136" FontSize="20" FontWeight="Bold" Background="White" />
+            <TextBlock HorizontalAlignment="Center" Margin="733,127,564,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" FontWeight="Bold" Foreground="#FF399427" Text="מיקום" Height="43" Width="97"/>
+            <TextBlock HorizontalAlignment="Left" Margin="652,245,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" FontWeight="Bold" Foreground="#FF399427"><Run FlowDirection="RightToLeft" Text="מספר מתארחים"/></TextBlock>
+
         </Grid>
+        <Grid Name="GuestGrid" HorizontalAlignment="Stretch" Visibility="Collapsed" MinHeight="420" VerticalAlignment="Top" MinWidth="994" Margin="0,0,-0.4,0">
+            <Grid.Background>
+                <ImageBrush ImageSource="תמונה ים.jpg"/>
+            </Grid.Background>
+            <TextBlock Name="welcomeGuest"  HorizontalAlignment="Center" Margin="824,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Width="99" Foreground="Black" />
+            <Button Name="logeOutRequest" Content="התנתק" HorizontalAlignment="Center" Margin="403,0,811,0" VerticalAlignment="Top" Width="180" Click="LogeOutRequest_Click" Height="32"/>
+            <TabControl Name="GuestlogOut" HorizontalAlignment="Stretch" MinHeight="670" Margin="0,0,0,0" VerticalAlignment="Top" SelectionChanged="GuestlogOut_SelectionChanged">
+                <TabControl.Background>
+                    <ImageBrush ImageSource="תמונה ים.jpg"/>
+                </TabControl.Background>
+                <TabItem Header="פרטים אישיים" Width="200" Height="30">
+
+                    <Grid Margin="0,0,0,0" >
+                        <Grid.Background>
+                            <ImageBrush ImageSource="תמונה ים.jpg"/>
+                        </Grid.Background>
+                        <TextBlock Name="guestpersonalDedails" HorizontalAlignment="Center" Margin="1102,-5,207,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="30" MinWidth="79" >
+                            <TextBlock.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleY="-1"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="דרישת אירוח" Width="200" Height="30">
+                    <Grid>
+                        <Grid.Background>
+                            <ImageBrush ImageSource="תמונה ים.jpg"/>
+                        </Grid.Background>
+                        <TextBlock Name="requestDetails" HorizontalAlignment="Left" Margin="307,137,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+        </Grid>
+        <Grid Name="RequestGrid" Visibility="Collapsed" HorizontalAlignment="Stretch" MinHeight="435" Margin="0,-2,-0.4,0" VerticalAlignment="Top" MinWidth="994" Height="670">
+
+            <Calendar HorizontalAlignment="Left" Margin="1031,112,0,0" VerticalAlignment="Top"/>
+            <ComboBox Name="RequestArea" HorizontalAlignment="Center" Margin="429,112,445,0"  SelectedIndex="0" VerticalAlignment="Top" Width="120" />
+            <TextBlock HorizontalAlignment="Stretch" Margin="754,111,478,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FF000866" Height="24" Text=":איזור הנופש"/>
+            <GridSplitter HorizontalAlignment="Stretch" MinHeight="60" Margin="0,0,0,0" VerticalAlignment="Top" MinWidth="794" Background="#FFDDD07A" BorderBrush="#FFEBE1A4"/>
+            <Rectangle  Fill="#FFF0EDA3" HorizontalAlignment="Stretch"  MinHeight="48" VerticalAlignment="Top" MinWidth="794" Margin="0,0,0,0" Stroke="#FFF6F4C4"/>
+
+            <Label Content=":עיר" HorizontalAlignment="Center" Margin="514,111,824,0" VerticalAlignment="Top" Width="56" FontSize="14" FontWeight="Bold" Foreground="#FF000866"/>
+            <TextBox HorizontalAlignment="Center" Height="23" Margin="170,111,704,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" BorderBrush="#FFABADB3" />
+            <TextBlock Text="תאריך הנופש" HorizontalAlignment="Center" Margin="874,85,30,0" VerticalAlignment="Top" Width="90"/>
+            <TextBlock Text="סוג הנופש" HorizontalAlignment="Center" Margin="665,210,249,0" VerticalAlignment="Top" Width="80"/>
+            <ComboBox HorizontalAlignment="Center" Name="requestType" Margin="521,210,353,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.088,0.576" />
+            <TextBlock Text="מספר מבוגרים" Name="requestNunber" HorizontalAlignment="Center" Margin="655,160,249,0" VerticalAlignment="Top" Width="90"/>
+            <TextBox HorizontalAlignment="Center" Height="23" Margin="530,157,344,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <Label Content="מספר ילדים" HorizontalAlignment="Center" Margin="450,157,464,0" VerticalAlignment="Top" Width="80"/>
+            <TextBox HorizontalAlignment="Center" Height="23" Margin="314,160,560,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBlock HorizontalAlignment="Stretch" Margin="762,266,163,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="69"><Run FlowDirection="RightToLeft" Text="בריכה:"/></TextBlock>
+            <StackPanel HorizontalAlignment="Center" Height="53" Margin="709,279,218,0" VerticalAlignment="Top">
+                <RadioButton Content="כן"/>
+                <RadioButton Content="לא"/>
+                <RadioButton Content="לא משנה"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" Height="53" Margin="583,279,344,0" VerticalAlignment="Top">
+                <RadioButton Content="כן"/>
+                <RadioButton Content="לא" Margin="0,0,0.4,0"/>
+                <RadioButton Content="לא משנה"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" Height="53" Margin="439,279,488,0" VerticalAlignment="Top">
+                <RadioButton Content="כן"/>
+                <RadioButton Content="לא" Margin="0,0,0.4,0"/>
+                <RadioButton Content="לא משנה"/>
+            </StackPanel>
+        </Grid>
+        <TabControl HorizontalAlignment="Stretch" MinHeight="100" Margin="0,0,-0.4,0" VerticalAlignment="Top" MinWidth="100" Height="670">
+            <TabControl.Background>
+                <ImageBrush ImageSource="SeaPicyure.jpg"/>
+            </TabControl.Background>
+            <TabItem Header="יחידות אירוח" Width="200" Height="50" FontSize="24">
+                <Grid>
+                    <Grid.Background>
+                        <ImageBrush ImageSource="SeaPicyure.jpg"/>
+                    </Grid.Background>
+                    <DataGrid Name="units" HorizontalAlignment="Left" CanUserAddRows="True" ItemsSource="{Binding MyHostingUnits}" Height="511" Margin="34,10,0,0" VerticalAlignment="Top" Width="1304">
+                        <DataGrid.Columns>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Content="הוספה" Name="Add" HorizontalAlignment="Left" Margin="166,560,0,0" VerticalAlignment="Top" Width="75" Click="Add_Click" />
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="287,560,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="417,560,0,0" VerticalAlignment="Top" Width="75"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="הזמנות" Width="200" Height="50" FontSize="24">
+                <Grid>
+                    <Grid.Background>
+                        <ImageBrush ImageSource="SeaPicyure.jpg"/>
+                    </Grid.Background>
+                    <DataGrid Name="orders" AutoGenerateColumns="False" CanUserAddRows="True" HorizontalAlignment="Center" Height="359" ItemsSource="{Binding MyHostingUnits}" Margin="226,114,199,0" VerticalAlignment="Top" Width="963" SelectionChanged="Orders_SelectionChanged">
+                        <DataGrid.Columns >
+                            <DataGridTextColumn x:Name="OrderNumber" Header = "מספר הזמנה"  Binding = "{Binding OrderKey}" />
+                            <DataGridTextColumn Header = "מספר יחידת אירוח" Binding = "{Binding HostingUnitKey}" />
+                            <DataGridTextColumn Header="סטטוס" Binding="{Binding Status}" />
+                            <DataGridTemplateColumn Header="פרטי יחידה">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button  Name="closeOrder" BorderThickness="0"  />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn x:Name="SendEmail" Header="שלח" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button  Content="שלח" BorderThickness="0" IsEnabled="True" Click="SendEmail_Click" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="פרטי יחידה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="closeOrder_Click" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <TextBlock Name="sendingEmail" HorizontalAlignment="Center" Margin="485,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top"    MinHeight="114" MinWidth="194"><Run FlowDirection="RightToLeft" Text=""/></TextBlock>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>

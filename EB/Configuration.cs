@@ -8,7 +8,7 @@ namespace BE
 {
     public class Configuration
     {
-        public static int GuestRequestKey = 10000000;
+        public static int GuestRequestKey = 10000005;
         public static int HostingUnitKey = 10000000;
         public static int OrderKey = 10000000;
         public static int NumCommission=10;

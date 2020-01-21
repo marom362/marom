@@ -12,10 +12,13 @@ namespace BE
         public Areas Area { get; set; }
         public bool Pool { get; set; }
         public bool Jacuzz { get; set; }
+        public bool Garden { get; set; }
+        public bool ChildrenAtraction { get; set; }
+        public string HostingUnitName { get; set; }
         public string SubArea { get; set; }
         public Types Type { get; set; }
+        public int numOfMaxGuests { get; set; }
         public Host Owner { get; set; }
-        public string HostingUnitName { get; set; }
         public bool[,] Diary = new bool[12, 31];
         /*public bool this[DateTime i]
         {

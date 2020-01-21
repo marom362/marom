@@ -9,9 +9,14 @@ namespace BE
     public class GuestRequest
     {
         public int GuestRequestKey { get; set; }
-        // public string PrivateName { get; set; }
-        // public string FamilyName { get; set; }
-        // public string MailAddress { get; set; }
+        /*public string password { get; set; }
+        public string PrivateName { get; set; }
+        public string FamilyName { get; set; }
+        public string MailAddress { get; set; }
+        public string PhoneNumber { get; set; }
+        public BankBranch BankBranchDetails { get; set; }
+        public int BankAccountNumber { get; set; }
+        public bool CollectionClearance { get; set; }*/
         public Guest guest { get; set; }
         public StatusGR Status { get; set; }
         public DateTime RegistrationDate { get; set; }
@@ -53,7 +58,7 @@ namespace BE
             information += " Registration Date: " + RegistrationDate.Day.ToString() +'.'+ RegistrationDate.Month.ToString() +'.'+ RegistrationDate.Year.ToString()+',';
             information += " Entry Date: "+ EntryDate.Day.ToString() + '.'+ EntryDate.Month.ToString() + ','+ EntryDate.Year.ToString() + ',';
             information += " release date: " + ReleaseDate.Day.ToString() + ',' + ReleaseDate.Month.ToString() + ',' + ReleaseDate.Year.ToString() + '\n';
-            information += " Area: " + Area.ToString()+','+ " SubArea: " + SubArea.ToString() + ',';
+            information += " Area: " + Area.ToString()+','+ " SubArea: " + SubArea + ',';
             information += " Type: " + Type.ToString() + ',';
             information += " Adults: " + Adults.ToString() + ','+" Children:" + Children.ToString() + ',';
             information += " pool:" + Pool.ToString() + ',' + " Jacuzz:" + Jacuzz.ToString() + ',' + " Garden:" + Garden.ToString() + ',' + " ChildrensAttractions:" + ChildrensAttractions.ToString() + ',';

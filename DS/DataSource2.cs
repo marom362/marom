@@ -7,7 +7,7 @@ using BE;
 
 namespace DS
 {
-    public static class DataSource
+    public static class DataSource2
     {
         public static List<HostingUnit> HostingUnits = new List<HostingUnit>()
         {
@@ -76,113 +76,13 @@ namespace DS
                 numOfMaxGuests=3
             }
         };
-    
-
-    public static List<Guest> Guests = new List<Guest>();
-        public static List<Host> Hosts = new List<Host>()
-        {
-            new Host()
-            {
-                HostKey=1,
-                FamilyName ="Meir",
-                PrivateName="Moria",
-                FhoneNumber="0527264891",
-                MailAddress="Moria@gmail.com",
-                bankBranch=new BankBranch(){BankNumber=122,BankName ="הפועלים",BranchNumber = 35,
-                BranchAddress = "הרצל 7",BranchCity = "קרית אונו"},
-                BankAccountNumber=3152667,
-                CollectionClearance=false
-            },
-
-            new Host()
-            {
-                HostKey=3,
-                FamilyName ="Levi"
-
-            }
-
-        };
-        public static List<GuestRequest> GuestRequests = new List<GuestRequest>()
-        {
-            new GuestRequest()
-            {
-               GuestRequestKey=100000002,
-               /*guest={PrivateName= "Shalom",
-               FamilyName= "Tal",
-               MailAddress="shalomT@gmail.com",
-               BankAccountNumber=2245,
-               },*/
-               Status= StatusGR.Open,
-               RegistrationDate=new DateTime(2019,8,6),
-               EntryDate=new DateTime(2020,5,4),
-               ReleaseDate=new DateTime(2020,5,8),
-               Area= Areas.Center,
-              /* subArea= Enums.SubArea.TelAviv*/
-               Type= Types.Zimmer,
-               Adults=2,
-               Children=6,
-               Pool= Options.Possible,
-               Garden= Options.Possible,
-               ChildrensAttractions= Options.NotIntresting,
-               Jacuzz= Options.Must,
-               NumGuests=8
-            },
-
-            new GuestRequest()
-            {
-               GuestRequestKey=100000003,
-               /*guest={PrivateName= "Shachar",
-               FamilyName= "Biton",
-               MailAddress="shacharB@gmail.com",
-               BankAccountNumber=12366 },*/
-               Status= StatusGR.Open,
-               RegistrationDate=new DateTime(2019,12,1),
-               EntryDate=new DateTime(2020,2,1),
-               ReleaseDate=new DateTime(2020,2,7),
-               Area= Areas.North,
-              /* subArea= Enums.SubArea.TelAviv*/
-               Type= Types.Hotel,
-               Adults=4,
-               Children=10,
-               Pool= Options.Must,
-               Garden= Options.NotIntresting,
-               ChildrensAttractions= Options.Must,
-               Jacuzz= Options.Must,
-               NumGuests=14
-            },
-
-            new GuestRequest()
-            {
-               GuestRequestKey=100000004,
-               /*guest={PrivateName= "Moria",
-               FamilyName= "Ariel",
-               MailAddress="moriaA@gmail.com",
-               BankAccountNumber =664435 },*/
-               Status= StatusGR.Open,
-               RegistrationDate=new DateTime(2020,1,20),
-               EntryDate=new DateTime(2020,4,29),
-               ReleaseDate=new DateTime(2020,5,4),
-               Area= Areas.All,
-              /* subArea= Enums.SubArea.TelAviv*/
-               Type= Types.Camping,
-               Adults=8,
-               Children=0,
-               Pool= Options.Possible,
-               Garden= Options.Possible,
-               ChildrensAttractions= Options.Must,
-               Jacuzz= Options.Possible,
-               NumGuests=8
-            }
-        };
-
-        
-
+        public static List<GuestRequest> GuestRequests;
         public static List<Order> Orders = new List<Order>()
         {
             new Order()
             {
-                HostingUnitKey=100000002,
-                GuestRequestKey=100000002,
+                HostingUnitKey=200000002,
+                GuestRequestKey=300000002,
                 OrderKey=10000001,
                 CreateDate=new DateTime(2020,3,20),
                 OrderDate=new DateTime(2020,3,28),
@@ -190,8 +90,8 @@ namespace DS
 
             new Order()
             {
-                HostingUnitKey=100000003,
-                GuestRequestKey=100000003,
+                HostingUnitKey=200000003,
+                GuestRequestKey=300000003,
                 OrderKey=10000002,
                 CreateDate=new DateTime(2020,4,29),
                 OrderDate=new DateTime(2020,5,1),
@@ -199,14 +99,13 @@ namespace DS
 
             new Order()
             {
-                HostingUnitKey=100000003,
-                GuestRequestKey=100000004,
+                HostingUnitKey=200000003,
+                GuestRequestKey=300000004,
                 OrderKey=10000003,
                 CreateDate=new DateTime(2020,7,5),
                 OrderDate=new DateTime(2020,7,15),
             }
         };
-
         public static List<BankBranch> BankBranchs = new List<BankBranch>()
         {
             new BankBranch()
@@ -259,9 +158,5 @@ namespace DS
 
             }
         };
-        
     }
 }
-
-
-

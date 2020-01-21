@@ -17,7 +17,7 @@ namespace BL
         /// If the same Guest Request doesn't exist, sends it to DAL to add it
         /// </summary>
         /// <param name="request"></param>
-        public void AddGuest(Guest guest)
+        /*public void AddGuest(Guest guest)
         {
 
             try
@@ -28,7 +28,7 @@ namespace BL
             {
                 throw x;
             }
-        }
+        }*/
         /// <summary>
         /// If the same Guest Request doesn't exist, sends it to DAL to add it
         /// </summary>
@@ -167,6 +167,7 @@ namespace BL
                 if (order.Status == StatusO.ClosedByClientsResponse && order.Status == StatusO.ClosedBecauseofClient)
                     throw new InvalidOperationException();
                 order.Status = status;
+                FactorySingletonDal.GetInstance.UpdatingOrder(order);
             }
             catch (KeyNotFoundException h)// where from???
             {
@@ -185,7 +186,7 @@ namespace BL
                 throw j;
             }
         }
-        public Guest GetGuest(int ID)
+        /*public Guest GetGuest(int ID)
         {
             try
             {
@@ -199,8 +200,8 @@ namespace BL
             {
                 throw j;
             }
-        }
-        private Guest GetGuest(Order order)
+        }*/
+        /*private Guest GetGuest(Order order)
         {
             try
             {
@@ -223,24 +224,26 @@ namespace BL
             {
                 throw j;
             }
-        }
+        }*/
         /// <summary>
         /// The function that acts to send a mail
         /// </summary>
         /// <param name="order"></param>
         /// <param name="guest"></param>
-        public void SendingMail(Order order, GuestRequest request)
+        public string SendingMail(Order order)
         {
             try
             {
-                if (request.guest.CollectionClearance)
-                    Console.WriteLine("The mail is sent");
+                
+                ChangeStatusOfOrder(order, StatusO.MailSent);
                 FactorySingletonDal.GetInstance.UpdatingOrder(order);// as if this function of DAL receives the new Status and the num of order;
+                return "The mail is sent";
             }
             catch (KeyNotFoundException k)
             {
                 throw k;
             }
+            return "";
         }
         /// <summary>
         /// The function that marks in the calendar that the dates are no more available
@@ -644,7 +647,7 @@ namespace BL
             }
 
         }
-        public List<HostingUnit> AllUnitsOfOneHost(int hostKey, GuestRequest request)
+        public List<HostingUnit> AllUnitsOfOneHost(int hostKey)
         {
             try
             {
@@ -683,13 +686,60 @@ namespace BL
              numOfUnits(x));
 
         }
-        public bool GuestIsExist(int ID)
+        /*public bool GuestIsExist(int ID)
         {
             return FactorySingletonDal.GetInstance.GetAllGuests().Exists(x => x.ID == ID);
-        }
+        }*/
         public bool mailGuestIsExist(string mail)
         {
             return FactorySingletonDal.GetInstance.GetAllGuests().Exists(x => x.MailAddress == mail);
+        }
+
+        public bool AddHost(Host host)
+        {
+            try
+            {
+                FactorySingletonDal.GetInstance.AddHost(host);
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+        public GuestRequest GetRequest(int id)
+        {
+            try
+            {
+                return FactorySingletonDal.GetInstance.GetGuestRequest(id);
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+        }
+        public Host GetHost(int key)
+        {
+            try
+            {
+                return FactorySingletonDal.GetInstance.GetHost(key);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public Order GetOrder(int key)
+        {
+            try
+            {
+                return FactorySingletonDal.GetInstance.GetOrder(key);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
 
 
