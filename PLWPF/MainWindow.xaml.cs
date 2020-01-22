@@ -181,7 +181,7 @@ namespace PLWPF
             {
                 flag = false;
                 InsertEmail.BorderBrush = Brushes.Red;
-                errorName.Text = "שדה חובה";
+                errorMail.Text = "שדה חובה";
             }
             else if (!Validation.EmailIsValid(InsertEmail.Text))
             {
@@ -219,6 +219,72 @@ namespace PLWPF
                 InsertFamilyName.BorderBrush = Brushes.Red;
                 errorFamilyName.Text = "שדה חובה";
             }
+            if(bankNumber.Text.Length==0)
+            {
+                flag = false;
+                bankNumber.BorderBrush = Brushes.Red;
+                errorBankNumber.Text = "שדה חובה";
+            }
+            else try
+                {
+                    int.Parse(bankNumber.Text);
+                }
+                catch(Exception)
+                {
+                    flag = false;
+                    bankNumber.BorderBrush = Brushes.Red;
+                    errorBankNumber.Text = "תווים לא תקינים";
+                }
+            if(bankName.Text.Length==0)
+            {
+                flag = false;
+                bankName.BorderBrush = Brushes.Red;
+                ErrorBankName.Text = "שדה חובה";
+            }
+            if(branchNumber.Text.Length==0)
+            {
+                flag = false;
+                branchNumber.BorderBrush = Brushes.Red;
+               ErrorBranchName.Text = "שדה חובה";
+            }
+            else try
+                {
+                    int.Parse(branchNumber.Text);
+                }
+                catch (Exception)
+                {
+                    flag = false;
+                    branchNumber.BorderBrush = Brushes.Red;
+                    ErrorBranchName.Text = "תווים לא תקינים";
+                }
+            if(branchAddress.Text.Length==0)
+            {
+                flag = false;
+                branchAddress.BorderBrush = Brushes.Red;
+                ErrorBranchAddress.Text = "שדה חובה";
+            }
+            if (branchCity.Text.Length == 0)
+            {
+                flag = false;
+                branchCity.BorderBrush = Brushes.Red;
+                ErrorBranchCity.Text = "שדה חובה";
+            }
+            if(acountNumber.Text.Length==0)
+            {
+                flag = false;
+                acountNumber.BorderBrush = Brushes.Red;
+                ErrorNumberAcount.Text = "שדה חובה";
+            }
+            else try
+                {
+                    int.Parse(acountNumber.Text);
+                }
+                catch
+                {
+                    flag = false;
+                    acountNumber.BorderBrush = Brushes.Red;
+                    ErrorNumberAcount.Text = "תווים לא תקינים";
+                }
             if (flag)
             {
                 currentGuest = new Guest();
@@ -283,13 +349,17 @@ namespace PLWPF
         }
         private bool allDetailsValid()
         {
-            bool flag = false;
+            bool flag = true;
             if (insertNumOFAdults.Text.Length == 0)
             {
                 flag = false;
                 insertNumOFAdults.BorderBrush = Brushes.Red;
             }
-
+            if (insertNumOFAdults.Text.Length == 0)
+            {
+                flag = false;
+               insertNumOfChildren.BorderBrush = Brushes.Red;
+            }
             return flag;
         }
         private void EndGuestRequest_Click(object sender, RoutedEventArgs e)
@@ -298,27 +368,52 @@ namespace PLWPF
             {
                 currentRequest = new GuestRequest();
                 currentRequest.guest = currentGuest;
-                currentRequest.Adults = int.Parse(insertNumOFAdults.Text);
-                currentRequest.Children = int.Parse(insertNumOfChildren.Text);
-                currentRequest.Area = (Areas)insertArea.SelectedIndex;
-                currentRequest.Type = (Types)insertTheType.SelectedIndex;
-                currentRequest.EntryDate = insertRequestDates.SelectedDates.First();
-                currentRequest.ReleaseDate = insertRequestDates.SelectedDates.Last();
-                //currentRequest.Pool = (Options)numberOfOption(insertPool);
                 try
                 {
-                    MyBl.AddRequest(currentRequest);
-                    //MyBl.AddGuest(currentGuest);
+                    currentRequest.Adults = int.Parse(insertNumOFAdults.Text);
+                }
+                catch(Exception)
+                {
+
+                }
+                try
+                {
+                    currentRequest.Children = int.Parse(insertNumOfChildren.Text);
                 }
                 catch (Exception)
                 {
 
                 }
-                NewRequestGrid.Visibility = Visibility.Collapsed;
-                GuestGrid.Visibility = Visibility.Visible;
-                welcomeGuest.Text = currentGuest.PrivateName;
-                guestpersonalDedails.Text = currentGuest.ToString();
-                requestDetails.Text = currentRequest.ToString();
+                currentRequest.Area = (Areas)insertArea.SelectedIndex;
+                currentRequest.Type = (Types)insertTheType.SelectedIndex;
+                try
+                {
+                    currentRequest.EntryDate = insertRequestDates.SelectedDates.First();
+                    currentRequest.ReleaseDate = insertRequestDates.SelectedDates.Last();
+                }
+                catch(Exception)
+                {
+
+                }
+                                //currentRequest.Pool = (Options)numberOfOption(insertPool);
+                try
+                {
+                    MyBl.AddRequest(currentRequest);
+                    //MyBl.AddGuest(currentGuest);
+                    NewRequestGrid.Visibility = Visibility.Collapsed;
+                    RequestGrid.Visibility = Visibility.Visible;
+                    welcomeGuest.Text = currentGuest.PrivateName;
+                    guestpersonalDedails.Text = currentGuest.ToString();
+                    requestDetails.Text = currentRequest.ToString();
+                    clearNewRequestGrid();
+                    clearNewGuestGrid();
+                    //currentRequest.Pool = insertPool;
+                }
+                catch (Exception)
+                {
+
+                }
+                
 
             }
 
@@ -496,12 +591,22 @@ namespace PLWPF
         }
         private void SendEmail_Click(object sender, RoutedEventArgs e)
         {
-            //orders.DataContext = (Order)((Button)sender).DataContext;
-            //MyBl.ChangeStatusOfOrder((Order)((Button)sender).DataContext, StatusO.MailSent);
-            sendingEmail.Text = MyBl.SendingMail((Order)((Button)sender).DataContext);
-            //sendingEmail.Text+= ((Order)((Button)sender).DataContext).ToString();
-            //((Button)sender).Visibility = Visibility.Collapsed;
-            orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+            try
+            {
+                //orders.DataContext = (Order)((Button)sender).DataContext;
+                //MyBl.ChangeStatusOfOrder((Order)((Button)sender).DataContext, StatusO.MailSent);
+                sendingEmail.Text = MyBl.SendingMail((Order)((Button)sender).DataContext);
+                //sendingEmail.Text+= ((Order)((Button)sender).DataContext).ToString();
+                //((Button)sender).Visibility = Visibility.Collapsed;
+                orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+                SendEmail.Visibility = Visibility.Collapsed;
+                //SendEmail.IsEnabled = true;
+            }
+            catch(Exception )
+            {
+
+            }
+            
         }
 
         private void addUnit_Click(object sender, RoutedEventArgs e)
@@ -510,6 +615,15 @@ namespace PLWPF
             hostAcount.Visibility = Visibility.Collapsed;
             AddUnit.Visibility = Visibility.Visible;
             currentUnit = new HostingUnit();
+            updatUnit.Visibility = Visibility.Collapsed;
+            nameOfUnit.Text = string.Empty;
+            Maxguests.Text = string.Empty;
+            isPool.IsChecked = false;
+            isAttractions.IsChecked = false;
+            isJacuzz.IsChecked = false;
+            isGarden.IsChecked = false;
+            areaOfUnit.SelectedIndex = 0;
+            typeOfUnit.SelectedIndex = 0;
         }
 
         private void HostTrySignIn_Click(object sender, RoutedEventArgs e)
@@ -588,34 +702,57 @@ namespace PLWPF
 
         private void AddUnit_Click(object sender, RoutedEventArgs e)
         {
-            bool flag=true;
+            try
+            {
+                if (CheckUnitDetails())
+                {
+                    MyBl.AddHostingUnit(currentUnit);
+                    units.ItemsSource = MyBl.AllUnitsOfOneHost(currentHost.HostKey);
+                    orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+                    updatOrAddUnit.Visibility = Visibility.Collapsed;
+                    hostAcount.Visibility = Visibility.Visible;
+                    units.UpdateLayout();
+                }
+            }
+            catch(Exception)
+            {
+
+            }
+                
+            
+
+
+        }
+        private bool CheckUnitDetails()
+        {
+            bool flag = true;
             if (nameOfUnit.Text == string.Empty)
             {
                 nameOfUnit.BorderBrush = Brushes.Red;
                 flag = false;
             }
-            if(Maxguests.Text==string.Empty)
+            if (Maxguests.Text == string.Empty)
             {
                 Maxguests.BorderBrush = Brushes.Red;
                 flag = false;
             }
             try
             {
-                int maxG=int.Parse(Maxguests.Text);
+                int maxG = int.Parse(Maxguests.Text);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 Maxguests.BorderBrush = Brushes.Red;
                 flag = false;
             }
-            if(flag)
+            if (flag)
             {
                 currentUnit.Area = (Areas)areaOfUnit.SelectedIndex;
                 currentUnit.Type = (Types)typeOfUnit.SelectedIndex;
-                currentUnit.Pool = isPool.IsChecked.HasValue;
-                currentUnit.Jacuzz = isJacuzz.IsChecked.HasValue;
-                currentUnit.Garden = isGarden.IsChecked.HasValue;
-                currentUnit.ChildrenAtraction = isAttractions.IsChecked.HasValue;
+                currentUnit.Pool = isPool.IsChecked.Value;
+                currentUnit.Jacuzz = isJacuzz.IsChecked.Value;
+                currentUnit.Garden = isGarden.IsChecked.Value;
+                currentUnit.ChildrenAtraction = isAttractions.IsChecked.Value;
                 try
                 {
                     currentUnit.numOfMaxGuests = int.Parse(Maxguests.Text);
@@ -623,18 +760,13 @@ namespace PLWPF
                 catch (Exception)
                 {
                     Maxguests.BorderBrush = Brushes.Red;
-                    return;
+                    return false;
                 }
                 currentUnit.HostingUnitName = nameOfUnit.Text;
                 currentUnit.Owner = currentHost;
-                MyBl.AddHostingUnit(currentUnit);
-                units.ItemsSource = MyBl.AllUnitsOfOneHost(currentHost.HostKey);
-                orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
-                updatOrAddUnit.Visibility = Visibility.Collapsed;
-                hostAcount.Visibility = Visibility.Visible;
+                
             }
-
-
+            return flag;
         }
         private void UpdatUnit_Click(object sender, RoutedEventArgs e)
         {
@@ -648,7 +780,8 @@ namespace PLWPF
             updatOrAddUnit.Visibility = Visibility.Visible;
             hostAcount.Visibility = Visibility.Collapsed;
             AddUnit.Visibility = Visibility.Collapsed;
-            
+            updatUnit.Visibility = Visibility.Visible;
+
             /*try
             {
                 if (MyBl.Unit((HostingUnit)((Button)sender).DataContext))
@@ -676,9 +809,115 @@ namespace PLWPF
             canNotBeDeletedGrid.Visibility = Visibility.Collapsed;
         }
 
-        private void UpdatUnit_Click_1(object sender, RoutedEventArgs e)
+        private void updatUnit_Click_1(object sender, RoutedEventArgs e)
         {
-            //MyBl.UpdateHostingUnit(currentUnit);
+            try
+            {
+                if (CheckUnitDetails())
+                {
+                    MyBl.UpdateHostingUnit(currentUnit);
+                    updatOrAddUnit.Visibility = Visibility.Collapsed;
+                    hostAcount.Visibility = Visibility.Visible;
+                    orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+                    units.ItemsSource = MyBl.AllUnitsOfOneHost(currentHost.HostKey);
+                    currentUnit = new HostingUnit();
+                }
+
+            }
+            catch(Exception)
+            {
+
+            }
+        }
+
+        private void BackToStartGuest_Click(object sender, RoutedEventArgs e)
+        {
+            StartGrid.Visibility = Visibility.Visible;
+            NewGuestGrid.Visibility = Visibility.Collapsed;
+            clearNewGuestGrid();
+            clearNewRequestGrid();
+
+
+        }
+        private void clearNewGuestGrid()
+        {
+            InsertName.Text = "";
+            InsertName.BorderBrush = ContinueToRequest.BorderBrush;
+            errorName.Text = "";
+            InsertFamilyName.Text = "";
+            InsertFamilyName.BorderBrush = ContinueToRequest.BorderBrush;
+            errorFamilyName.Text = "";
+            InsertPhoneNumber.Text = "";
+            InsertPhoneNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            errorPhone.Text = "";
+            InsertEmail.Text = "";
+            InsertEmail.BorderBrush = ContinueToRequest.BorderBrush;
+            errorMail.Text = "";
+            InsertID.Text = "";
+            InsertPassword.Password = "";
+            bankNumber.Text = "";
+            bankNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            errorBankNumber.Text = "";
+            bankName.Text = "";
+            bankName.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorBankName.Text = "";
+            branchNumber.Text = "";
+            branchNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorBranchName.Text = "";
+            branchAddress.Text = "";
+            branchAddress.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorBranchAddress.Text = "";
+            branchCity.Text = "";
+            branchCity.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorBranchCity.Text = "";
+            acountNumber.Text = "";
+            acountNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorNumberAcount.Text = "";
+        }
+        private void clearNewRequestGrid()
+        {
+            insertArea.SelectedIndex = 0;
+            insertArea.SelectedIndex = 0;
+            insertNumOFAdults.Text = "";
+            insertNumOfChildren.Text = "";
+            insertRequestDates.SelectedDates.Clear();
+            
+        }
+
+        private void BankNumber_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            bankNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            errorBankNumber.Text = "";
+        }
+
+        private void BankName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            bankName.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorBankName.Text = "";
+        }
+
+        private void BranchNumber_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            branchNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorBranchName.Text = "";
+        }
+
+        private void BranchAddress_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            branchAddress.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorBranchAddress.Text = "";
+        }
+
+        private void BranchCity_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            branchCity.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorBranchCity.Text = "";
+        }
+
+        private void AcountNumber_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            acountNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorNumberAcount.Text = "";
         }
     }
 }

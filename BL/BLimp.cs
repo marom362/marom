@@ -53,6 +53,7 @@ namespace BL
             {
                 throw x;
             }
+            
         }
         /// <summary>
         /// checks whether the dates are available
@@ -166,8 +167,8 @@ namespace BL
         {
             try
             {
-                if (order.Status == StatusO.ClosedByClientsResponse && order.Status == StatusO.ClosedBecauseofClient)
-                    throw new InvalidOperationException();
+                if (order.Status == StatusO.ClosedByClientsResponse || order.Status == StatusO.ClosedBecauseofClient)
+                    throw new InvalidOperationException("This order is closed");
                 order.Status = status;
                 FactorySingletonDal.GetInstance.UpdatingOrder(order);
             }
@@ -234,6 +235,8 @@ namespace BL
         /// <param name="guest"></param>
         public string SendingMail(Order order)
         {
+            if (order.Status == StatusO.MailSent)
+                throw new Exception("The mail is already sent");
             try
             {
                 
@@ -245,7 +248,10 @@ namespace BL
             {
                 throw k;
             }
-            return "";
+            catch (InvalidOperationException y)
+            {
+                throw y;
+            }
         }
         /// <summary>
         /// The function that marks in the calendar that the dates are no more available
@@ -649,6 +655,17 @@ namespace BL
             catch (InvalidOperationException n)
             {
                 throw n;
+            }
+        }
+        public void UpdateHostingUnit(HostingUnit unit)
+        {
+            try
+            {
+                FactorySingletonDal.GetInstance.UpdatingHostUnit(unit);
+            }
+            catch(Exception x)
+            {
+                throw x;
             }
         }
         public List<HostingUnit> AllUnitsOfOneHostFittingTorequest(int hostKey, GuestRequest request)

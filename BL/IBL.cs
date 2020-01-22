@@ -36,6 +36,7 @@ namespace BL
         /// </summary>
         /// <param name="unit"></param>
         void RemoveHostingUnit(HostingUnit unit);
+        void UpdateHostingUnit(HostingUnit unit);
         /// <summary>
         /// Updates the information about jacuzzi/ swimming pool
         /// </summary>
