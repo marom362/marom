@@ -98,7 +98,9 @@ namespace BL
         GuestRequest GetRequest(int id);
         Host GetHost(int key);
         Order GetOrder(int key);
+        bool DelUnit(HostingUnit unit);
+        List<Order> GetAllOrdersOfUnit(HostingUnit unit);
+        List<Order> GetAllOrdersOfHost(int key);
 
-
-    }
+        }
 }

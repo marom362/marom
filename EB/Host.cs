@@ -16,6 +16,7 @@ namespace BE
         public BankBranch bankBranch { get; set; }
         public int BankAccountNumber { get; set; }
         public bool CollectionClearance { get; set; }
+        public string password { get; set; }
         public override string ToString()
         {
             string s;

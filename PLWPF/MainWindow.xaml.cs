@@ -31,6 +31,13 @@ namespace PLWPF
                 ComboBoxItem newItem = new ComboBoxItem();
                 newItem.Content = (Areas)i;
                 insertArea.Items.Add(newItem);
+                
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                ComboBoxItem newItem = new ComboBoxItem();
+                newItem.Content = (Areas)i;
+                areaOfUnit.Items.Add(newItem);
             }
             for (int i = 0; i < 3; i++)
             {
@@ -38,12 +45,18 @@ namespace PLWPF
                 newItem.Content = (Types)i;
                 insertTheType.Items.Add(newItem);
             }
+            for (int i = 0; i < 3; i++)
+            {
+                ComboBoxItem newItem = new ComboBoxItem();
+                newItem.Content = (Types)i;
+                typeOfUnit.Items.Add(newItem);
+            }
 
 
 
 
-            orders.ItemsSource = MyBl.GetListOfOrders();
-            units.ItemsSource = MyBl.AllUnitsOfOneHost(1);
+            //orders.ItemsSource = MyBl.GetListOfOrders();
+            //units.ItemsSource = MyBl.AllUnitsOfOneHost(1);
         }
         public List<HostingUnit> MyHostingUnits
         {
@@ -55,8 +68,9 @@ namespace PLWPF
         Host tempHost = new Host() { PrivateName = "Meir", HostKey = 1 };
         GuestRequest currentRequest;
         Guest currentGuest;
-        HostingUnit unit = new HostingUnit();
+        HostingUnit currentUnit = new HostingUnit();
         Order order = new Order();
+        Host currentHost = new Host();
 
 
 
@@ -337,7 +351,7 @@ namespace PLWPF
         }
         private void HostSignIn_Click(object sender, RoutedEventArgs e)
         {
-            StartGrid.Visibility = Visibility.Hidden;
+            StartGrid.Visibility = Visibility.Collapsed;
             HostEntranceGrid.Visibility = Visibility.Visible;
         }
         public void GuestSignIn_Click(object sender, RoutedEventArgs e)
@@ -413,12 +427,22 @@ namespace PLWPF
             tempHost.PrivateName = HostName.Text;
             tempHost.FamilyName = HostFamilyName.Text;
             tempHost.MailAddress = HostMail.Text;
+            tempHost.password = insertHostPassword.Password;
             bool added = MyBl.AddHost(tempHost);
             if (!added)
             {
                 HostAlreadyExists.Visibility = Visibility.Visible;
                 AlreadyExists_Host.Visibility = Visibility.Visible;
                 SignUpHost.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                currentHost = tempHost;
+                orders.ItemsSource =null;
+                HostSignUpGrid.Visibility = Visibility.Collapsed;
+                WhiteGrid.Visibility = Visibility.Collapsed;
+                updatOrAddUnit.Visibility = Visibility.Visible;
+
             }
         }
 
@@ -472,18 +496,189 @@ namespace PLWPF
         }
         private void SendEmail_Click(object sender, RoutedEventArgs e)
         {
-            orders.DataContext = (Order)((Button)sender).DataContext;
-            //MyBl.ChangeStatusOfOrder(MyBl.GetOrder(int.Parse(orders.DataContext.ToString())), StatusO.MailSent);
-            MyBl.ChangeStatusOfOrder((Order)((Button)sender).DataContext, StatusO.MailSent);
+            //orders.DataContext = (Order)((Button)sender).DataContext;
+            //MyBl.ChangeStatusOfOrder((Order)((Button)sender).DataContext, StatusO.MailSent);
             sendingEmail.Text = MyBl.SendingMail((Order)((Button)sender).DataContext);
-            sendingEmail.Text+= ((Order)((Button)sender).DataContext).ToString();
-            ((Button)sender).Visibility = Visibility.Collapsed;
+            //sendingEmail.Text+= ((Order)((Button)sender).DataContext).ToString();
+            //((Button)sender).Visibility = Visibility.Collapsed;
+            orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+        }
+
+        private void addUnit_Click(object sender, RoutedEventArgs e)
+        {
+            updatOrAddUnit.Visibility = Visibility.Visible;
+            hostAcount.Visibility = Visibility.Collapsed;
+            AddUnit.Visibility = Visibility.Visible;
+            currentUnit = new HostingUnit();
+        }
+
+        private void HostTrySignIn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int i = int.Parse(insertYourKey.Text);
+                units.ItemsSource= MyBl.AllUnitsOfOneHost(i);
+                orders.ItemsSource = MyBl.GetAllOrdersOfHost(i);
+                Host host = MyBl.GetHost(i);
+                if (hostEnteryPassword.Password==host.password)
+                {
+                    hostAcount.Visibility = Visibility.Visible;
+                    HostEntranceGrid.Visibility = Visibility.Collapsed;
+                    StartGrid.Visibility = Visibility.Collapsed;
+                    currentHost = host;
+                }
+                else
+                {
+                    errorHostKey.Text = "הסיסמא שגויה";
+                    errorHostKey.Visibility = Visibility.Visible;
+                }
+                    
+
+
+            }
+            catch(Exception)
+            {
+                errorHostKey.Text = "מספר אורח לא קיים";
+                errorHostKey.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void InsertYourKey_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            errorHostKey.Text = string.Empty;
+        }
+
+        private void HostLogOut_Click(object sender, RoutedEventArgs e)
+        {
+            hostAcount.Visibility = Visibility.Collapsed;
+            StartGrid.Visibility = Visibility.Visible;
+            insertYourKey.Text = string.Empty;
+            hostEnteryPassword.Password = string.Empty;
+            currentHost = null;
+        }
+        private void DelUnit_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (MyBl.DelUnit((HostingUnit)((Button)sender).DataContext))
+                {
+                    units.ItemsSource = MyBl.AllUnitsOfOneHost(currentHost.HostKey);
+                    orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+                }
+
+                else
+                {
+                    canNotBeDeletedGrid.Visibility = Visibility.Visible;
+                    CanNotBeDeleted.Text = "אין אפשרות למחוק יחידה זו";
+                }
+            }
+            catch(Exception)
+            {
+                canNotBeDeletedGrid.Visibility = Visibility.Visible;
+                CanNotBeDeleted.Text = "you can't delete this unit";
+            }
             
         }
 
-        private void Add_Click(object sender, RoutedEventArgs e)
+        private void BackToUserHost_Click(object sender, RoutedEventArgs e)
         {
+            updatOrAddUnit.Visibility = Visibility.Collapsed;
+            hostAcount.Visibility = Visibility.Visible;
+        }
 
+        private void AddUnit_Click(object sender, RoutedEventArgs e)
+        {
+            bool flag=true;
+            if (nameOfUnit.Text == string.Empty)
+            {
+                nameOfUnit.BorderBrush = Brushes.Red;
+                flag = false;
+            }
+            if(Maxguests.Text==string.Empty)
+            {
+                Maxguests.BorderBrush = Brushes.Red;
+                flag = false;
+            }
+            try
+            {
+                int maxG=int.Parse(Maxguests.Text);
+            }
+            catch(Exception)
+            {
+                Maxguests.BorderBrush = Brushes.Red;
+                flag = false;
+            }
+            if(flag)
+            {
+                currentUnit.Area = (Areas)areaOfUnit.SelectedIndex;
+                currentUnit.Type = (Types)typeOfUnit.SelectedIndex;
+                currentUnit.Pool = isPool.IsChecked.HasValue;
+                currentUnit.Jacuzz = isJacuzz.IsChecked.HasValue;
+                currentUnit.Garden = isGarden.IsChecked.HasValue;
+                currentUnit.ChildrenAtraction = isAttractions.IsChecked.HasValue;
+                try
+                {
+                    currentUnit.numOfMaxGuests = int.Parse(Maxguests.Text);
+                }
+                catch (Exception)
+                {
+                    Maxguests.BorderBrush = Brushes.Red;
+                    return;
+                }
+                currentUnit.HostingUnitName = nameOfUnit.Text;
+                currentUnit.Owner = currentHost;
+                MyBl.AddHostingUnit(currentUnit);
+                units.ItemsSource = MyBl.AllUnitsOfOneHost(currentHost.HostKey);
+                orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+                updatOrAddUnit.Visibility = Visibility.Collapsed;
+                hostAcount.Visibility = Visibility.Visible;
+            }
+
+
+        }
+        private void UpdatUnit_Click(object sender, RoutedEventArgs e)
+        {
+            currentUnit = (HostingUnit)((Button)sender).DataContext;
+            nameOfUnit.Text = currentUnit.HostingUnitName;
+            Maxguests.Text = currentUnit.numOfMaxGuests.ToString();
+            isPool.IsChecked = currentUnit.Pool;
+            isJacuzz.IsChecked = currentUnit.Jacuzz;
+            isGarden.IsChecked = currentUnit.Garden;
+            isAttractions.IsChecked = currentUnit.ChildrenAtraction;
+            updatOrAddUnit.Visibility = Visibility.Visible;
+            hostAcount.Visibility = Visibility.Collapsed;
+            AddUnit.Visibility = Visibility.Collapsed;
+            
+            /*try
+            {
+                if (MyBl.Unit((HostingUnit)((Button)sender).DataContext))
+                {
+                    units.ItemsSource = MyBl.AllUnitsOfOneHost(currentHost.HostKey);
+                    orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+                }
+
+                else
+                {
+                    canNotBeDeletedGrid.Visibility = Visibility.Visible;
+                    CanNotBeDeleted.Text = "אין אפשרות למחוק יחידה זו";
+                }
+            }
+            catch (Exception)
+            {
+                canNotBeDeletedGrid.Visibility = Visibility.Visible;
+                CanNotBeDeleted.Text = "you can't delete this unit";
+            }*/
+
+        }
+
+        private void OKNoDelet_Click(object sender, RoutedEventArgs e)
+        {
+            canNotBeDeletedGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void UpdatUnit_Click_1(object sender, RoutedEventArgs e)
+        {
+            //MyBl.UpdateHostingUnit(currentUnit);
         }
     }
 }

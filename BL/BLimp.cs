@@ -47,6 +47,7 @@ namespace BL
                 if (isExist)
                     throw new InvalidOperationException();
                 else FactorySingletonDal.GetInstance.AddGuestRequest(request);
+                AddOrdersForNewRequest(request);
             }
             catch (InvalidOperationException x)
             {
@@ -102,6 +103,7 @@ namespace BL
             try
             {
                 FactorySingletonDal.GetInstance.AddHostingUnit(unit);
+                AddOrdersForNewUnit(unit);
             }
             catch (InvalidOperationException x)
             {
@@ -418,6 +420,39 @@ namespace BL
                 throw h;
             }
         }
+        public void AddOrdersForNewRequest(GuestRequest request)
+        {
+            try
+            {
+                if (request.ReleaseDate.Date <= request.EntryDate.Date)
+                    throw new ArgumentException();// implement in UI catch etc for this type of exception that will be translated as "the dates are incorrect"
+                else
+                {
+                    List<HostingUnit> allUnits = GetListOfUnits();
+                    foreach (HostingUnit unit in allUnits)
+                        if (IsFitting(unit, request))
+                            AddOrder(request, unit);
+                }
+            }
+            catch (InvalidOperationException h)
+            {
+                throw h;
+            }
+        }
+        public void AddOrdersForNewUnit(HostingUnit unit)
+        {
+            try
+            {
+                List<GuestRequest> allRequests = FactorySingletonDal.GetInstance.GetAllGuestRequests();
+                foreach (GuestRequest request in allRequests)
+                    if (IsFitting(unit, request))
+                        AddOrder(request, unit);
+            }
+            catch (InvalidOperationException h)
+            {
+                throw h;
+            }
+        }
         public List<HostingUnit> CreateListOfFittingUnits(GuestRequest request, List<HostingUnit> myUnits)
         {
             try
@@ -432,6 +467,23 @@ namespace BL
                             units.Add(unit);
                     return units;
                 }
+            }
+            catch (InvalidOperationException h)
+            {
+                throw h;
+            }
+        }
+        public List<GuestRequest> CreateListOfFittingRequests(HostingUnit unit, List<GuestRequest> myRequests)
+        {
+            try
+            {
+               
+                    List<GuestRequest> requests = new List<GuestRequest>();
+                    foreach (GuestRequest request in myRequests)
+                        if (IsFitting(unit, request))
+                            requests.Add(request);
+                    return requests;
+                
             }
             catch (InvalidOperationException h)
             {
@@ -461,6 +513,7 @@ namespace BL
                 Order order = new Order();
                 order.HostingUnitKey = unit.HostingUnitKey;
                 order.GuestRequestKey = request.GuestRequestKey;
+                order.OrderKey = ++Configuration.OrderKey;
                 FactorySingletonDal.GetInstance.AddOrder(order);
             }
             catch (InvalidOperationException x)
@@ -734,6 +787,60 @@ namespace BL
             try
             {
                 return FactorySingletonDal.GetInstance.GetOrder(key);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+        public List<Order> GetAllOrdersOfUnit(HostingUnit unit)
+        {
+            try
+            {
+                return FactorySingletonDal.GetInstance.GetAllOrders().Where(x =>
+                x.HostingUnitKey == unit.HostingUnitKey).ToList();
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+        }
+        public List<Order> GetAllOrdersOfHost(int key)
+        {
+            try
+            {
+                return FactorySingletonDal.GetInstance.GetAllOrders().Where(x =>
+                GetUnit(x.HostingUnitKey).Owner.HostKey ==key).ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public bool DelUnit(HostingUnit unit)
+        {
+            if (GetAllOrdersOfUnit(unit).Exists(x => x.Status == StatusO.MailSent))
+                return false;
+            try
+            {
+                FactorySingletonDal.GetInstance.DelHostingUnit(unit);
+                
+            }
+            catch (Exception )
+            {
+                return false;
+            }
+            
+            return true;
+
+        }
+        public HostingUnit GetUnit(int key)
+        {
+            try
+            {
+                return FactorySingletonDal.GetInstance.GetHostingUnit(key);
+
             }
             catch (Exception)
             {

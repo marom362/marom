@@ -15,7 +15,7 @@ namespace DS
             {
                 HostingUnitKey= 200000003,
                 Owner= new Host(){HostKey=1, FamilyName="Meir" },
-                HostingUnitName= "מול הים",
+                HostingUnitName= "מלון הדר",
                 Pool= true,
                 ChildrenAtraction=false,
                 Jacuzz= true,
@@ -28,25 +28,26 @@ namespace DS
             {
                 HostingUnitKey= 200000004,
                 Owner= new Host(){HostKey=1, FamilyName="Meir" },
-                HostingUnitName= "בקתה בעמק",
+                HostingUnitName= "בקתת רימונים",
                 Pool= true,
                 ChildrenAtraction= false,
                 Jacuzz= true,
                 Area= Areas.Center,
                 Type= Types.Zimmer,
-                numOfMaxGuests=5
+                numOfMaxGuests=9
+                
             },
 
            new HostingUnit()
             {
                 HostingUnitKey= 200000005,
                 Owner= new Host(){HostKey=1, FamilyName="Meir" },
-                HostingUnitName= "מול החוף",
+                HostingUnitName= "חופשה בטבע",
                 Pool= false,
                 ChildrenAtraction= true,
                 Jacuzz=  true,
                 Area= Areas.North,
-                Type= Types.Hotel,
+                Type= Types.Camping,
                 numOfMaxGuests=15
             },
 
@@ -54,20 +55,21 @@ namespace DS
             {
                 HostingUnitKey= 200000006,
                 Owner= new Host(){HostKey=3, FamilyName="Levi" },
-                HostingUnitName= "מול החוף",
-                Pool= false,
+                HostingUnitName= "מלון הוד",
+                Pool= true,
                 ChildrenAtraction= true,
                 Jacuzz=  true,
-                Area= Areas.North,
+                Garden=false,
+                Area= Areas.Center,
                 Type= Types.Hotel,
-                numOfMaxGuests=9
+                numOfMaxGuests=3
             },
 
             new HostingUnit()
             {
                 HostingUnitKey= 200000007,
                 Owner= new Host(){HostKey=3, FamilyName="Levi" },
-                HostingUnitName= "מול החוף",
+                HostingUnitName= "מלון פאר ",
                 Pool= false,
                 ChildrenAtraction= true,
                 Jacuzz=  true,
@@ -91,13 +93,23 @@ namespace DS
                 bankBranch=new BankBranch(){BankNumber=122,BankName ="הפועלים",BranchNumber = 35,
                 BranchAddress = "הרצל 7",BranchCity = "קרית אונו"},
                 BankAccountNumber=3152667,
-                CollectionClearance=false
+                CollectionClearance=false,
+                password="11111"
             },
 
             new Host()
             {
                 HostKey=3,
-                FamilyName ="Levi"
+                FamilyName ="Levi",
+                PrivateName="Mor",
+                FhoneNumber="0527264891",
+                MailAddress="Mor@gmail.com",
+                bankBranch=new BankBranch(){BankNumber=122,BankName ="הפועלים",BranchNumber = 35,
+                BranchAddress = "הרצל 7",BranchCity = "קרית אונו"},
+                BankAccountNumber=3152667,
+                CollectionClearance=false,
+                password="33333"
+
 
             }
 
@@ -112,8 +124,8 @@ namespace DS
                MailAddress="shalomT@gmail.com",
                BankAccountNumber=2245,
                },*/
-               Status= StatusGR.Open,
-               RegistrationDate=new DateTime(2019,8,6),
+               Status= StatusGR.ClosedThroughSite,
+               RegistrationDate=new DateTime(2020, 1,1),
                EntryDate=new DateTime(2020,5,4),
                ReleaseDate=new DateTime(2020,5,8),
                Area= Areas.Center,
@@ -139,16 +151,16 @@ namespace DS
                RegistrationDate=new DateTime(2019,12,1),
                EntryDate=new DateTime(2020,2,1),
                ReleaseDate=new DateTime(2020,2,7),
-               Area= Areas.North,
+               Area= Areas.All,
               /* subArea= Enums.SubArea.TelAviv*/
                Type= Types.Hotel,
-               Adults=4,
-               Children=10,
-               Pool= Options.Must,
-               Garden= Options.NotIntresting,
-               ChildrensAttractions= Options.Must,
+               Adults=2,
+               Children=0,
+               Pool= Options.Possible,
+               Garden= Options.Possible,
+               ChildrensAttractions= Options.Possible,
                Jacuzz= Options.Must,
-               NumGuests=14
+               NumGuests=2
             },
 
             new GuestRequest()
@@ -175,33 +187,53 @@ namespace DS
             }
         };
 
-        
+
 
         public static List<Order> Orders = new List<Order>()
         {
             new Order()
             {
-                HostingUnitKey=100000002,
+                HostingUnitKey=200000004,
                 GuestRequestKey=100000002,
                 OrderKey=10000001,
-                CreateDate=new DateTime(2020,3,20),
-                OrderDate=new DateTime(2020,3,28),
+                Status=StatusO.ClosedByClientsResponse,
+                CreateDate=new DateTime(2020,1,1),
+                OrderDate=new DateTime(2020,1,22),
+            },
+            new Order()
+            {
+                HostingUnitKey=200000006,
+                GuestRequestKey=100000003,
+                OrderKey=10000002,
+                Status=StatusO.MailSent,
+                CreateDate=new DateTime(2019,8,6),
+                OrderDate=new DateTime(2020,1,22),
             },
 
             new Order()
             {
-                HostingUnitKey=100000003,
+                HostingUnitKey=200000007,
                 GuestRequestKey=100000003,
-                OrderKey=10000002,
-                CreateDate=new DateTime(2020,4,29),
+                OrderKey=10000003,
+                Status=StatusO.NotDealed,
                 OrderDate=new DateTime(2020,5,1),
             },
 
             new Order()
             {
-                HostingUnitKey=100000003,
+                HostingUnitKey=200000003,
+                GuestRequestKey=100000003,
+                OrderKey=10000004,
+                Status=StatusO.MailSent,
+                CreateDate=new DateTime(2020,7,5),
+                OrderDate=new DateTime(2020,7,15),
+            },
+            new Order()
+            {
+                HostingUnitKey=200000005,
                 GuestRequestKey=100000004,
-                OrderKey=10000003,
+                OrderKey=10000005,
+                Status=StatusO.MailSent,
                 CreateDate=new DateTime(2020,7,5),
                 OrderDate=new DateTime(2020,7,15),
             }

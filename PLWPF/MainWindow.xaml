@@ -16,17 +16,21 @@
             <Image Margin="0,0,-6,0" Source="תמונה צימר.jpg" Stretch="Fill"/>
             <Button Name="HostEnter" Content="כניסה" HorizontalAlignment="Center" Margin="41,254,0,0" VerticalAlignment="Top" Width="117" Height="53" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="HostEnter_Click"/>
             <Button Content="הרשמה" HorizontalAlignment="Center" Margin="41,312,0,0" VerticalAlignment="Top" Width="117" Height="54" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="Button_Click"/>
-            <Button Content="אורח" Name ="GuestSignUp" HorizontalAlignment="Center" Visibility="Collapsed" VerticalAlignment="Top" Width="75" Margin="210,312,0,0" Height="22" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="GuestSignUp_Click"/>
-            <Button Content="מארח" Name="HostSignUp" HorizontalAlignment="Center" Visibility="Collapsed" Height="22" Margin="210,339,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.513,1.305" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="HostSignUp_Click"/>
-            <Button Content="אורח" Name ="GuestSignIn" HorizontalAlignment="Center" Visibility="Collapsed" VerticalAlignment="Top" Width="75" Margin="210,285,0,0" Height="22" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="GuestSignIn_Click"/>
-            <Button Content="מארח" Name="HostSignIn" HorizontalAlignment="Center" Visibility="Collapsed" Height="22" Margin="210,254,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.513,1.305" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="HostSignIn_Click"/>
+            <Button Content="אורח" Name ="GuestSignUp" HorizontalAlignment="Center" Visibility="Visible" VerticalAlignment="Top" Width="75" Margin="210,312,0,0" Height="22" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="GuestSignUp_Click"/>
+            <Button Content="מארח" Name="HostSignUp" HorizontalAlignment="Center" Visibility="Visible" Height="22" Margin="210,339,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.513,1.305" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="HostSignUp_Click"/>
+            <Button Content="אורח" Name ="GuestSignIn" HorizontalAlignment="Center" Visibility="Visible" VerticalAlignment="Top" Width="75" Margin="210,285,0,0" Height="22" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="GuestSignIn_Click"/>
+            <Button Content="מארח" Name="HostSignIn" HorizontalAlignment="Center" Visibility="Visible" Height="22" Margin="210,254,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.513,1.305" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="HostSignIn_Click"/>
+
         </Grid>
 
-        <Grid Name="WhiteGrid" Visibility="Collapsed" Background ="AntiqueWhite"></Grid>
-        <Grid Name ="HostSignUpGrid" Visibility="Collapsed" Opacity="0.8" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="794" Margin="0,0,-2,0" RenderTransformOrigin="0.531,0.512">
+        <Grid Name="WhiteGrid" Visibility="Collapsed" Background ="AntiqueWhite">
+        </Grid>
+        <Grid Name ="HostSignUpGrid" Visibility="Collapsed" Opacity="0.8" HorizontalAlignment="Stretch" Height="670" VerticalAlignment="Top" MinWidth="1394" Margin="0,0,0,0" RenderTransformOrigin="0.531,0.512">
             <Grid.Background>
                 <ImageBrush  ImageSource="SealPicture.jpg"></ImageBrush>
             </Grid.Background>
+            <PasswordBox Name="insertHostPassword" HorizontalAlignment="Left" Margin="522,262,0,0" VerticalAlignment="Top" Height="27" Width="216" Background="White"/>
+
             <TextBox Name ="HostID" MaxLength="9" HorizontalAlignment="Left" Height="27" Margin="522,53,0,0"  TextWrapping="Wrap" Text="מספר זהות"  VerticalAlignment="Top" Width="216"/>
             <TextBox Name ="HostName" HorizontalAlignment="Left" Height="27" Margin="522,95,0,0" TextWrapping="Wrap" Text="שם פרטי" VerticalAlignment="Top" Width="216"/>
             <TextBox Name = "HostFamilyName" HorizontalAlignment="Left" Height="27" Margin="522,137,0,0" TextWrapping="Wrap" Text="שם משפחה" VerticalAlignment="Top" Width="216"/>
@@ -40,13 +44,21 @@
             <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
             <TextBlock Name="HostAlreadyExists" Visibility="Collapsed" HorizontalAlignment="Left" Height="37" Margin="522,327,-114,0" TextWrapping="Wrap" FontSize="20" FontWeight="Bold" Text="הנך כבר קיים במערכת" VerticalAlignment="Top" Width="386"/>
             <Button Content="לעמוד האישי שלך" Name ="AlreadyExists_Host" FontSize="20" Visibility ="Collapsed" Background="#6495ED" Foreground="#191970" HorizontalAlignment="Left" Height="58" Margin="327,327,0,0" VerticalAlignment="Top" Width="164"/>
+            <TextBlock HorizontalAlignment="Left" Margin="767,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="141" FontWeight="Bold" FontSize="18"><Run FlowDirection="RightToLeft" Text="סיסמא:"/></TextBlock>
 
 
         </Grid>
-        <Grid Name="HostEntranceGrid" HorizontalAlignment="Left" Height="448" Margin="0,-29,-2,0" Visibility ="Collapsed" VerticalAlignment="Top" Width="794">
+        <Grid Name="HostEntranceGrid" Visibility="Collapsed" HorizontalAlignment="Center" MinHeight="448" Margin="0,-29,-2,0"  VerticalAlignment="Top" MinWidth="794">
             <Grid.Background>
                 <ImageBrush  ImageSource="SeaPicyure.jpg"></ImageBrush>
             </Grid.Background>
+            <TextBlock  HorizontalAlignment="Center" Margin="544,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="47" Width="201" FontSize="24" FontWeight="Bold"><Span FlowDirection="RightToLeft"><Run Text="מספר "/><Run Text="מארח"/></Span></TextBlock>
+            <TextBox Name="insertYourKey" HorizontalAlignment="Center" Height="45" Margin="344,66,376,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="187" FontSize="24" TextChanged="InsertYourKey_TextChanged"/>
+            <TextBlock Name="errorHostKey" Visibility="Collapsed" HorizontalAlignment="Center" Margin="330,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="76" Width="197" FontWeight="Bold" FontSize="20" Foreground="Red"><Run FlowDirection="RightToLeft" Text="המספר אינו קיים במערכת אנא נסה שנית"/></TextBlock>
+            <Button Name="HostTrySignIn" Content="אישור" HorizontalAlignment="Center" Margin="151,353,0,0" VerticalAlignment="Top" Width="166" Height="45" FontSize="24" Click="HostTrySignIn_Click"/>
+            <TextBlock HorizontalAlignment="Center" Margin="625,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="59" Width="146" FontSize="24" FontWeight="Bold"><Run FlowDirection="RightToLeft" Text="סיסמא"/></TextBlock>
+            <PasswordBox Name="hostEnteryPassword" HorizontalAlignment="Center" Margin="344,142,376.2,0" VerticalAlignment="Top" Height="45" Width="187"/>
+
         </Grid>
         <Grid Name="NewGuestGrid" Visibility="Collapsed" HorizontalAlignment="Stretch"  >
             <Grid.Background>
@@ -193,7 +205,7 @@
                 <RadioButton Content="לא משנה"/>
             </StackPanel>
         </Grid>
-        <TabControl HorizontalAlignment="Stretch" MinHeight="100" Margin="0,0,-0.4,0" VerticalAlignment="Top" MinWidth="100" Height="670">
+        <TabControl Name="hostAcount"  HorizontalAlignment="Stretch" Visibility="Visible" MinHeight="100" Margin="0,0,-0.4,0" VerticalAlignment="Top" MinWidth="100" Height="670">
             <TabControl.Background>
                 <ImageBrush ImageSource="SeaPicyure.jpg"/>
             </TabControl.Background>
@@ -204,12 +216,30 @@
                     </Grid.Background>
                     <DataGrid Name="units" HorizontalAlignment="Left" CanUserAddRows="True" ItemsSource="{Binding MyHostingUnits}" Height="511" Margin="34,10,0,0" VerticalAlignment="Top" Width="1304">
                         <DataGrid.Columns>
-
+                            <DataGridTemplateColumn x:Name="DelUnit" Header="מחק יחידה" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button  Content="מחק" BorderThickness="0" IsEnabled="True" Click="DelUnit_Click" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn x:Name="UpdatUnit" Header="עדכן יחידה" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button  Content="עדכן" BorderThickness="0" IsEnabled="True" Click="UpdatUnit_Click" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
+                        
                     </DataGrid>
-                    <Button Content="הוספה" Name="Add" HorizontalAlignment="Left" Margin="166,560,0,0" VerticalAlignment="Top" Width="75" Click="Add_Click" />
-                    <Button Content="Button" HorizontalAlignment="Left" Margin="287,560,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button Name="addUnit" Content="הוספה"  HorizontalAlignment="Left" Margin="166,560,0,0" VerticalAlignment="Top" Width="75" Click="addUnit_Click" />
+                    <Button Name="hostLogOut" Content="התנתק" HorizontalAlignment="Left" Margin="298,560,0,0" VerticalAlignment="Top" Width="100" Click="HostLogOut_Click"/>
                     <Button Content="Button" HorizontalAlignment="Left" Margin="417,560,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Grid Name="canNotBeDeletedGrid" Visibility="Collapsed" HorizontalAlignment="Center" Height="175" Margin="72,183,1133,0" VerticalAlignment="Top" Width="183" Background="#FFADA1A1">
+                        <TextBlock Name="CanNotBeDeleted" HorizontalAlignment="Center" Margin="0,26,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="77" Width="183"/>
+                        <Button Name="OKNoDelet" Content="אישור" HorizontalAlignment="Center" Margin="48,130,0,0" VerticalAlignment="Top" MinWidth="75" Click="OKNoDelet_Click"/>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="הזמנות" Width="200" Height="50" FontSize="24">
@@ -249,6 +279,21 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <Grid Name="updatOrAddUnit" Visibility="Visible" HorizontalAlignment="Stretch" MinHeight="518" Margin="0,0,-0.4,0" VerticalAlignment="Top" MinWidth="1065" Height="670" Background="#FFBA9595">
+            <CheckBox Name="isPool" Content="בריכה" HorizontalAlignment="Center" Margin="531,197,717.6,0" VerticalAlignment="Top" FontSize="24" Height="32" Width="145"/>
+            <CheckBox Name="isJacuzz" Content="ג'קוזי" HorizontalAlignment="Center" Margin="531,276,704.6,0" VerticalAlignment="Top" Height="40" Width="158" FontSize="24"/>
+            <CheckBox Name="isGarden" Content="גינה" HorizontalAlignment="Center" Margin="531,361,665,0" VerticalAlignment="Top" FontSize="24" Height="39" Width="198"/>
+            <CheckBox Name="isAttractions" Content="אטרקציות לילדים" HorizontalAlignment="Center" Margin="531,450,639,0" VerticalAlignment="Top" FontSize="24" Width="224"/>
+            <TextBox Name="Maxguests" HorizontalAlignment="Center" Height="42" Margin="830,361,342.6,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="221" />
+            <ComboBox Name="areaOfUnit" HorizontalAlignment="Center" SelectedIndex="0" Margin="830,197,342.6,0" VerticalAlignment="Top" Width="221" Height="40" FontSize="24"/>
+            <ComboBox Name="typeOfUnit" HorizontalAlignment="Center" SelectedIndex="0" Margin="830,277,342.6,0" VerticalAlignment="Top" Width="221" Height="39" FontSize="24"/>
+            <TextBox Name="nameOfUnit" HorizontalAlignment="Center" Height="42" Margin="830,450,342.6,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="221"/>
+            <TextBlock HorizontalAlignment="Left" Margin="1003,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="40" Width="231" FontSize="24"><Run FlowDirection="RightToLeft" Text="מספר יחידה:"/></TextBlock>
+            <Button Name="AddUnit" Content="אישור" HorizontalAlignment="Left" Visibility="Collapsed" Margin="142,522,0,0" VerticalAlignment="Top" Width="159" Height="66" FontSize="36" Click="AddUnit_Click"/>
+            <Button Name="backToUserHost" Content="חזור" HorizontalAlignment="Left" Margin="142,430,0,0" VerticalAlignment="Top" Width="156" Height="62" FontSize="36" Click="BackToUserHost_Click"/>
+            <Button Name="updatUnit" Content="עדכן" HorizontalAlignment="Left" Margin="142,522,0,0" VerticalAlignment="Top" Width="156" Height="66" FontSize="36" Click="UpdatUnit_Click_1"/>
+        </Grid>
+
 
     </Grid>
 </Window>
