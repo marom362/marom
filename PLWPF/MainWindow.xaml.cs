@@ -576,9 +576,9 @@ namespace PLWPF
 
         private void Orders_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+           
         }
-        private void closeOrder_Click(object sender, RoutedEventArgs e)
+        private void OrderDetails_Click(object sender, RoutedEventArgs e)
         {
             for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
                 if (vis is DataGridRow)
@@ -589,17 +589,31 @@ namespace PLWPF
                     break;
                 }
         }
+        private void closeOrder_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                
+                MyBl.OrderClosed((Order)((Button)sender).DataContext);
+                orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+
+            }
+            catch(Exception)
+            {
+
+            }
+        }
         private void SendEmail_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 //orders.DataContext = (Order)((Button)sender).DataContext;
                 //MyBl.ChangeStatusOfOrder((Order)((Button)sender).DataContext, StatusO.MailSent);
-                sendingEmail.Text = MyBl.SendingMail((Order)((Button)sender).DataContext);
+                /*sendingEmail.Text = */MyBl.SendingMail((Order)((Button)sender).DataContext);
                 //sendingEmail.Text+= ((Order)((Button)sender).DataContext).ToString();
                 //((Button)sender).Visibility = Visibility.Collapsed;
                 orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
-                SendEmail.Visibility = Visibility.Collapsed;
+                //SendEmail.Visibility = Visibility.Collapsed;
                 //SendEmail.IsEnabled = true;
             }
             catch(Exception )
@@ -711,7 +725,6 @@ namespace PLWPF
                     orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
                     updatOrAddUnit.Visibility = Visibility.Collapsed;
                     hostAcount.Visibility = Visibility.Visible;
-                    units.UpdateLayout();
                 }
             }
             catch(Exception)

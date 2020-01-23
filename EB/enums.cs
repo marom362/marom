@@ -35,7 +35,9 @@ namespace BE
         NotDealed,
         MailSent,
         ClosedBecauseofClient,
-        ClosedByClientsResponse
+        ClosedByClientsResponse,
+        ClosedBecauseExpired
+
     }
     public enum Types
     {

@@ -102,6 +102,7 @@ namespace BL
         bool DelUnit(HostingUnit unit);
         List<Order> GetAllOrdersOfUnit(HostingUnit unit);
         List<Order> GetAllOrdersOfHost(int key);
+        int OrderClosed(Order order);
 
         }
 }

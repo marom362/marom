@@ -245,10 +245,14 @@
             </TabControl.Background>
             <TabItem Header="יחידות אירוח" Width="200" Height="50" FontSize="24">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="303*"/>
+                        <ColumnDefinition Width="1085*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.Background>
                         <ImageBrush ImageSource="SeaPicyure.jpg"/>
                     </Grid.Background>
-                    <DataGrid Name="units" HorizontalAlignment="Left" CanUserAddRows="True" ItemsSource="{Binding MyHostingUnits}" Height="511" Margin="34,10,0,0" VerticalAlignment="Top" Width="1304">
+                    <DataGrid Name="units" HorizontalAlignment="Left" CanUserAddRows="True" ItemsSource="{Binding MyHostingUnits}" Height="511" Margin="34,10,0,0" VerticalAlignment="Top" Width="1304" Grid.ColumnSpan="2">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn x:Name="DelUnit" Header="מחק יחידה" >
                                 <DataGridTemplateColumn.CellTemplate>
@@ -268,9 +272,9 @@
 
                     </DataGrid>
                     <Button Name="addUnit" Content="הוספה"  HorizontalAlignment="Left" Margin="166,560,0,0" VerticalAlignment="Top" Width="75" Click="addUnit_Click" />
-                    <Button Name="hostLogOut" Content="התנתק" HorizontalAlignment="Left" Margin="298,560,0,0" VerticalAlignment="Top" Width="100" Click="HostLogOut_Click"/>
-                    <Button Content="Button" HorizontalAlignment="Left" Margin="417,560,0,0" VerticalAlignment="Top" Width="75"/>
-                    <Grid Name="canNotBeDeletedGrid" Visibility="Collapsed" HorizontalAlignment="Center" Height="175" Margin="72,183,1133,0" VerticalAlignment="Top" Width="183" Background="#FFADA1A1">
+                    <Button Name="hostLogOut" Content="התנתק" HorizontalAlignment="Left" Margin="298,560,0,0" VerticalAlignment="Top" Width="100" Click="HostLogOut_Click" Grid.ColumnSpan="2"/>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="114.1,560,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
+                    <Grid Name="canNotBeDeletedGrid" Visibility="Collapsed" HorizontalAlignment="Center" Height="175" Margin="72,183,47.9,0" VerticalAlignment="Top" Width="183" Background="#FFADA1A1">
                         <TextBlock Name="CanNotBeDeleted" HorizontalAlignment="Center" Margin="0,26,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="77" Width="183"/>
                         <Button Name="OKNoDelet" Content="אישור" HorizontalAlignment="Center" Margin="48,130,0,0" VerticalAlignment="Top" MinWidth="75" Click="OKNoDelet_Click"/>
                     </Grid>
@@ -286,30 +290,29 @@
                             <DataGridTextColumn x:Name="OrderNumber" Header = "מספר הזמנה"  Binding = "{Binding OrderKey}" />
                             <DataGridTextColumn Header = "מספר יחידת אירוח" Binding = "{Binding HostingUnitKey}" />
                             <DataGridTextColumn Header="סטטוס" Binding="{Binding Status}" />
-                            <DataGridTemplateColumn Header="פרטי יחידה">
+                            <DataGridTemplateColumn Header="סגירת הזמנה">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button  Name="closeOrder" BorderThickness="0"  />
+                                        <Button Content="סגור הזמנה" Name="closeOrder" BorderThickness="0" Click="closeOrder_Click"  />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn x:Name="SendEmail" Header="שלח" >
+                            <DataGridTemplateColumn x:Name="SendEmail" Header="שלח">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button  Content="שלח" BorderThickness="0"  Click="SendEmail_Click" />
+                                        <Button  Content="שלח"  VerticalAlignment="Top" Click="SendEmail_Click" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="פרטי יחידה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="closeOrder_Click" />
+                                        <Button Content="פרטי יחידה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="OrderDetails_Click" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <TextBlock Name="sendingEmail" HorizontalAlignment="Center" Margin="485,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top"    MinHeight="114" MinWidth="194"><Run FlowDirection="RightToLeft" Text=""/></TextBlock>
                 </Grid>
             </TabItem>
             <TextBlock Height="100" TextWrapping="Wrap" Text="TextBlock" Width="100"/>

@@ -266,19 +266,10 @@ namespace BL
                 GuestRequest request = FactorySingletonDal.GetInstance.GetGuestRequest(order.GuestRequestKey);
                 HostingUnit unit = FactorySingletonDal.GetInstance.GetHostingUnit(order.HostingUnitKey);
                 bool[,] diary = unit.Diary;
-                for (int i = request.EntryDate.Month, j = request.EntryDate.Day + 1; i <= request.EntryDate.Month; i++)
-                    if (i != request.ReleaseDate.Month)
-                    {
-                        for (; j < 31; j++)
-                            diary[i, j] = true;
-
-                        j = 1;
-                    }
-                    else
-                    {
-                        for (; j < request.EntryDate.Day - 1; j++)
-                            diary[i, j] = true;
-                    }
+                for(DateTime i=request.EntryDate;i<request.ReleaseDate;i=i.AddDays(1))
+                {
+                    unit.Diary[i.Month, i.Day] = true;
+                }
             }
             catch (InvalidOperationException f)
             {
@@ -296,8 +287,8 @@ namespace BL
                 List<Order> orders = GetListOfOrders();
                 foreach (Order order in orders)
                 {
-                    if (order.GuestRequestKey == request.GuestRequestKey)// need to be changed to the correct names of variables
-                        ClosingOrder(order, request, StatusO.ClosedBecauseofClient);
+                    if (order.GuestRequestKey == request.GuestRequestKey) // need to be changed to the correct names of variables
+                         ClosingOrder(order, request, StatusO.ClosedBecauseofClient);
                 }
             }
             catch (InvalidOperationException h) { throw h; }
@@ -331,12 +322,13 @@ namespace BL
                 if (desiredStatus == (StatusO)2)
                 {
                     gr.Status = (StatusGR)2; // if enum is defined
-                    order.Status = (StatusO)3;
+                    order.Status = (StatusO)2;
                 }
+                
                 else
                 {
                     BookDays(order);
-                    CloseOtherOrders(request);
+                    CloseOtherOrders(gr);
                     return NumDaysBetween(gr.EntryDate, gr.ReleaseDate) * Configuration.NumCommission; //DayComission should be defined in Configurations
                 }
                 return 0; //default code
@@ -344,6 +336,34 @@ namespace BL
             catch (KeyNotFoundException k)
             {
                 throw k;
+            }
+            catch (InvalidOperationException g)// from DAL
+            {
+                throw g;
+            }
+        }
+        public int OrderClosed(Order order)
+        {
+            try
+            {
+                GuestRequest gr = FactorySingletonDal.GetInstance.GetGuestRequest(order.GuestRequestKey);
+                if (order.Status == StatusO.MailSent)
+                {
+                    BookDays(order);
+                    CloseOtherOrders(gr);
+                    gr.Status = StatusGR.ClosedThroughSite; // if enum is defined
+                    order.Status = StatusO.ClosedByClientsResponse;
+                    return NumDaysBetween(gr.EntryDate, gr.ReleaseDate) * Configuration.NumCommission; //DayComission should be defined in Configurations
+
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch (KeyNotFoundException k)
+            {
+                    throw k;
             }
             catch (InvalidOperationException g)// from DAL
             {
