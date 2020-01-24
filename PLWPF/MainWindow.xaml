@@ -16,7 +16,7 @@
             <ImageBrush ImageSource="תמונה צימר.jpg"/>
         </Grid.Background>
 
-        <Grid Name="StartGrid" Visibility="Collapsed" HorizontalAlignment="Stretch" MinHeight="420" VerticalAlignment="Top" MinWidth="794" Margin="0,0,-0.4,0" Grid.ColumnSpan="2">
+        <Grid Name="StartGrid" Visibility="Visible" HorizontalAlignment="Stretch" MinHeight="420" VerticalAlignment="Top" MinWidth="794" Margin="0,0,-0.4,0" Grid.ColumnSpan="2">
             <Image Margin="0,0,-6,0" Source="תמונה צימר.jpg" Stretch="Fill"/>
             <Button Name="HostEnter" Content="כניסה" HorizontalAlignment="Center" Margin="41,254,0,0" VerticalAlignment="Top" Width="117" Height="53" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="HostEnter_Click"/>
             <Button Content="הרשמה" HorizontalAlignment="Center" Margin="41,312,0,0" VerticalAlignment="Top" Width="117" Height="54" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Click="Button_Click"/>
@@ -239,7 +239,7 @@
                 <RadioButton Content="לא משנה"/>
             </StackPanel>
         </Grid>
-        <TabControl Name="hostAcount"  HorizontalAlignment="Stretch" Visibility="Visible" MinHeight="100" Margin="0,0,-0.4,0" VerticalAlignment="Top" MinWidth="100" Height="770" Grid.ColumnSpan="2">
+        <TabControl Name="hostAcount"  HorizontalAlignment="Stretch" Visibility="Collapsed" MinHeight="100" Margin="0,0,-0.4,0" VerticalAlignment="Top" MinWidth="100" Height="770" Grid.ColumnSpan="2">
             <TabControl.Background>
                 <ImageBrush ImageSource="SeaPicyure.jpg"/>
             </TabControl.Background>
@@ -274,9 +274,13 @@
                     <Button Name="addUnit" Content="הוספה"  HorizontalAlignment="Left" Margin="166,560,0,0" VerticalAlignment="Top" Width="75" Click="addUnit_Click" />
                     <Button Name="hostLogOut" Content="התנתק" HorizontalAlignment="Left" Margin="298,560,0,0" VerticalAlignment="Top" Width="100" Click="HostLogOut_Click" Grid.ColumnSpan="2"/>
                     <Button Content="Button" HorizontalAlignment="Left" Margin="114.1,560,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
-                    <Grid Name="canNotBeDeletedGrid" Visibility="Collapsed" HorizontalAlignment="Center" Height="175" Margin="72,183,47.9,0" VerticalAlignment="Top" Width="183" Background="#FFADA1A1">
-                        <TextBlock Name="CanNotBeDeleted" HorizontalAlignment="Center" Margin="0,26,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="77" Width="183"/>
-                        <Button Name="OKNoDelet" Content="אישור" HorizontalAlignment="Center" Margin="48,130,0,0" VerticalAlignment="Top" MinWidth="75" Click="OKNoDelet_Click"/>
+                    <Grid Name="canNotBeDeletedGrid" Visibility="Collapsed" HorizontalAlignment="Center" Height="317" Margin="166,278,765,0" VerticalAlignment="Top" Width="457" Grid.ColumnSpan="2" >
+                        <Grid.Background>
+                            <ImageBrush ImageSource="Image1.png"/>
+                        </Grid.Background>
+                        <TextBlock Name="CanNotBeDeleted" HorizontalAlignment="Center" Margin="61,48,43,0" FontSize="24" FontWeight="Medium" Foreground="#800000" TextWrapping="Wrap" Text="אי אפשר למחוק את היחידה כי קיימות הזמנות פתוחות עליה" VerticalAlignment="Top" Height="200" Width="353"/>
+                        <Button Name="OKNoDelet" Content="אישור" Background ="#FF4500" FontWeight="DemiBold" Foreground="#FFFFE0" HorizontalAlignment="Center" Margin="344,267,10,0" VerticalAlignment="Top" MinWidth="75" Click="OKNoDelet_Click" Height="40" RenderTransformOrigin="0.24,0.364" Width="103"/>
+                        <Button Content="X" Background ="Red" HorizontalAlignment="Left" Height="47" Margin="398,1,0,0" VerticalAlignment="Top" Width="59" Click="OKNoDelet_Click"/>
                     </Grid>
                 </Grid>
             </TabItem>

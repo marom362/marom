@@ -362,7 +362,7 @@ namespace PLWPF
             }
             return flag;
         }
-        private void EndGuestRequest_Click(object sender, RoutedEventArgs e)
+        /*private void EndGuestRequest_Click(object sender, RoutedEventArgs e)
         {
             if (allDetailsValid())
             {
@@ -414,6 +414,53 @@ namespace PLWPF
 
                 }
                 
+
+            }
+
+        }*/
+        private void EndGuestRequest_Click(object sender, RoutedEventArgs e)
+        {
+            if (allDetailsValid())
+            {
+                currentRequest = new GuestRequest();
+                currentRequest.guest = currentGuest;
+                try
+                {
+                    currentRequest.Adults = int.Parse(insertNumOFAdults.Text);
+                }
+                catch (FormatException)
+                {
+                    insertNumOFAdults.Clear();
+                    //ErrorNumOfAdults.Visibility = Visibility.Visible;
+                }
+                try
+                {
+                    currentRequest.Children = int.Parse(insertNumOfChildren.Text);
+                }
+                catch (FormatException)
+                {
+                    //ErrorNumOfChildren.Visibility = Visibility.Visible;
+                    insertNumOfChildren.Clear();
+                }
+                currentRequest.Area = (Areas)insertArea.SelectedIndex;
+                currentRequest.Type = (Types)insertTheType.SelectedIndex;
+                currentRequest.EntryDate = insertRequestDates.SelectedDates.First();
+                currentRequest.ReleaseDate = insertRequestDates.SelectedDates.Last();
+                //currentRequest.Pool = (Options)numberOfOption(insertPool);
+                try
+                {
+                    FactorySingletonBL.GetInstance.AddRequest(currentRequest);
+                    //MyBl.AddGuest(currentGuest);
+                }
+                catch (Exception)
+                {
+
+                }
+                NewRequestGrid.Visibility = Visibility.Collapsed;
+                GuestGrid.Visibility = Visibility.Visible;
+                welcomeGuest.Text = currentGuest.PrivateName;
+                guestpersonalDedails.Text = currentGuest.ToString();
+                requestDetails.Text = currentRequest.ToString();
 
             }
 
@@ -932,6 +979,8 @@ namespace PLWPF
             acountNumber.BorderBrush = ContinueToRequest.BorderBrush;
             ErrorNumberAcount.Text = "";
         }
+       
     }
+
 }
 
