@@ -12,7 +12,7 @@ namespace BL
     public class BLimp : IBL
     {
 
-
+        Idal MyDAL = FactorySingletonDal.GetInstance;
         /// <summary>
         /// If the same Guest Request doesn't exist, sends it to DAL to add it
         /// </summary>
@@ -89,6 +89,7 @@ namespace BL
                 GuestRequest gr = FactorySingletonDal.GetInstance.GetGuestRequest(numOfRequest);
                 gr.Status = status;
                 FactorySingletonDal.GetInstance.UpdatingGuestRequest(gr);
+                
             }
             catch (InvalidOperationException x)
             {
@@ -167,7 +168,7 @@ namespace BL
         {
             try
             {
-                if (order.Status == StatusO.ClosedByClientsResponse || order.Status == StatusO.ClosedBecauseofClient)
+                if (order.Status == StatusO.ClosedByClientsResponse || order.Status == StatusO.ClosedBecauseofClient||order.Status==StatusO.ClosedBecauseExpired)
                     throw new InvalidOperationException("This order is closed");
                 order.Status = status;
                 FactorySingletonDal.GetInstance.UpdatingOrder(order);
@@ -244,6 +245,7 @@ namespace BL
                 FactorySingletonDal.GetInstance.UpdatingOrder(order);// as if this function of DAL receives the new Status and the num of order;
                 return "The mail is sent";
             }
+
             catch (KeyNotFoundException k)
             {
                 throw k;
@@ -300,6 +302,39 @@ namespace BL
         /// <param name="order"></param>
         /// <param name="guest"></param>
         /// <param name="desiredStatus"></param>
+        public void checksExpiredOrders()
+        {
+            int key;
+            List<Order> orders= FactorySingletonDal.GetInstance.GetAllOrders();
+            foreach(Order order in orders)
+            {
+                key = order.GuestRequestKey;
+                if (FactorySingletonDal.GetInstance.GetGuestRequest(key).Status == StatusGR.ClosedBecauseExpired)
+                {
+                    ChangeStatusOfOrder(order,StatusO.ClosedBecauseExpired);
+
+                }
+            }
+        }
+        public void checksExpiredRequests()
+        {
+            List<GuestRequest> requests = FactorySingletonDal.GetInstance.GetAllGuestRequests();
+            foreach (GuestRequest request in requests)
+            {
+                if (request.EntryDate<=DateTime.Now)
+                {
+                    ChangeStatusOfRequest(request.GuestRequestKey, StatusGR.ClosedBecauseExpired);
+                }
+            }
+        }
+        public void UpdateRequest(GuestRequest request)
+        {
+            FactorySingletonDal.GetInstance.UpdatingGuestRequest(request);
+        }
+        public void UpdateOrder(Order order)
+        {
+            FactorySingletonDal.GetInstance.UpdatingOrder(order);
+        }
         public List<Order> TheWaitingTimeExpired(int numberOfDays)
         {
             List<Order> orders = GetListOfOrders();
@@ -702,10 +737,11 @@ namespace BL
             }
 
         }
-        public int NumOfClosedOrders(HostingUnit unit)
+        public int NumOfClosedOrders(int key)
         {
             try
             {
+                HostingUnit unit = GetUnit(key);
                 return FactorySingletonDal.GetInstance.GetAllOrders().Count(x =>
                x.HostingUnitKey == unit.HostingUnitKey && x.Status == StatusO.ClosedByClientsResponse);
             }
@@ -714,11 +750,15 @@ namespace BL
                 throw h;
             }
         }
+        public float n(int key)
+        {
+            return (float)NumOfClosedOrders(key)/ 365;
+        }
         public List<HostingUnit> OrderUnitsByPopularity()
         {
             try
             {
-                return FactorySingletonDal.GetInstance.GetAllHostingUnits().OrderByDescending(x => NumOfClosedOrders(x)).ToList();
+                return FactorySingletonDal.GetInstance.GetAllHostingUnits().OrderByDescending(x => NumOfClosedOrders(x.HostingUnitKey)).ToList();
             }
             catch (InvalidCastException x)
             {
@@ -845,6 +885,7 @@ namespace BL
         }
         public List<Order> GetAllOrdersOfHost(int key)
         {
+            
             try
             {
                 return FactorySingletonDal.GetInstance.GetAllOrders().Where(x =>
@@ -854,10 +895,11 @@ namespace BL
             {
                 return null;
             }
+            
         }
         public bool DelUnit(HostingUnit unit)
         {
-            if (GetAllOrdersOfUnit(unit).Exists(x => x.Status == StatusO.MailSent))
+            if (GetAllOrdersOfUnit(unit).Exists(x => x.Status == StatusO.MailSent||x.Status==StatusO.ClosedByClientsResponse))
                 return false;
             try
             {
@@ -885,9 +927,51 @@ namespace BL
             }
 
         }
+        public void DelOrder(Order order)
+        {
+            try
+            {
+                FactorySingletonDal.GetInstance.DelOrder(order);
+            }
+            catch
+            {
 
+            }
+        }
+        public void DelRequest(GuestRequest request)
+        {
+            try
+            {
+                FactorySingletonDal.GetInstance.DelRequest(request);
+            }
+            catch (Exception)
+            {
 
-
+            }
+        }
+        public Guest GetGuest(string mail)
+        {
+            List<GuestRequest> requests = FactorySingletonDal.GetInstance.GetAllGuestRequests();
+            foreach (GuestRequest request in requests)
+            {
+                if (request.guest.MailAddress == mail)
+                    return request.guest;
+            }
+            return null;
+        }
+        public List<GuestRequest> GetRequestsOfGuest(string mail)
+        {
+            try
+            {
+                return FactorySingletonDal.GetInstance.GetAllGuestRequests().Where(x =>
+                x.guest.MailAddress == mail).ToList();
+            }
+            catch (Exception x)
+            {
+                throw x;
+            }
+        }
+       
     }
 }
 

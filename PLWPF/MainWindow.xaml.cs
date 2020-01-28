@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,7 +23,7 @@ namespace PLWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        IBL MyBl = new BLimp();
+        IBL MyBl = FactorySingletonBL.GetInstance;
         public MainWindow()
         {
             InitializeComponent();
@@ -31,7 +32,7 @@ namespace PLWPF
                 ComboBoxItem newItem = new ComboBoxItem();
                 newItem.Content = (Areas)i;
                 insertArea.Items.Add(newItem);
-                
+
             }
             for (int i = 0; i < 5; i++)
             {
@@ -52,11 +53,24 @@ namespace PLWPF
                 typeOfUnit.Items.Add(newItem);
             }
 
-
-
+            //Task.Run(() => FactorySingletonBL.GetInstance.checksExpiredOrders());
+           // Task.Run(() => FactorySingletonBL.GetInstance.checksExpiredRequests());
+           // Task task = Task.Run(() => Updateorders());
 
             //orders.ItemsSource = MyBl.GetListOfOrders();
             //units.ItemsSource = MyBl.AllUnitsOfOneHost(1);
+        }
+        public void  Updateorders()
+        {
+            try
+            {
+                units.ItemsSource = FactorySingletonBL.GetInstance.AllUnitsOfOneHost(currentHost.HostKey);
+                orders.ItemsSource = FactorySingletonBL.GetInstance.GetAllOrdersOfHost(currentHost.HostKey);
+            }
+            catch
+            {
+
+            }
         }
         public List<HostingUnit> MyHostingUnits
         {
@@ -65,10 +79,10 @@ namespace PLWPF
                 return MyBl.GetListOfUnits(); //MyBl.AllUnitsOfOneHost(tempHost.HostKey);
             }
         }
-        Host tempHost = new Host() { PrivateName = "Meir", HostKey = 1 };
+        Host tempHost = new Host();
         GuestRequest currentRequest;
         Guest currentGuest;
-        HostingUnit currentUnit = new HostingUnit();
+        HostingUnit currentUnit;
         Order order = new Order();
         Host currentHost = new Host();
 
@@ -130,20 +144,6 @@ namespace PLWPF
             }*/
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
-        {
-
-        }
 
         private void ContinueToRequest_Click(object sender, RoutedEventArgs e)
         {
@@ -189,7 +189,7 @@ namespace PLWPF
                 errorMail.Text = "כתובת אימייל לא תקינה";
                 InsertEmail.BorderBrush = Brushes.Red;
             }
-            else if (MyBl.mailGuestIsExist(InsertEmail.Text))
+            else if (FactorySingletonBL.GetInstance.GetGuest(InsertEmail.Text)!=null)
             {
                 flag = false;
                 errorMail.Text = "כתובת אימייל כבר קיימת במערכת";
@@ -219,7 +219,7 @@ namespace PLWPF
                 InsertFamilyName.BorderBrush = Brushes.Red;
                 errorFamilyName.Text = "שדה חובה";
             }
-            if(bankNumber.Text.Length==0)
+            if (bankNumber.Text.Length == 0)
             {
                 flag = false;
                 bankNumber.BorderBrush = Brushes.Red;
@@ -229,23 +229,23 @@ namespace PLWPF
                 {
                     int.Parse(bankNumber.Text);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     flag = false;
                     bankNumber.BorderBrush = Brushes.Red;
                     errorBankNumber.Text = "תווים לא תקינים";
                 }
-            if(bankName.Text.Length==0)
+            if (bankName.Text.Length == 0)
             {
                 flag = false;
                 bankName.BorderBrush = Brushes.Red;
                 ErrorBankName.Text = "שדה חובה";
             }
-            if(branchNumber.Text.Length==0)
+            if (branchNumber.Text.Length == 0)
             {
                 flag = false;
                 branchNumber.BorderBrush = Brushes.Red;
-               ErrorBranchName.Text = "שדה חובה";
+                ErrorBranchName.Text = "שדה חובה";
             }
             else try
                 {
@@ -257,7 +257,7 @@ namespace PLWPF
                     branchNumber.BorderBrush = Brushes.Red;
                     ErrorBranchName.Text = "תווים לא תקינים";
                 }
-            if(branchAddress.Text.Length==0)
+            if (branchAddress.Text.Length == 0)
             {
                 flag = false;
                 branchAddress.BorderBrush = Brushes.Red;
@@ -269,7 +269,7 @@ namespace PLWPF
                 branchCity.BorderBrush = Brushes.Red;
                 ErrorBranchCity.Text = "שדה חובה";
             }
-            if(acountNumber.Text.Length==0)
+            if (acountNumber.Text.Length == 0)
             {
                 flag = false;
                 acountNumber.BorderBrush = Brushes.Red;
@@ -312,7 +312,7 @@ namespace PLWPF
                 return false;
             //if (MyBl.GuestIsExist(int.Parse(InsertID.Text)))
             return true;
-            
+
 
         }
 
@@ -358,7 +358,7 @@ namespace PLWPF
             if (insertNumOFAdults.Text.Length == 0)
             {
                 flag = false;
-               insertNumOfChildren.BorderBrush = Brushes.Red;
+                insertNumOfChildren.BorderBrush = Brushes.Red;
             }
             return flag;
         }
@@ -457,10 +457,11 @@ namespace PLWPF
 
                 }
                 NewRequestGrid.Visibility = Visibility.Collapsed;
-                GuestGrid.Visibility = Visibility.Visible;
-                welcomeGuest.Text = currentGuest.PrivateName;
-                guestpersonalDedails.Text = currentGuest.ToString();
-                requestDetails.Text = currentRequest.ToString();
+                UserGuest.Visibility = Visibility.Visible;
+                UserGuestRequest.ItemsSource = FactorySingletonBL.GetInstance.GetListOfRequests();
+                //welcomeGuest.Text = currentGuest.PrivateName;
+                //guestpersonalDedails.Text = currentGuest.ToString();
+                //requestDetails.Text = currentRequest.ToString();
 
             }
 
@@ -478,18 +479,22 @@ namespace PLWPF
 
         private void GuestEntery_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void LogeOutRequest_Click(object sender, RoutedEventArgs e)
         {
-
+            UserGuest.Visibility = Visibility.Collapsed;
+            StartGrid.Visibility = Visibility.Visible;
+            currentGuest = null;
+            currentRequest = null;
         }
 
         private void GuestSignUp_Click(object sender, RoutedEventArgs e)
         {
             NewGuestGrid.Visibility = Visibility.Visible;
-            StartGrid.Visibility = Visibility.Hidden;
+            StartGrid.Visibility = Visibility.Collapsed;
+            GuestTryIn.Visibility = Visibility.Collapsed;
         }
         private void HostSignIn_Click(object sender, RoutedEventArgs e)
         {
@@ -498,13 +503,16 @@ namespace PLWPF
         }
         public void GuestSignIn_Click(object sender, RoutedEventArgs e)
         {
-
+            //StartGrid.Visibility = Visibility.Collapsed;
+            GuestTryIn.Visibility = Visibility.Visible;
+            
         }
         private void HostSignUp_Click(object sender, RoutedEventArgs e)
         {
             HostSignUpGrid.Visibility = Visibility.Visible;
             StartGrid.Visibility = Visibility.Collapsed;
             WhiteGrid.Visibility = Visibility.Visible;
+            HostEntranceGrid.Visibility = Visibility.Collapsed;
             tempHost.HostKey = 0;
             tempHost.FamilyName = "\0";
             tempHost.FhoneNumber = "\0";
@@ -518,6 +526,13 @@ namespace PLWPF
             StartGrid.Visibility = Visibility.Visible;
             HostSignUpGrid.Visibility = Visibility.Collapsed;
             WhiteGrid.Visibility = Visibility.Collapsed;
+            clearHostSignUpGrid();
+            HostAlreadyExists.Visibility = Visibility.Collapsed;
+            AlreadyExists_Host.Visibility = Visibility.Collapsed;
+            SignUpHost.Visibility = Visibility.Visible;
+            InvalidID.Visibility = Visibility.Collapsed;
+            InvalidPhone.Visibility = Visibility.Collapsed;
+            WrongEmail.Visibility = Visibility.Collapsed;
         }
         private void Host_Email_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -534,25 +549,28 @@ namespace PLWPF
             }
             catch (NullReferenceException)
             {
-                WrongEmail = new TextBlock();
+                //MessageBox.Show(a.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                //WrongEmail = new TextBlock();
             }
         }
         private void SignUpHost_Click(object sender, RoutedEventArgs e)
         {
-            //bool invalid = false;
+            bool isvalid = true;
 
             try
             {
                 InvalidID.Visibility = Visibility.Collapsed;
                 tempHost.HostKey = Int32.Parse(HostID.Text);
-                //invalid = false;
+                
+
 
             }
             catch (FormatException)
             {
                 InvalidID.Visibility = Visibility.Visible;
                 HostID.Clear();
-                return;
+                isvalid = false;
+                
             }
             try
             {
@@ -565,6 +583,12 @@ namespace PLWPF
             {
                 InvalidPhone.Visibility = Visibility.Visible;
                 HostTelephone.Clear();
+                isvalid = false;
+
+            }
+            if (insertHostPassword.Password.Length==0)
+            {
+                isvalid = false;
             }
             tempHost.PrivateName = HostName.Text;
             tempHost.FamilyName = HostFamilyName.Text;
@@ -577,18 +601,21 @@ namespace PLWPF
                 AlreadyExists_Host.Visibility = Visibility.Visible;
                 SignUpHost.Visibility = Visibility.Collapsed;
             }
-            else
+            else if(isvalid)
             {
                 currentHost = tempHost;
-                orders.ItemsSource =null;
+                orders.ItemsSource = null;
+                units.ItemsSource = null;
                 HostSignUpGrid.Visibility = Visibility.Collapsed;
                 WhiteGrid.Visibility = Visibility.Collapsed;
-                updatOrAddUnit.Visibility = Visibility.Visible;
+                hostAcount.Visibility = Visibility.Visible;
+                clearHostSignUpGrid();
+                
 
             }
         }
 
-        
+
         private void WatchYourRequest_Click(object sender, RoutedEventArgs e)
         {
 
@@ -612,7 +639,7 @@ namespace PLWPF
             InsertPassword.Password = string.Empty;
             insertNumOFAdults.Text = string.Empty;
             insertNumOfChildren.Text = string.Empty;
-            GuestGrid.Visibility = Visibility.Collapsed;
+            UserGuest.Visibility = Visibility.Collapsed;
             StartGrid.Visibility = Visibility.Visible;
         }
 
@@ -623,7 +650,7 @@ namespace PLWPF
 
         private void Orders_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-           
+
         }
         private void OrderDetails_Click(object sender, RoutedEventArgs e)
         {
@@ -640,34 +667,69 @@ namespace PLWPF
         {
             try
             {
-                
+
                 MyBl.OrderClosed((Order)((Button)sender).DataContext);
                 orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
 
             }
-            catch(Exception)
+            catch (Exception)
             {
 
             }
         }
         private void SendEmail_Click(object sender, RoutedEventArgs e)
         {
+            Order order = (Order)((Button)sender).DataContext;
+            //orders.DataContext = (Order)((Button)sender).DataContext;
+            //MyBl.ChangeStatusOfOrder((Order)((Button)sender).DataContext, StatusO.MailSent);
+            /*sendingEmail.Text = */
+            
+            //SendEmail.Visibility = Visibility.Collapsed;
+            //SendEmail.IsEnabled = true;
+            MailMessage mail = new MailMessage();
+            //Order order = (Order)((Button)sender).DataContext;
+            string SiteMail = "mmm1.ppp112345@gmail.com";// BL.BL_imp.loggedInUser.Email;
+            GuestRequest request = MyBl.GetListOfRequests().Where(x => x.GuestRequestKey == order.GuestRequestKey).FirstOrDefault();
+            string GuestMail = request.guest.MailAddress;
+            string PasswordMail = "mp1234567";//BL.BL_imp.loggedInUser.Password;
+
+            mail.To.Add(GuestMail);
+            mail.From = new MailAddress(SiteMail);
+            mail.Subject = "הצעת ארוח ממערכת גן עדן";
+            currentUnit=MyBl.GetUnit(order.HostingUnitKey);
+            mail.Body = GetMailBody(request, currentUnit);
+            mail.IsBodyHtml = true;
+
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new System.Net.NetworkCredential(SiteMail, PasswordMail);
+            smtp.EnableSsl = true;
             try
             {
-                //orders.DataContext = (Order)((Button)sender).DataContext;
-                //MyBl.ChangeStatusOfOrder((Order)((Button)sender).DataContext, StatusO.MailSent);
-                /*sendingEmail.Text = */MyBl.SendingMail((Order)((Button)sender).DataContext);
+                smtp.Send(mail);
+                MyBl.SendingMail((Order)((Button)sender).DataContext);
                 //sendingEmail.Text+= ((Order)((Button)sender).DataContext).ToString();
                 //((Button)sender).Visibility = Visibility.Collapsed;
                 orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
-                //SendEmail.Visibility = Visibility.Collapsed;
-                //SendEmail.IsEnabled = true;
             }
-            catch(Exception )
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
-            
+        }
+        private string GetMailBody(GuestRequest request, HostingUnit unit)
+        {
+            return string.Format(@"
+                    <html>
+                        <body>
+                            שלום {0} ,<br/>
+                            נמצאה התאמה מיחידה  {1}
+                        </body>
+                    </html>
+            ", request.guest.PrivateName + " " + request.guest.FamilyName,
+            unit.HostingUnitName);
         }
 
         private void addUnit_Click(object sender, RoutedEventArgs e)
@@ -692,26 +754,26 @@ namespace PLWPF
             try
             {
                 int i = int.Parse(insertYourKey.Text);
-                units.ItemsSource= MyBl.AllUnitsOfOneHost(i);
-                orders.ItemsSource = MyBl.GetAllOrdersOfHost(i);
                 Host host = MyBl.GetHost(i);
-                if (hostEnteryPassword.Password==host.password)
+                if (hostEnteryPassword.Password == host.password)
                 {
                     hostAcount.Visibility = Visibility.Visible;
                     HostEntranceGrid.Visibility = Visibility.Collapsed;
                     StartGrid.Visibility = Visibility.Collapsed;
                     currentHost = host;
+                    units.ItemsSource = MyBl.AllUnitsOfOneHost(i);
+                    orders.ItemsSource = MyBl.GetAllOrdersOfHost(i);
                 }
                 else
                 {
                     errorHostKey.Text = "הסיסמא שגויה";
                     errorHostKey.Visibility = Visibility.Visible;
                 }
-                    
+
 
 
             }
-            catch(Exception)
+            catch (Exception)
             {
                 errorHostKey.Text = "מספר אורח לא קיים";
                 errorHostKey.Visibility = Visibility.Visible;
@@ -735,22 +797,44 @@ namespace PLWPF
         {
             try
             {
-                if (MyBl.DelUnit((HostingUnit)((Button)sender).DataContext))
+                List<Order> orders = FactorySingletonBL.GetInstance.GetAllOrdersOfHost(currentHost.HostKey);
+                HostingUnit unit=(HostingUnit)((Button)sender).DataContext;
+                var result=MessageBox.Show("?האם אתה בטוח שברצונך למחוק יחידה זו", "", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if(result==MessageBoxResult.Yes)
                 {
-                    units.ItemsSource = MyBl.AllUnitsOfOneHost(currentHost.HostKey);
-                    orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+                    if (!MyBl.DelUnit(unit))
+                    {
+                        MessageBox.Show("אין אפשרות למחוק יחידה זו", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        foreach (Order order in orders)
+                            if (order.HostingUnitKey == unit.HostingUnitKey)
+                                FactorySingletonBL.GetInstance.DelOrder(order);
+                        Updateorders();
+                        
+                    }
                 }
+                
+            }
+            catch (Exception a)
+            {
+                MessageBox.Show(a.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                
+            }
 
-                else
-                {
-                    canNotBeDeletedGrid.Visibility = Visibility.Visible;
-                    CanNotBeDeleted.Text = "אין אפשרות למחוק יחידה זו";
-                }
+        }
+        private void DelRequest_Click(object sender, RoutedEventArgs e)
+        {
+            GuestRequest request = (GuestRequest)((Button)sender).DataContext;
+            try
+            {
+                FactorySingletonBL.GetInstance.DelRequest(request);
+                UserGuestRequest.ItemsSource = FactorySingletonBL.GetInstance.GetRequestsOfGuest(currentGuest.MailAddress);
             }
             catch(Exception)
             {
-                canNotBeDeletedGrid.Visibility = Visibility.Visible;
-                CanNotBeDeleted.Text = "you can't delete this unit";
+
             }
             
         }
@@ -759,6 +843,8 @@ namespace PLWPF
         {
             updatOrAddUnit.Visibility = Visibility.Collapsed;
             hostAcount.Visibility = Visibility.Visible;
+            Maxguests.BorderBrush = updatUnit.BorderBrush;
+            nameOfUnit.BorderBrush = updatUnit.BorderBrush;
         }
 
         private void AddUnit_Click(object sender, RoutedEventArgs e)
@@ -774,12 +860,13 @@ namespace PLWPF
                     hostAcount.Visibility = Visibility.Visible;
                 }
             }
-            catch(Exception)
+            catch (Exception a)
             {
+                MessageBox.Show(a.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
-                
-            
+
+
 
 
         }
@@ -824,7 +911,7 @@ namespace PLWPF
                 }
                 currentUnit.HostingUnitName = nameOfUnit.Text;
                 currentUnit.Owner = currentHost;
-                
+
             }
             return flag;
         }
@@ -881,11 +968,16 @@ namespace PLWPF
                     orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
                     units.ItemsSource = MyBl.AllUnitsOfOneHost(currentHost.HostKey);
                     currentUnit = new HostingUnit();
+                    Maxguests.BorderBrush = updatUnit.BorderBrush;
+                    nameOfUnit.BorderBrush= updatUnit.BorderBrush;
+
+
                 }
 
             }
-            catch(Exception)
+            catch (Exception a)
             {
+                MessageBox.Show(a.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
         }
@@ -934,6 +1026,15 @@ namespace PLWPF
             acountNumber.BorderBrush = ContinueToRequest.BorderBrush;
             ErrorNumberAcount.Text = "";
         }
+        private void clearHostSignUpGrid()
+        {
+            HostID.Text = "מספר זהות";
+            HostName.Text = "שם פרטי";
+            HostFamilyName.Text = "שם משפחה";
+            HostTelephone.Text = "מספר טלפון";
+            HostMail.Text = "כתובת אי מייל";
+            insertHostPassword.Clear();
+        }
         private void clearNewRequestGrid()
         {
             insertArea.SelectedIndex = 0;
@@ -941,7 +1042,30 @@ namespace PLWPF
             insertNumOFAdults.Text = "";
             insertNumOfChildren.Text = "";
             insertRequestDates.SelectedDates.Clear();
-            
+
+        }
+        private void clearUpdatGuestGrid()
+        {
+            updateName.BorderBrush = ContinueToRequest.BorderBrush;
+            errorUpdateName.Text = "";
+            updateFamilyName.BorderBrush = ContinueToRequest.BorderBrush;
+            errorUpdateFamilyName.Text = "";
+            updatePhoneNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            errorUpdatePhone.Text = "";
+            updateEmail.BorderBrush = ContinueToRequest.BorderBrush;
+            errorUpdateMail.Text = "";
+            updatebankNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            errorUpdateBankNumber.Text = "";
+            updatebankName.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorUpdateBankName.Text = "";
+            updatebranchNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorUpdateBranchName.Text = "";
+            updatebranchAddress.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorUpdateBranchAddress.Text = "";
+            updatebranchCity.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorUpdateBranchCity.Text = "";
+            updateacountNumber.BorderBrush = ContinueToRequest.BorderBrush;
+            ErrorUpdateNumberAcount.Text = "";
         }
 
         private void BankNumber_TextChanged(object sender, TextChangedEventArgs e)
@@ -979,8 +1103,307 @@ namespace PLWPF
             acountNumber.BorderBrush = ContinueToRequest.BorderBrush;
             ErrorNumberAcount.Text = "";
         }
-       
+        private void Master_Click(object sender, RoutedEventArgs e)
+        {
+            UsernamePassword.Visibility = Visibility.Visible;
+        }
+        private void ReturnToTheStart_Click(object sender, RoutedEventArgs e)
+        {
+            ToReturnQuestion.Visibility = Visibility.Visible;
+        }
+        private void ReturnFromMasters_Click(object sender, RoutedEventArgs e)
+        {
+            MastersGrid.Visibility = Visibility.Collapsed;
+            StartGrid.Visibility = Visibility.Visible;
+        }
+        private void ReturnToMasters_Click(object sender, RoutedEventArgs e)
+        {
+            ToReturnQuestion.Visibility = Visibility.Collapsed;
+        }
+        
+        private void ContinueToMasterPage_Click(object sender, RoutedEventArgs e)
+        {
+            if (MUsername.Text == "User" && MPassword.Password == "Password")
+            {
+                MastersGrid.Visibility = Visibility.Visible;
+                StartGrid.Visibility = Visibility.Collapsed;
+                Tables.DataContext = (Order)((Button)sender).DataContext;
+                Tables.ItemsSource = FactorySingletonBL.GetInstance.GetListOfOrders();
+                unitsMaster.ItemsSource = FactorySingletonBL.GetInstance.GetListOfUnits();
+                requestsMaster.ItemsSource = FactorySingletonBL.GetInstance.GetListOfRequests();
+
+
+            }
+            else
+            {
+                ErrorPasswordTextBlock.Visibility = Visibility.Visible;
+                MUsername.Clear();
+                MPassword.Clear();
+            }
+        }
+
+        private void SortByComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SortByAreas.IsSelected == true)
+            foreach (var nameGroup in FactorySingletonBL.GetInstance.GetUnitssGroupingByAreas())
+            {
+                if (nameGroup.Key == Areas.Center)
+                    unitsMaster.ItemsSource = nameGroup;
+            }
+        }
+
+        private void GuestTryInButtom_Click(object sender, RoutedEventArgs e)
+        {
+            Guest guest = FactorySingletonBL.GetInstance.GetGuest(GuestEmail.Text);
+            if(guest==null|| guest.passward != GuestPassword.Password)
+            {
+                wrongGuestPasswordOrMail.Text = "שם משתמש או סיסמא לא נכונים";
+            }
+            else if(guest.passward!=GuestPassword.Password)
+            {
+
+            }
+            else
+            {
+                GuestTryIn.Visibility = Visibility.Collapsed;
+                UserGuest.Visibility = Visibility.Visible;
+                currentGuest = guest;
+                setGuestDetails();
+                UserGuestRequest.ItemsSource = FactorySingletonBL.GetInstance.GetRequestsOfGuest(GuestEmail.Text);
+            }
+        }
+
+        private void BackFromGuestTryIN_Click(object sender, RoutedEventArgs e)
+        {
+            GuestTryIn.Visibility = Visibility.Collapsed;
+            StartGrid.Visibility = Visibility.Visible;
+        }
+        private  void setGuestDetails()
+        {
+            updateName.Text = currentGuest.PrivateName;
+            updateFamilyName.Text = currentGuest.FamilyName;
+            updateEmail.Text = currentGuest.MailAddress;
+        }
+
+        private void BackToUserGuest_Click(object sender, RoutedEventArgs e)
+        {
+            UpdatingGuestGrid.Visibility = Visibility.Collapsed;
+            UserGuest.Visibility = Visibility.Visible;
+            clearUpdatGuestGrid();
+
+        }
+
+        private void ToUpdateGuest_Click(object sender, RoutedEventArgs e)
+        {
+            setGuestDetails();
+            UserGuest.Visibility = Visibility.Collapsed;
+            UpdatingGuestGrid.Visibility = Visibility.Visible;
+
+
+
+        }
+        private void toUpdateRequest_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ResetUpdateGuest_Click(object sender, RoutedEventArgs e)
+        {
+            clearUpdatGuestGrid();
+            setGuestDetails();
+        }
+
+        private void UpdateGuest_Click(object sender, RoutedEventArgs e)
+        {
+            bool flag = true;
+            
+            if (updateEmail.Text.Length == 0)
+            {
+                flag = false;
+                updateEmail.BorderBrush = Brushes.Red;
+                errorUpdateMail.Text = "שדה חובה";
+            }
+            else if (!Validation.EmailIsValid(updateEmail.Text))
+            {
+                flag = false;
+                errorUpdateMail.Text = "כתובת אימייל לא תקינה";
+                updateEmail.BorderBrush = Brushes.Red;
+            }
+            else if (FactorySingletonBL.GetInstance.GetGuest(updateEmail.Text) != null)
+            {
+                if(FactorySingletonBL.GetInstance.GetGuest(updateEmail.Text) !=currentGuest)
+                {
+                    flag = false;
+                    errorUpdateMail.Text = "כתובת אימייל כבר קיימת במערכת";
+                    updateEmail.BorderBrush = Brushes.Red;
+                }
+            }
+            if (updatePhoneNumber.Text.Length == 0)
+            {
+                flag = false;
+                updatePhoneNumber.BorderBrush = Brushes.Red;
+                errorUpdatePhone.Text = "שדה חובה";
+            }
+            else if (!Validation.IsValidePhoneNumber(updatePhoneNumber.Text))
+            {
+                flag = false;
+                errorUpdatePhone.Text = "מספר טלפון לא תקין";
+                updatePhoneNumber.BorderBrush = Brushes.Red;
+            }
+            if (updateName.Text.Length == 0)
+            {
+                flag = false;
+                updateName.BorderBrush = Brushes.Red;
+                errorUpdateName.Text = "שדה חובה";
+            }
+            if (updateFamilyName.Text.Length == 0)
+            {
+                flag = false;
+                updateFamilyName.BorderBrush = Brushes.Red;
+                errorUpdateFamilyName.Text = "שדה חובה";
+            }
+            if (updatebankNumber.Text.Length == 0)
+            {
+                flag = false;
+                updatebankNumber.BorderBrush = Brushes.Red;
+                errorUpdateBankNumber.Text = "שדה חובה";
+            }
+            else try
+                {
+                    int.Parse(updatebankNumber.Text);
+                }
+                catch (Exception)
+                {
+                    flag = false;
+                    updatebankNumber.BorderBrush = Brushes.Red;
+                    errorUpdateBankNumber.Text = "תווים לא תקינים";
+                }
+            if (updatebankName.Text.Length == 0)
+            {
+                flag = false;
+                updatebankName.BorderBrush = Brushes.Red;
+                ErrorUpdateBankName.Text = "שדה חובה";
+            }
+            if (updatebranchNumber.Text.Length == 0)
+            {
+                flag = false;
+                updatebranchNumber.BorderBrush = Brushes.Red;
+                ErrorUpdateBranchName.Text = "שדה חובה";
+            }
+            else try
+                {
+                    int.Parse(updatebranchNumber.Text);
+                }
+                catch (Exception)
+                {
+                    flag = false;
+                    updatebranchNumber.BorderBrush = Brushes.Red;
+                    ErrorUpdateBranchName.Text = "תווים לא תקינים";
+                }
+            if (updatebranchAddress.Text.Length == 0)
+            {
+                flag = false;
+                updatebranchAddress.BorderBrush = Brushes.Red;
+                ErrorUpdateBranchAddress.Text = "שדה חובה";
+            }
+            if (updatebranchCity.Text.Length == 0)
+            {
+                flag = false;
+                updatebranchCity.BorderBrush = Brushes.Red;
+                ErrorUpdateBranchCity.Text = "שדה חובה";
+            }
+            if (updateacountNumber.Text.Length == 0)
+            {
+                flag = false;
+                updateacountNumber.BorderBrush = Brushes.Red;
+                ErrorUpdateNumberAcount.Text = "שדה חובה";
+            }
+            else try
+                {
+                    int.Parse(updateacountNumber.Text);
+                }
+                catch
+                {
+                    flag = false;
+                    updateacountNumber.BorderBrush = Brushes.Red;
+                    ErrorUpdateNumberAcount.Text = "תווים לא תקינים";
+                }
+            if (flag)
+            {
+                string mail = currentGuest.MailAddress;
+                BankBranch branch = new BankBranch();
+                //currentGuest.ID = int.Parse(InsertID.Text);
+                currentGuest.PrivateName = updateName.Text;
+                currentGuest.FamilyName = updateFamilyName.Text;
+                currentGuest.MailAddress = updateEmail.Text;
+                currentGuest.PhoneNumber = updatePhoneNumber.Text;
+                currentGuest.passward = updatePassword.Password;
+                branch.BankName = updatebankName.Text;
+                branch.BankNumber = int.Parse(updatebankNumber.Text);
+                branch.BranchAddress = updatebranchAddress.Text;
+                branch.BranchCity = updatebranchCity.Text;
+                branch.BranchNumber = int.Parse(updatebranchNumber.Text);
+                currentGuest.BankBranchDetails = branch;
+                currentGuest.BankAccountNumber = int.Parse(updateacountNumber.Text);
+                UserGuest.Visibility = Visibility.Visible;
+                UpdatingGuestGrid.Visibility = Visibility.Collapsed;
+                foreach(GuestRequest request in FactorySingletonBL.GetInstance.GetRequestsOfGuest(mail))
+                {
+                    request.guest = currentGuest;
+                    FactorySingletonBL.GetInstance.UpdateRequest(request);
+                }
+            }
+                
+        }
+
+        private void BackFromHostEntery_Click(object sender, RoutedEventArgs e)
+        {
+            HostEntranceGrid.Visibility = Visibility.Collapsed;
+            StartGrid.Visibility = Visibility.Visible;
+        }
+
+        private void HostID_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            HostID.Clear();
+        }
+
+        private void HostName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            HostName.Clear();
+        }
+
+        private void HostFamilyName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            HostFamilyName.Clear();
+        }
+
+        private void HostTelephone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            HostTelephone.Clear();
+        }
+
+        private void HostMail_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            HostMail.Clear();
+        }
+
+        private void HostAcount_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Maxguests_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Maxguests.BorderBrush = updatUnit.BorderBrush;
+        }
+
+        private void NameOfUnit_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            nameOfUnit.BorderBrush = updatUnit.BorderBrush;
+        }
     }
+    
+    
 
 }
 

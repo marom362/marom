@@ -24,7 +24,7 @@ namespace BE
             information = " PrivateName: " + PrivateName + ',' + " FamilyName: " + FamilyName + ',';
             information += " MailAddress: " + MailAddress + '\n';
             information += " PhoneNumber: " + PhoneNumber + '\n';
-            information += "BankBranchDetails:" + BankBranchDetails.ToString();
+            //information += "BankBranchDetails:" + BankBranchDetails.ToString();
             information += "BankAccountNumber:" + BankAccountNumber + '\n';
             information += "CollectionClearance: " + CollectionClearance + '\n';
             return information;

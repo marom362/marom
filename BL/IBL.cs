@@ -87,7 +87,8 @@ namespace BL
         //void AddGuest(Guest guest);
         List<HostingUnit> CreateListOfFittingUnits(GuestRequest request, List<HostingUnit> myUnits);
         //Guest GetGuest(int ID);
-        int NumOfClosedOrders(HostingUnit unit);
+        int NumOfClosedOrders(int key);
+        float n(int key);
         List<HostingUnit> OrderUnitsByPopularity();
         HostingUnit THeMostPopularUnit();
         List<HostingUnit> AllUnitsOfOneHost(int hostKey);
@@ -103,6 +104,13 @@ namespace BL
         List<Order> GetAllOrdersOfUnit(HostingUnit unit);
         List<Order> GetAllOrdersOfHost(int key);
         int OrderClosed(Order order);
-
+        void checksExpiredOrders();
+        void checksExpiredRequests();
+        void UpdateRequest(GuestRequest request);
+        void DelOrder(Order order);
+        void DelRequest(GuestRequest request);
+        Guest GetGuest(string mail);
+        List<GuestRequest> GetRequestsOfGuest(string mail);
+        HostingUnit GetUnit(int key);
         }
 }

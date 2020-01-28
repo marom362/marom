@@ -119,11 +119,12 @@ namespace DS
             new GuestRequest()
             {
                GuestRequestKey=100000002,
-               /*guest={PrivateName= "Shalom",
+               guest=new Guest(){PrivateName= "Shalom",
                FamilyName= "Tal",
                MailAddress="shalomT@gmail.com",
                BankAccountNumber=2245,
-               },*/
+               passward="shalom"
+               },
                Status= StatusGR.ClosedThroughSite,
                RegistrationDate=new DateTime(2020, 1,1),
                EntryDate=new DateTime(2020,5,4),
@@ -143,10 +144,11 @@ namespace DS
             new GuestRequest()
             {
                GuestRequestKey=100000003,
-               /*guest={PrivateName= "Shachar",
+               guest=new Guest(){PrivateName= "Shachar",
                FamilyName= "Biton",
                MailAddress="shacharB@gmail.com",
-               BankAccountNumber=12366 },*/
+               BankAccountNumber=12366,
+               passward="shachar"},
                Status= StatusGR.Open,
                RegistrationDate=new DateTime(2019,12,1),
                EntryDate=new DateTime(2020,2,1),
@@ -166,13 +168,14 @@ namespace DS
             new GuestRequest()
             {
                GuestRequestKey=100000004,
-               /*guest={PrivateName= "Moria",
+               guest=new Guest(){PrivateName= "Moria",
                FamilyName= "Ariel",
-               MailAddress="moriaA@gmail.com",
-               BankAccountNumber =664435 },*/
+               MailAddress="maromsulami@gmail.com",
+               BankAccountNumber =664435,
+               passward="moriaA"},
                Status= StatusGR.Open,
                RegistrationDate=new DateTime(2020,1,20),
-               EntryDate=new DateTime(2020,4,29),
+               EntryDate=new DateTime(2020,1,20),
                ReleaseDate=new DateTime(2020,5,4),
                Area= Areas.All,
               /* subArea= Enums.SubArea.TelAviv*/

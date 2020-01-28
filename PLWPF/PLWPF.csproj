@@ -100,7 +100,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="תמונה צימר.jpg" />
+    <Resource Include="Zimmer.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj">
@@ -113,7 +113,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="תמונה ים.jpg" />
+    <Resource Include="sea.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SealPicture.jpg" />
@@ -126,6 +126,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

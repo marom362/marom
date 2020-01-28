@@ -29,10 +29,12 @@ namespace DAL
             gr.RegistrationDate = DateTime.Now;
             DataSource.GuestRequests.Add(gr);
         }
-        public void UpdatingGuestRequest(GuestRequest gr)
+        void Idal.UpdatingGuestRequest(GuestRequest gr)
         {
             GuestRequest request = DataSource.GuestRequests.Where(req =>
              req.GuestRequestKey == gr.GuestRequestKey).SingleOrDefault();
+            DataSource.GuestRequests.Where(req =>
+             req.GuestRequestKey == gr.GuestRequestKey).SingleOrDefault().Status = StatusGR.ClosedBecauseExpired;
             if (request == null)
             {
                 throw new KeyNotFoundException("This hosting unit is not exist");
@@ -116,7 +118,8 @@ namespace DAL
             }
             else
             {
-                order = or;
+                or=order ;
+                
             }
 
         }
@@ -156,7 +159,7 @@ namespace DAL
             //GuestRequest[] requests = new GuestRequest[DataSource.GuestRequests.Count];
             //DataSource.GuestRequests.CopyTo(requests);
             if (requests == null)
-                throw new InvalidOperationException("thier is no clients");
+                throw new InvalidOperationException("there is no clients");
             return requests.ToList<GuestRequest>();
         }
         List<Order> Idal.GetAllOrders()
@@ -164,7 +167,7 @@ namespace DAL
             Order[] orders = new Order[DataSource.Orders.Count];
             DataSource.Orders.CopyTo(orders);
             if (orders == null)
-                throw new InvalidOperationException("thier is no orders");
+                throw new InvalidOperationException("there is no orders");
             return orders.ToList<Order>();
         }
         List<BankBranch> Idal.GetAllBankBranches()
@@ -282,6 +285,39 @@ namespace DAL
                 throw new InvalidOperationException("no host has found");
             else
                 return hosts;
+        }
+        public void DelOrder(Order order)
+        {
+            try 
+            {
+                DataSource.Orders.Remove(order);
+            }
+            catch (Exception)
+            {
+                throw new Exception("this order is not exists");
+            }
+        }
+        public void DelRequest(GuestRequest request)
+        {
+            /* try
+             {
+
+
+             }
+             catch(Exception)
+             {
+                 throw new Exception("this unit is not exists");
+             }*/
+            List<GuestRequest> requests = DataSource.GuestRequests;
+            if (requests.Exists(x => x.GuestRequestKey == request.GuestRequestKey))
+            {
+                DataSource.GuestRequests.Remove(request);
+            }
+            else
+            {
+                throw new InvalidOperationException("The unit is not exists");
+            }
+            DataSource.GuestRequests.Remove(request);
         }
     }
 }
