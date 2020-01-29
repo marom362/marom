@@ -103,7 +103,7 @@ namespace DAL
                 throw new InvalidOperationException("The order alredy exists");
             else
             {
-                order.GuestRequestKey = ++Configuration.GuestRequestKey;
+                order.OrderKey = ++Configuration.OrderKey;
                 DataSource.Orders.Add(order);
             }
 
@@ -172,9 +172,10 @@ namespace DAL
         }
         List<BankBranch> Idal.GetAllBankBranches()
         {
-            BankBranch[] branch = new BankBranch[DataSource.BankBranchs.Count];
-            DS.DataSource.BankBranchs.CopyTo(branch);
-            return branch.ToList();
+            //BankBranch[] branch = new BankBranch[DataSource.BankBranchs.Count];
+            //DS.DataSource.BankBranchs.CopyTo(branch);
+            //return branch.ToList();
+            return null;
         }
         public ObjectType Copy<ObjectType>(ObjectType src)
         {
@@ -197,18 +198,19 @@ namespace DAL
         //}
         public List<Guest> GetAllGuests()
         {
-            if (DataSource.Guests == null)
-                throw new InvalidOperationException("thier is no orders");
-            List<Guest> guests =
-                (from item in DS.DataSource.Guests
-                 select Copy(item)
-          ).ToList();
+            //  if (DataSource.Guests == null)
+            //      throw new InvalidOperationException("thier is no orders");
+            //  List<Guest> guests =
+            //      (from item in DS.DataSource.Guests
+            //       select Copy(item)
+            //).ToList();
 
-            //Guest[] guests = new Guest[DataSource.Guests.Count];
-            //DataSource.Guests.CopyTo(guests);
-            //if (guests == null)
-            //    throw new InvalidOperationException("thier is no orders");
-            return guests;
+            //  //Guest[] guests = new Guest[DataSource.Guests.Count];
+            //  //DataSource.Guests.CopyTo(guests);
+            //  //if (guests == null)
+            //  //    throw new InvalidOperationException("thier is no orders");
+            //  return guests;
+            return null;
         }
         //public List<Host> GetAllHosts()
         //{
@@ -238,53 +240,56 @@ namespace DAL
         }*/
         public void AddHost(Host host)
         {
-            var h = DataSource.Hosts;
-            if (h.Exists(x => x.HostKey == host.HostKey))
-            {
-                throw new InvalidOperationException("The host already exists");
-            }
-            else
-            {
-                DataSource.Hosts.Add(host);
-            }
+            //var h = DataSource.Hosts;
+            //if (h.Exists(x => x.HostKey == host.HostKey))
+            //{
+            //    throw new InvalidOperationException("The host already exists");
+            //}
+            //else
+            //{
+            //    DataSource.Hosts.Add(host);
+            //}
+            //return null;
         }
         public void DelHost(Host host)
         {
-            List<Host> h = DataSource.Hosts;
-            if (h.Exists(x => x.HostKey == host.HostKey))
-            {
-                DataSource.Hosts.Remove(host);
-            }
-            else
-            {
-                throw new InvalidOperationException("The host is not exists");
-            }
+            //List<Host> h = DataSource.Hosts;
+            //if (h.Exists(x => x.HostKey == host.HostKey))
+            //{
+            //    DataSource.Hosts.Remove(host);
+            //}
+            //else
+            //{
+            //    throw new InvalidOperationException("The host is not exists");
+            //}
         }
         public void UpdatingHost(Host host)
         {
-            Host h = DataSource.Hosts.Where(x =>
-            x.HostKey == host.HostKey).SingleOrDefault();
-            if (h == null)
-                throw new InvalidOperationException("This hosting unit is not exist");
-            else
-                h = host;
+            //Host h = DataSource.Hosts.Where(x =>
+            //x.HostKey == host.HostKey).SingleOrDefault();
+            //if (h == null)
+            //    throw new InvalidOperationException("This hosting unit is not exist");
+            //else
+            //    h = host;
         }
         public Host GetHost(int key)
         {
-            Host host = DataSource.Hosts.Where(x =>
-            x.HostKey == key).SingleOrDefault();
-            if (host == null)
-                throw new InvalidOperationException("no host has found");
-            else
-                return host;
+            ////Host host = DataSource.Hosts.Where(x =>
+            ////x.HostKey == key).SingleOrDefault();
+            //if (host == null)
+            //    throw new InvalidOperationException("no host has found");
+            //else
+            //    return host;
+            return null;
         }
         public List<Host> GetAllHosts()
         {
-            List<Host> hosts = DataSource.Hosts.Select(x => Copy(x)).ToList();
-            if (hosts == null)
-                throw new InvalidOperationException("no host has found");
-            else
-                return hosts;
+            //List<Host> hosts = DataSource.Hosts.Select(x => Copy(x)).ToList();
+            //if (hosts == null)
+            //    throw new InvalidOperationException("no host has found");
+            //else
+            //    return hosts;
+            return null;
         }
         public void DelOrder(Order order)
         {
@@ -311,13 +316,13 @@ namespace DAL
             List<GuestRequest> requests = DataSource.GuestRequests;
             if (requests.Exists(x => x.GuestRequestKey == request.GuestRequestKey))
             {
-                DataSource.GuestRequests.Remove(request);
+               var e= DataSource.GuestRequests.Where(x => x.GuestRequestKey == request.GuestRequestKey).FirstOrDefault();
+                DataSource.GuestRequests.Remove(e);
             }
             else
             {
                 throw new InvalidOperationException("The unit is not exists");
             }
-            DataSource.GuestRequests.Remove(request);
         }
     }
 }

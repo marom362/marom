@@ -8,16 +8,16 @@ namespace BE
 {
     public class BankBranch
     {
-        public int BankNumber { get; set; }
-        public string BankName { get; set; }
-        public int BranchNumber { get; set; }
-        public string BranchAddress { get; set; }
-        public string BranchCity { get; set; }
+        public int Bank_Code { get; set; }
+        public string Bank_Name { get; set; }
+        public int Branch_Code { get; set; }
+        public string Branch_Address { get; set; }
+        public string City { get; set; }
         public override string ToString()
         {
             string s;
-            s = "bank number: " + BankNumber.ToString() + ", bank name: " + BankName + ", branch number: " + BranchNumber.ToString()
-                + ",branch address: " + BranchAddress + ", branch city: " + BranchCity;
+            s = ", bank name: " + Bank_Name + ", bank number: " + Bank_Code.ToString() + ", branch number: " + Branch_Code.ToString()
+                + ", branch city: " + City + ",branch address: " + Branch_Address ;
             return s;
         }
     }

@@ -40,9 +40,10 @@ namespace BE
                 MailAddress: {MailAddress}
                 Status:*/
             string information;
-            information = " GuestRequestKey: " + GuestRequestKey.ToString() + ','+guest.ToString();
-           // information += " PrivateName: " + PrivateName + ','+" FamilyName: " + FamilyName + ',';
-           // information += " MailAddress: " + MailAddress + '\n';
+            //information = " GuestRequestKey: " + GuestRequestKey.ToString() + ','+guest.ToString();
+            // information += " PrivateName: " + PrivateName + ','+" FamilyName: " + FamilyName + ',';
+            // information += " MailAddress: " + MailAddress + '\n';
+            information = "";
             switch ((int)Status)
             {
                 case 0:

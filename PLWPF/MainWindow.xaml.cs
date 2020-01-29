@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,7 +27,11 @@ namespace PLWPF
         IBL MyBl = FactorySingletonBL.GetInstance;
         public MainWindow()
         {
+            //Task.Run(() => MyBl.checksExpiredOrders());
+            //Task.Run(() => MyBl.checksExpiredRequests());
+            //Task.Run(() => Updateorders());
             InitializeComponent();
+            hostBranchAcountCmb.ItemsSource= MyBl.getListOfBankBranches();
             for (int i = 0; i < 5; i++)
             {
                 ComboBoxItem newItem = new ComboBoxItem();
@@ -52,14 +57,31 @@ namespace PLWPF
                 newItem.Content = (Types)i;
                 typeOfUnit.Items.Add(newItem);
             }
+            new Thread(() =>
+            {
+                do
+                {
+                    MyBl.checksExpiredOrders();
+                    var orders = MyBl.GetListOfOrders();
+                    MyBl.checksExpiredRequests();
+                    /*foreach (var item in orders)
+                        if(item.Status = StatusO.MailSent && item.OrderDate >item.OrderDate.AddDays(30))
+                        {
 
-            //Task.Run(() => FactorySingletonBL.GetInstance.checksExpiredOrders());
-           // Task.Run(() => FactorySingletonBL.GetInstance.checksExpiredRequests());
-           // Task task = Task.Run(() => Updateorders());
+                        }*/
+                    Thread.Sleep(100 * 60 * 60 * 24);
+                } while (true);
+            }).Start();
+
+            //Task.Run(() => MyBl.checksExpiredOrders());
+            //Task.Run(() => MyBl.checksExpiredRequests());
+            //Task.Run(() => Updateorders());
 
             //orders.ItemsSource = MyBl.GetListOfOrders();
             //units.ItemsSource = MyBl.AllUnitsOfOneHost(1);
         }
+       
+        
         public void  Updateorders()
         {
             try
@@ -72,11 +94,12 @@ namespace PLWPF
 
             }
         }
-        public List<HostingUnit> MyHostingUnits
+        public List<BankBranch> BranchsList
         {
             get
             {
-                return MyBl.GetListOfUnits(); //MyBl.AllUnitsOfOneHost(tempHost.HostKey);
+                return MyBl.getListOfBankBranches(); 
+                
             }
         }
         Host tempHost = new Host();
@@ -219,91 +242,23 @@ namespace PLWPF
                 InsertFamilyName.BorderBrush = Brushes.Red;
                 errorFamilyName.Text = "שדה חובה";
             }
-            if (bankNumber.Text.Length == 0)
-            {
-                flag = false;
-                bankNumber.BorderBrush = Brushes.Red;
-                errorBankNumber.Text = "שדה חובה";
-            }
-            else try
-                {
-                    int.Parse(bankNumber.Text);
-                }
-                catch (Exception)
-                {
-                    flag = false;
-                    bankNumber.BorderBrush = Brushes.Red;
-                    errorBankNumber.Text = "תווים לא תקינים";
-                }
-            if (bankName.Text.Length == 0)
-            {
-                flag = false;
-                bankName.BorderBrush = Brushes.Red;
-                ErrorBankName.Text = "שדה חובה";
-            }
-            if (branchNumber.Text.Length == 0)
-            {
-                flag = false;
-                branchNumber.BorderBrush = Brushes.Red;
-                ErrorBranchName.Text = "שדה חובה";
-            }
-            else try
-                {
-                    int.Parse(branchNumber.Text);
-                }
-                catch (Exception)
-                {
-                    flag = false;
-                    branchNumber.BorderBrush = Brushes.Red;
-                    ErrorBranchName.Text = "תווים לא תקינים";
-                }
-            if (branchAddress.Text.Length == 0)
-            {
-                flag = false;
-                branchAddress.BorderBrush = Brushes.Red;
-                ErrorBranchAddress.Text = "שדה חובה";
-            }
-            if (branchCity.Text.Length == 0)
-            {
-                flag = false;
-                branchCity.BorderBrush = Brushes.Red;
-                ErrorBranchCity.Text = "שדה חובה";
-            }
-            if (acountNumber.Text.Length == 0)
-            {
-                flag = false;
-                acountNumber.BorderBrush = Brushes.Red;
-                ErrorNumberAcount.Text = "שדה חובה";
-            }
-            else try
-                {
-                    int.Parse(acountNumber.Text);
-                }
-                catch
-                {
-                    flag = false;
-                    acountNumber.BorderBrush = Brushes.Red;
-                    ErrorNumberAcount.Text = "תווים לא תקינים";
-                }
+            
             if (flag)
             {
                 currentGuest = new Guest();
-                BankBranch branch = new BankBranch();
                 //currentGuest.ID = int.Parse(InsertID.Text);
                 currentGuest.PrivateName = InsertName.Text;
                 currentGuest.FamilyName = InsertFamilyName.Text;
                 currentGuest.MailAddress = InsertEmail.Text;
                 currentGuest.PhoneNumber = InsertPhoneNumber.Text;
                 currentGuest.passward = InsertPassword.Password;
-                branch.BankName = bankName.Text;
-                branch.BankNumber = int.Parse(bankNumber.Text);
-                branch.BranchAddress = branchAddress.Text;
-                branch.BranchCity = branchCity.Text;
-                branch.BranchNumber = int.Parse(branchNumber.Text);
-                currentGuest.BankBranchDetails = branch;
-                currentGuest.BankAccountNumber = int.Parse(acountNumber.Text);
                 NewRequestGrid.Visibility = Visibility.Visible;
                 NewGuestGrid.Visibility = Visibility.Collapsed;
+                BackToFersonalDedails.Visibility = Visibility.Visible;
+                EndGuestRequest.Visibility = Visibility.Visible;
+                backToUserGuest.Visibility = Visibility.Collapsed;
+                updateRequest.Visibility = Visibility.Collapsed;
+                addRequest.Visibility = Visibility.Collapsed;
             }
         }
         private bool NewGuestDetailsOK()
@@ -442,11 +397,45 @@ namespace PLWPF
                     //ErrorNumOfChildren.Visibility = Visibility.Visible;
                     insertNumOfChildren.Clear();
                 }
-                currentRequest.Area = (Areas)insertArea.SelectedIndex;
-                currentRequest.Type = (Types)insertTheType.SelectedIndex;
-                currentRequest.EntryDate = insertRequestDates.SelectedDates.First();
-                currentRequest.ReleaseDate = insertRequestDates.SelectedDates.Last();
-                //currentRequest.Pool = (Options)numberOfOption(insertPool);
+                try
+                {
+                    currentRequest.Area = (Areas)insertArea.SelectedIndex;
+                    currentRequest.Type = (Types)insertTheType.SelectedIndex;
+                    currentRequest.EntryDate = insertRequestDates.SelectedDates.First();
+                    currentRequest.ReleaseDate = insertRequestDates.SelectedDates.Last();
+                    if (poolN.IsChecked == true)
+                        currentRequest.Pool = Options.NotIntresting;
+                    else if (poolY.IsChecked == true)
+                        currentRequest.Pool = Options.Must;
+                    else
+                        currentRequest.Pool = Options.Possible;
+                    if (jacuzzN.IsChecked == true)
+                        currentRequest.Jacuzz = Options.NotIntresting;
+                    else if (jacuzzY.IsChecked == true)
+                        currentRequest.Jacuzz = Options.Must;
+                    else
+                        currentRequest.Jacuzz = Options.Possible;
+                    if (gardenN.IsChecked == true)
+                        currentRequest.Garden = Options.NotIntresting;
+                    else if (gardenY.IsChecked == true)
+                        currentRequest.Garden = Options.Must;
+                    else
+                        currentRequest.Garden = Options.Possible;
+                    if (attractionsN.IsChecked == true)
+                        currentRequest.ChildrensAttractions = Options.NotIntresting;
+                    else if (attractionsY.IsChecked == true)
+                        currentRequest.ChildrensAttractions = Options.Must;
+                    else
+                        currentRequest.ChildrensAttractions = Options.Possible;
+
+
+
+                    //currentRequest.Pool = (Options)numberOfOption(insertPool);
+                }
+                catch(Exception x)
+                {
+                    MessageBox.Show(x.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 try
                 {
                     FactorySingletonBL.GetInstance.AddRequest(currentRequest);
@@ -458,7 +447,7 @@ namespace PLWPF
                 }
                 NewRequestGrid.Visibility = Visibility.Collapsed;
                 UserGuest.Visibility = Visibility.Visible;
-                UserGuestRequest.ItemsSource = FactorySingletonBL.GetInstance.GetListOfRequests();
+                UserGuestRequest.ItemsSource = MyBl.GetRequestsOfGuest(currentGuest.MailAddress);
                 //welcomeGuest.Text = currentGuest.PrivateName;
                 //guestpersonalDedails.Text = currentGuest.ToString();
                 //requestDetails.Text = currentRequest.ToString();
@@ -466,6 +455,7 @@ namespace PLWPF
             }
 
         }
+        
         private int numberOfOption(CheckBox a)
         {
             if (a.Content.ToString() == "checked")
@@ -495,6 +485,7 @@ namespace PLWPF
             NewGuestGrid.Visibility = Visibility.Visible;
             StartGrid.Visibility = Visibility.Collapsed;
             GuestTryIn.Visibility = Visibility.Collapsed;
+            clearGuestTryIn();
         }
         private void HostSignIn_Click(object sender, RoutedEventArgs e)
         {
@@ -503,7 +494,7 @@ namespace PLWPF
         }
         public void GuestSignIn_Click(object sender, RoutedEventArgs e)
         {
-            //StartGrid.Visibility = Visibility.Collapsed;
+            StartGrid.Visibility = Visibility.Collapsed;
             GuestTryIn.Visibility = Visibility.Visible;
             
         }
@@ -517,6 +508,8 @@ namespace PLWPF
             tempHost.FamilyName = "\0";
             tempHost.FhoneNumber = "\0";
             tempHost.MailAddress = "\0";
+            hostBranchAcountCmb.DataContext = MyBl.getListOfBankBranches();
+            clearHostEntery();
 
         }
 
@@ -527,12 +520,7 @@ namespace PLWPF
             HostSignUpGrid.Visibility = Visibility.Collapsed;
             WhiteGrid.Visibility = Visibility.Collapsed;
             clearHostSignUpGrid();
-            HostAlreadyExists.Visibility = Visibility.Collapsed;
-            AlreadyExists_Host.Visibility = Visibility.Collapsed;
-            SignUpHost.Visibility = Visibility.Visible;
-            InvalidID.Visibility = Visibility.Collapsed;
-            InvalidPhone.Visibility = Visibility.Collapsed;
-            WrongEmail.Visibility = Visibility.Collapsed;
+            
         }
         private void Host_Email_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -597,9 +585,11 @@ namespace PLWPF
             bool added = MyBl.AddHost(tempHost);
             if (!added)
             {
+                currentHost = MyBl.GetHost(Int32.Parse(HostID.Text));
                 HostAlreadyExists.Visibility = Visibility.Visible;
                 AlreadyExists_Host.Visibility = Visibility.Visible;
                 SignUpHost.Visibility = Visibility.Collapsed;
+                clearNewGuestGrid();
             }
             else if(isvalid)
             {
@@ -663,13 +653,39 @@ namespace PLWPF
                     break;
                 }
         }
+        private void UnitDetails_Click(object sender, RoutedEventArgs e)
+        {
+            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
+                if (vis is DataGridRow)
+                {
+                    var row = (DataGridRow)vis;
+                    row.DetailsVisibility =
+                    row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                    break;
+                }
+
+        }
+        private void RequestDetails_Click(object sender, RoutedEventArgs e)
+        {
+            for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
+                if (vis is DataGridRow)
+                {
+                    var row = (DataGridRow)vis;
+                    row.DetailsVisibility =
+                    row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                    break;
+                }
+        }
+
         private void closeOrder_Click(object sender, RoutedEventArgs e)
         {
             try
             {
 
-                MyBl.OrderClosed((Order)((Button)sender).DataContext);
+                int num=MyBl.OrderClosed((Order)((Button)sender).DataContext);
                 orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+                MessageBox.Show(" עמלה בסך " + num + " שח הועברה מחשבונך בעקבות סגרת העיסקה " , "", MessageBoxButton.OK, MessageBoxImage.Information);
+
 
             }
             catch (Exception)
@@ -679,39 +695,11 @@ namespace PLWPF
         }
         private void SendEmail_Click(object sender, RoutedEventArgs e)
         {
-            Order order = (Order)((Button)sender).DataContext;
-            //orders.DataContext = (Order)((Button)sender).DataContext;
-            //MyBl.ChangeStatusOfOrder((Order)((Button)sender).DataContext, StatusO.MailSent);
-            /*sendingEmail.Text = */
-            
-            //SendEmail.Visibility = Visibility.Collapsed;
-            //SendEmail.IsEnabled = true;
-            MailMessage mail = new MailMessage();
-            //Order order = (Order)((Button)sender).DataContext;
-            string SiteMail = "mmm1.ppp112345@gmail.com";// BL.BL_imp.loggedInUser.Email;
-            GuestRequest request = MyBl.GetListOfRequests().Where(x => x.GuestRequestKey == order.GuestRequestKey).FirstOrDefault();
-            string GuestMail = request.guest.MailAddress;
-            string PasswordMail = "mp1234567";//BL.BL_imp.loggedInUser.Password;
-
-            mail.To.Add(GuestMail);
-            mail.From = new MailAddress(SiteMail);
-            mail.Subject = "הצעת ארוח ממערכת גן עדן";
-            currentUnit=MyBl.GetUnit(order.HostingUnitKey);
-            mail.Body = GetMailBody(request, currentUnit);
-            mail.IsBodyHtml = true;
-
-            SmtpClient smtp = new SmtpClient();
-            smtp.Host = "smtp.gmail.com";
-            smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new System.Net.NetworkCredential(SiteMail, PasswordMail);
-            smtp.EnableSsl = true;
             try
             {
-                smtp.Send(mail);
-                MyBl.SendingMail((Order)((Button)sender).DataContext);
-                //sendingEmail.Text+= ((Order)((Button)sender).DataContext).ToString();
-                //((Button)sender).Visibility = Visibility.Collapsed;
+                string b=MyBl.SendingMail((Order)((Button)sender).DataContext);
                 orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
+                MessageBox.Show(b, "", MessageBoxButton.OK,MessageBoxImage.None);
             }
             catch (Exception ex)
             {
@@ -719,18 +707,7 @@ namespace PLWPF
 
             }
         }
-        private string GetMailBody(GuestRequest request, HostingUnit unit)
-        {
-            return string.Format(@"
-                    <html>
-                        <body>
-                            שלום {0} ,<br/>
-                            נמצאה התאמה מיחידה  {1}
-                        </body>
-                    </html>
-            ", request.guest.PrivateName + " " + request.guest.FamilyName,
-            unit.HostingUnitName);
-        }
+        
 
         private void addUnit_Click(object sender, RoutedEventArgs e)
         {
@@ -763,6 +740,7 @@ namespace PLWPF
                     currentHost = host;
                     units.ItemsSource = MyBl.AllUnitsOfOneHost(i);
                     orders.ItemsSource = MyBl.GetAllOrdersOfHost(i);
+                    clearHostEntery();
                 }
                 else
                 {
@@ -806,14 +784,14 @@ namespace PLWPF
                     {
                         MessageBox.Show("אין אפשרות למחוק יחידה זו", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                    else
-                    {
-                        foreach (Order order in orders)
-                            if (order.HostingUnitKey == unit.HostingUnitKey)
-                                FactorySingletonBL.GetInstance.DelOrder(order);
-                        Updateorders();
+                    //else
+                    //{
+                    //    foreach (Order order in orders)
+                    //        if (order.HostingUnitKey == unit.HostingUnitKey)
+                    //            FactorySingletonBL.GetInstance.DelOrder(order);
+                    //    Updateorders();
                         
-                    }
+                    //}
                 }
                 
             }
@@ -824,20 +802,21 @@ namespace PLWPF
             }
 
         }
-        private void DelRequest_Click(object sender, RoutedEventArgs e)
-        {
-            GuestRequest request = (GuestRequest)((Button)sender).DataContext;
-            try
-            {
-                FactorySingletonBL.GetInstance.DelRequest(request);
-                UserGuestRequest.ItemsSource = FactorySingletonBL.GetInstance.GetRequestsOfGuest(currentGuest.MailAddress);
-            }
-            catch(Exception)
-            {
+        ////private void DelRequest_Click(object sender, RoutedEventArgs e)
+        //{
+        //    GuestRequest request = (GuestRequest)((Button)sender).DataContext;
+        //    try
+        //    {
+        //        FactorySingletonBL.GetInstance.DelRequest(request);
+        //        UserGuestRequest.ItemsSource = FactorySingletonBL.GetInstance.GetRequestsOfGuest(currentGuest.MailAddress);
+        //    }
+        //    catch(Exception)
+        //    {
 
-            }
+        //    }
             
-        }
+        //}
+        
 
         private void BackToUserHost_Click(object sender, RoutedEventArgs e)
         {
@@ -1007,24 +986,7 @@ namespace PLWPF
             errorMail.Text = "";
             InsertID.Text = "";
             InsertPassword.Password = "";
-            bankNumber.Text = "";
-            bankNumber.BorderBrush = ContinueToRequest.BorderBrush;
-            errorBankNumber.Text = "";
-            bankName.Text = "";
-            bankName.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorBankName.Text = "";
-            branchNumber.Text = "";
-            branchNumber.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorBranchName.Text = "";
-            branchAddress.Text = "";
-            branchAddress.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorBranchAddress.Text = "";
-            branchCity.Text = "";
-            branchCity.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorBranchCity.Text = "";
-            acountNumber.Text = "";
-            acountNumber.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorNumberAcount.Text = "";
+            
         }
         private void clearHostSignUpGrid()
         {
@@ -1034,6 +996,12 @@ namespace PLWPF
             HostTelephone.Text = "מספר טלפון";
             HostMail.Text = "כתובת אי מייל";
             insertHostPassword.Clear();
+            WrongEmail.Visibility = Visibility.Collapsed;
+            InvalidID.Visibility = Visibility.Collapsed;
+            InvalidPhone.Visibility = Visibility.Collapsed;
+            HostAlreadyExists.Visibility = Visibility.Collapsed;
+            AlreadyExists_Host.Visibility = Visibility.Collapsed;
+            SignUpHost.Visibility = Visibility.Visible;
         }
         private void clearNewRequestGrid()
         {
@@ -1041,6 +1009,19 @@ namespace PLWPF
             insertArea.SelectedIndex = 0;
             insertNumOFAdults.Text = "";
             insertNumOfChildren.Text = "";
+            insertCity.Clear();
+            poolN.IsChecked = false;
+            poolY.IsChecked = false;
+            poolP.IsChecked = false;
+            gardenN.IsChecked = false;
+            gardenY.IsChecked = false;
+            gardenP.IsChecked = false;
+            jacuzzN.IsChecked = false;
+            jacuzzY.IsChecked = false;
+            jacuzzP.IsChecked = false;
+            attractionsN.IsChecked = false;
+            attractionsY.IsChecked = false;
+            attractionsP.IsChecked = false;
             insertRequestDates.SelectedDates.Clear();
 
         }
@@ -1054,55 +1035,20 @@ namespace PLWPF
             errorUpdatePhone.Text = "";
             updateEmail.BorderBrush = ContinueToRequest.BorderBrush;
             errorUpdateMail.Text = "";
-            updatebankNumber.BorderBrush = ContinueToRequest.BorderBrush;
-            errorUpdateBankNumber.Text = "";
-            updatebankName.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorUpdateBankName.Text = "";
-            updatebranchNumber.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorUpdateBranchName.Text = "";
-            updatebranchAddress.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorUpdateBranchAddress.Text = "";
-            updatebranchCity.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorUpdateBranchCity.Text = "";
-            updateacountNumber.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorUpdateNumberAcount.Text = "";
+            updatePassword.BorderBrush = ContinueToRequest.BorderBrush;
+            errorUpdatePassword.Text = "";
+            setGuestDetails();
+            
+        }
+        private void clearGuestTryIn()
+        {
+            GuestEmail.Clear();
+            GuestPassword.Clear();
+            wrongGuestPasswordOrMail.Text = "";
         }
 
-        private void BankNumber_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            bankNumber.BorderBrush = ContinueToRequest.BorderBrush;
-            errorBankNumber.Text = "";
-        }
 
-        private void BankName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            bankName.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorBankName.Text = "";
-        }
 
-        private void BranchNumber_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            branchNumber.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorBranchName.Text = "";
-        }
-
-        private void BranchAddress_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            branchAddress.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorBranchAddress.Text = "";
-        }
-
-        private void BranchCity_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            branchCity.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorBranchCity.Text = "";
-        }
-
-        private void AcountNumber_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            acountNumber.BorderBrush = ContinueToRequest.BorderBrush;
-            ErrorNumberAcount.Text = "";
-        }
         private void Master_Click(object sender, RoutedEventArgs e)
         {
             UsernamePassword.Visibility = Visibility.Visible;
@@ -1157,7 +1103,7 @@ namespace PLWPF
             Guest guest = FactorySingletonBL.GetInstance.GetGuest(GuestEmail.Text);
             if(guest==null|| guest.passward != GuestPassword.Password)
             {
-                wrongGuestPasswordOrMail.Text = "שם משתמש או סיסמא לא נכונים";
+                wrongGuestPasswordOrMail.Text = " אימייל או סיסמא לא נכונים";
             }
             else if(guest.passward!=GuestPassword.Password)
             {
@@ -1168,8 +1114,8 @@ namespace PLWPF
                 GuestTryIn.Visibility = Visibility.Collapsed;
                 UserGuest.Visibility = Visibility.Visible;
                 currentGuest = guest;
-                setGuestDetails();
                 UserGuestRequest.ItemsSource = FactorySingletonBL.GetInstance.GetRequestsOfGuest(GuestEmail.Text);
+                clearGuestTryIn();
             }
         }
 
@@ -1177,13 +1123,26 @@ namespace PLWPF
         {
             GuestTryIn.Visibility = Visibility.Collapsed;
             StartGrid.Visibility = Visibility.Visible;
+            clearGuestTryIn();
         }
         private  void setGuestDetails()
         {
             updateName.Text = currentGuest.PrivateName;
             updateFamilyName.Text = currentGuest.FamilyName;
             updateEmail.Text = currentGuest.MailAddress;
+            updatePhoneNumber.Text = currentGuest.PhoneNumber;
+            updatePassword.Password = currentGuest.passward;
         }
+        private void setRequestDetails()
+        {
+            
+            //insertArea.SelectedIndex = int.Parse((Areas)currentRequest.Area);
+            //insertype.SelectedItem = currentRequest.Type;
+            insertNumOFAdults.Text = currentRequest.Adults.ToString();
+            insertNumOfChildren.Text = currentRequest.Children.ToString(); ;
+            //insertRequestDates.SelectedDates.First(currentRequest.EntryDate) = currentRequest.EntryDate; ;
+        }
+
 
         private void BackToUserGuest_Click(object sender, RoutedEventArgs e)
         {
@@ -1204,7 +1163,14 @@ namespace PLWPF
         }
         private void toUpdateRequest_Click(object sender, RoutedEventArgs e)
         {
-
+            EndGuestRequest.Visibility = Visibility.Collapsed;
+            BackToFersonalDedails.Visibility = Visibility.Collapsed;
+            addRequest.Visibility = Visibility.Collapsed;
+            backToUserGuest.Visibility = Visibility.Visible;
+            updateRequest.Visibility = Visibility.Visible;
+            setRequestDetails();
+            NewRequestGrid.Visibility = Visibility.Visible;
+            UserGuest.Visibility = Visibility.Collapsed;
         }
 
         private void ResetUpdateGuest_Click(object sender, RoutedEventArgs e)
@@ -1262,91 +1228,25 @@ namespace PLWPF
                 updateFamilyName.BorderBrush = Brushes.Red;
                 errorUpdateFamilyName.Text = "שדה חובה";
             }
-            if (updatebankNumber.Text.Length == 0)
+            if(updatePassword.Password.Length==0)
             {
                 flag = false;
-                updatebankNumber.BorderBrush = Brushes.Red;
-                errorUpdateBankNumber.Text = "שדה חובה";
+                updatePassword.BorderBrush = Brushes.Red;
+                errorUpdatePassword.Text = "שדה חובה";
             }
-            else try
-                {
-                    int.Parse(updatebankNumber.Text);
-                }
-                catch (Exception)
-                {
-                    flag = false;
-                    updatebankNumber.BorderBrush = Brushes.Red;
-                    errorUpdateBankNumber.Text = "תווים לא תקינים";
-                }
-            if (updatebankName.Text.Length == 0)
-            {
-                flag = false;
-                updatebankName.BorderBrush = Brushes.Red;
-                ErrorUpdateBankName.Text = "שדה חובה";
-            }
-            if (updatebranchNumber.Text.Length == 0)
-            {
-                flag = false;
-                updatebranchNumber.BorderBrush = Brushes.Red;
-                ErrorUpdateBranchName.Text = "שדה חובה";
-            }
-            else try
-                {
-                    int.Parse(updatebranchNumber.Text);
-                }
-                catch (Exception)
-                {
-                    flag = false;
-                    updatebranchNumber.BorderBrush = Brushes.Red;
-                    ErrorUpdateBranchName.Text = "תווים לא תקינים";
-                }
-            if (updatebranchAddress.Text.Length == 0)
-            {
-                flag = false;
-                updatebranchAddress.BorderBrush = Brushes.Red;
-                ErrorUpdateBranchAddress.Text = "שדה חובה";
-            }
-            if (updatebranchCity.Text.Length == 0)
-            {
-                flag = false;
-                updatebranchCity.BorderBrush = Brushes.Red;
-                ErrorUpdateBranchCity.Text = "שדה חובה";
-            }
-            if (updateacountNumber.Text.Length == 0)
-            {
-                flag = false;
-                updateacountNumber.BorderBrush = Brushes.Red;
-                ErrorUpdateNumberAcount.Text = "שדה חובה";
-            }
-            else try
-                {
-                    int.Parse(updateacountNumber.Text);
-                }
-                catch
-                {
-                    flag = false;
-                    updateacountNumber.BorderBrush = Brushes.Red;
-                    ErrorUpdateNumberAcount.Text = "תווים לא תקינים";
-                }
+            
             if (flag)
             {
                 string mail = currentGuest.MailAddress;
-                BankBranch branch = new BankBranch();
                 //currentGuest.ID = int.Parse(InsertID.Text);
                 currentGuest.PrivateName = updateName.Text;
                 currentGuest.FamilyName = updateFamilyName.Text;
                 currentGuest.MailAddress = updateEmail.Text;
                 currentGuest.PhoneNumber = updatePhoneNumber.Text;
                 currentGuest.passward = updatePassword.Password;
-                branch.BankName = updatebankName.Text;
-                branch.BankNumber = int.Parse(updatebankNumber.Text);
-                branch.BranchAddress = updatebranchAddress.Text;
-                branch.BranchCity = updatebranchCity.Text;
-                branch.BranchNumber = int.Parse(updatebranchNumber.Text);
-                currentGuest.BankBranchDetails = branch;
-                currentGuest.BankAccountNumber = int.Parse(updateacountNumber.Text);
                 UserGuest.Visibility = Visibility.Visible;
                 UpdatingGuestGrid.Visibility = Visibility.Collapsed;
+                clearUpdatGuestGrid();
                 foreach(GuestRequest request in FactorySingletonBL.GetInstance.GetRequestsOfGuest(mail))
                 {
                     request.guest = currentGuest;
@@ -1360,8 +1260,13 @@ namespace PLWPF
         {
             HostEntranceGrid.Visibility = Visibility.Collapsed;
             StartGrid.Visibility = Visibility.Visible;
+            clearHostEntery();
         }
-
+        private void clearHostEntery()
+        {
+            hostEnteryPassword.Clear();
+            insertYourKey.Clear();
+        }
         private void HostID_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             HostID.Clear();
@@ -1400,6 +1305,207 @@ namespace PLWPF
         private void NameOfUnit_TextChanged(object sender, TextChangedEventArgs e)
         {
             nameOfUnit.BorderBrush = updatUnit.BorderBrush;
+        }
+
+        private void AlreadyExists_Host_Click(object sender, RoutedEventArgs e)
+        {
+            clearHostSignUpGrid();
+            HostSignUpGrid.Visibility = Visibility.Collapsed;
+            HostEntranceGrid.Visibility = Visibility.Visible;
+            insertYourKey.Text = currentHost.HostKey.ToString();
+
+        }
+
+        private void HostBranchAcountCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.DataContext = MyBl.getListOfBankBranches();
+        }
+
+        private void ToAddRequest_Click(object sender, RoutedEventArgs e)
+        {
+            EndGuestRequest.Visibility = Visibility.Collapsed;
+            BackToFersonalDedails.Visibility = Visibility.Collapsed;
+            updateRequest.Visibility = Visibility.Collapsed;
+            addRequest.Visibility = Visibility.Visible;
+            backToUserGuest.Visibility = Visibility.Visible;
+            UserGuest.Visibility = Visibility.Collapsed;
+            NewRequestGrid.Visibility = Visibility.Visible;
+        }
+
+        private void AddRequest_Click(object sender, RoutedEventArgs e)
+        {
+            
+            if (allDetailsValid())
+            {
+                currentRequest = new GuestRequest();
+                currentRequest.guest = currentGuest;
+                try
+                {
+                    currentRequest.Adults = int.Parse(insertNumOFAdults.Text);
+                    if (currentRequest.Adults < 1)
+                        throw new Exception("kkkkkk");
+                        
+                }
+                catch (Exception x)
+                {
+                    MessageBox.Show(x.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    insertNumOFAdults.Clear();
+                    //ErrorNumOfAdults.Visibility = Visibility.Visible;
+                }
+                try
+                {
+                    currentRequest.Children = int.Parse(insertNumOfChildren.Text);
+                }
+                catch (FormatException)
+                {
+                    //ErrorNumOfChildren.Visibility = Visibility.Visible;
+                    insertNumOfChildren.Clear();
+                }
+                try
+                {
+                    currentRequest.Area = (Areas)insertArea.SelectedIndex;
+                    currentRequest.Type = (Types)insertTheType.SelectedIndex;
+                    currentRequest.EntryDate = insertRequestDates.SelectedDates.First();
+                    currentRequest.ReleaseDate = insertRequestDates.SelectedDates.Last();
+                    if (poolN.IsChecked == true)
+                        currentRequest.Pool = Options.NotIntresting;
+                    else if (poolY.IsChecked == true)
+                        currentRequest.Pool = Options.Must;
+                    else
+                        currentRequest.Pool = Options.Possible;
+                    if (jacuzzN.IsChecked == true)
+                        currentRequest.Jacuzz = Options.NotIntresting;
+                    else if (jacuzzY.IsChecked == true)
+                        currentRequest.Jacuzz = Options.Must;
+                    else
+                        currentRequest.Jacuzz = Options.Possible;
+                    if (gardenN.IsChecked == true)
+                        currentRequest.Garden = Options.NotIntresting;
+                    else if (gardenY.IsChecked == true)
+                        currentRequest.Garden = Options.Must;
+                    else
+                        currentRequest.Garden = Options.Possible;
+                    if (attractionsN.IsChecked == true)
+                        currentRequest.ChildrensAttractions = Options.NotIntresting;
+                    else if (attractionsY.IsChecked == true)
+                        currentRequest.ChildrensAttractions = Options.Must;
+                    else
+                        currentRequest.ChildrensAttractions = Options.Possible;
+                }
+                catch(Exception)
+                {
+                    MessageBox.Show("אחד מהפרטים חסרים או שגויים", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                try
+                {
+                    MyBl.AddRequest(currentRequest);
+                }
+                catch (Exception)
+                {
+
+                }
+                NewRequestGrid.Visibility = Visibility.Collapsed;
+                UserGuest.Visibility = Visibility.Visible;
+                UserGuestRequest.ItemsSource = MyBl.GetRequestsOfGuest(currentGuest.MailAddress);
+                //welcomeGuest.Text = currentGuest.PrivateName;
+                //guestpersonalDedails.Text = currentGuest.ToString();
+                //requestDetails.Text = currentRequest.ToString();
+
+            }
+
+
+            clearNewRequestGrid();
+        }
+
+        private void BackToUserGuest_Click_1(object sender, RoutedEventArgs e)
+        {
+            clearNewRequestGrid();
+            UserGuest.Visibility = Visibility.Visible;
+            NewRequestGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void UpdateRequest_Click(object sender, RoutedEventArgs e)
+        {
+            if (allDetailsValid())
+            {
+                currentRequest = new GuestRequest();
+                currentRequest.guest = currentGuest;
+                try
+                {
+                    currentRequest.Adults = int.Parse(insertNumOFAdults.Text);
+                }
+                catch (FormatException)
+                {
+                    insertNumOFAdults.Clear();
+                    //ErrorNumOfAdults.Visibility = Visibility.Visible;
+                }
+                try
+                {
+                    currentRequest.Children = int.Parse(insertNumOfChildren.Text);
+                }
+                catch (FormatException)
+                {
+                    //ErrorNumOfChildren.Visibility = Visibility.Visible;
+                    insertNumOfChildren.Clear();
+                }
+                try
+                {
+                    currentRequest.Area = (Areas)insertArea.SelectedIndex;
+                    currentRequest.Type = (Types)insertTheType.SelectedIndex;
+                    currentRequest.EntryDate = insertRequestDates.SelectedDates.First();
+                    currentRequest.ReleaseDate = insertRequestDates.SelectedDates.Last();
+                    if (poolN.IsChecked == true)
+                        currentRequest.Pool = Options.NotIntresting;
+                    else if (poolY.IsChecked == true)
+                        currentRequest.Pool = Options.Must;
+                    else
+                        currentRequest.Pool = Options.Possible;
+                    if (jacuzzN.IsChecked == true)
+                        currentRequest.Jacuzz = Options.NotIntresting;
+                    else if (jacuzzY.IsChecked == true)
+                        currentRequest.Jacuzz = Options.Must;
+                    else
+                        currentRequest.Jacuzz = Options.Possible;
+                    if (gardenN.IsChecked == true)
+                        currentRequest.Garden = Options.NotIntresting;
+                    else if (gardenY.IsChecked == true)
+                        currentRequest.Garden = Options.Must;
+                    else
+                        currentRequest.Garden = Options.Possible;
+                    if (attractionsN.IsChecked == true)
+                        currentRequest.ChildrensAttractions = Options.NotIntresting;
+                    else if (attractionsY.IsChecked == true)
+                        currentRequest.ChildrensAttractions = Options.Must;
+                    else
+                        currentRequest.ChildrensAttractions = Options.Possible;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("אחד מהפרטים חסרים או שגויים", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                try
+                {
+                    MyBl.UpdateRequest(currentRequest);
+                    NewRequestGrid.Visibility = Visibility.Collapsed;
+                    UserGuest.Visibility = Visibility.Visible;
+                    UserGuestRequest.ItemsSource = MyBl.GetRequestsOfGuest(currentGuest.MailAddress);
+                    //welcomeGuest.Text = currentGuest.PrivateName;
+                    //guestpersonalDedails.Text = currentGuest.ToString();
+                    //requestDetails.Text = currentRequest.ToString();
+                    clearNewRequestGrid();
+                    UserGuest.Visibility = Visibility.Visible;
+                    NewRequestGrid.Visibility = Visibility.Collapsed;
+                }
+                catch (Exception x)
+                {
+                    MessageBox.Show(x.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                }
+
+
+            }
+            
+
         }
     }
     

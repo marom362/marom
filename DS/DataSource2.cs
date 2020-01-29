@@ -106,57 +106,57 @@ namespace DS
                 OrderDate=new DateTime(2020,7,15),
             }
         };
-        public static List<BankBranch> BankBranchs = new List<BankBranch>()
-        {
-            new BankBranch()
-            {
-                BankNumber=122,
-                BankName ="הפועלים",
-                BranchNumber = 35,
-                BranchAddress = "הרצל 7",
-                BranchCity = "קרית אונו",
+        //public static List<BankBranch> BankBranchs = new List<BankBranch>()
+        //{
+        //    new BankBranch()
+        //    {
+        //        BankNumber=122,
+        //        BankName ="הפועלים",
+        //        BranchNumber = 35,
+        //        BranchAddress = "הרצל 7",
+        //        BranchCity = "קרית אונו",
 
-            },
+        //    },
 
-            new BankBranch()
-            {
-                 BankNumber=456,
-                BankName ="לאומי",
-                BranchNumber = 76,
-                BranchAddress = "כנפי נשרים 10",
-                BranchCity = "ירושלים",
+        //    new BankBranch()
+        //    {
+        //         BankNumber=456,
+        //        BankName ="לאומי",
+        //        BranchNumber = 76,
+        //        BranchAddress = "כנפי נשרים 10",
+        //        BranchCity = "ירושלים",
 
-            },
+        //    },
 
-            new BankBranch()
-            {
-                BankNumber=390,
-                BankName ="דיסקונט",
-                BranchNumber = 24,
-                BranchAddress = "יגאל אלון 5",
-                BranchCity = "פתח תקווה",
+        //    new BankBranch()
+        //    {
+        //        BankNumber=390,
+        //        BankName ="דיסקונט",
+        //        BranchNumber = 24,
+        //        BranchAddress = "יגאל אלון 5",
+        //        BranchCity = "פתח תקווה",
 
-            },
+        //    },
 
-            new BankBranch()
-            {
-                BankNumber=650,
-                BankName ="איגוד",
-                BranchNumber = 59,
-                BranchAddress = "ביאליק 20",
-                BranchCity = "תל אביב",
+        //    new BankBranch()
+        //    {
+        //        BankNumber=650,
+        //        BankName ="איגוד",
+        //        BranchNumber = 59,
+        //        BranchAddress = "ביאליק 20",
+        //        BranchCity = "תל אביב",
 
-            },
+        //    },
 
-            new BankBranch()
-            {
-                BankNumber=720,
-                BankName ="הבינלאומי",
-                BranchNumber = 22,
-                BranchAddress = "בן גוריון 18",
-                BranchCity = "הרצליה",
+        //    new BankBranch()
+        //    {
+        //        BankNumber=720,
+        //        BankName ="הבינלאומי",
+        //        BranchNumber = 22,
+        //        BranchAddress = "בן גוריון 18",
+        //        BranchCity = "הרצליה",
 
-            }
-        };
+        //    }
+        //};
     }
 }

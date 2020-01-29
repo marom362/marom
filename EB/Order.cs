@@ -20,7 +20,7 @@ namespace BE
             switch ((int)Status)
             {
                 case 0:
-                    text += " Not answered";
+                    text += " Open";
                     break;
                 case 1:
                     text += " The mail was sent";
@@ -30,6 +30,9 @@ namespace BE
                     break;
                 case 3:
                     text += " Closed by answer to the client";
+                    break;
+                case 4:
+                    text += "Closed because expired";
                     break;
             }
             if ((int)Status > 0)

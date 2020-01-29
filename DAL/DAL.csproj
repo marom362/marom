@@ -45,6 +45,7 @@
     <Compile Include="FactorySingletonDal.cs" />
     <Compile Include="Idal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XMLDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DS\DS.csproj">

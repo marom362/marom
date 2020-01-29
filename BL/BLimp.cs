@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -237,23 +238,71 @@ namespace BL
         public string SendingMail(Order order)
         {
             if (order.Status == StatusO.MailSent)
-                throw new Exception("The mail is already sent");
-            try
+                return "ההזמנה כבר נשלחה";
+            else if (order.Status != StatusO.NotDealed)
+                return "ההזמנה סגורה";
+            else
             {
-                
-                ChangeStatusOfOrder(order, StatusO.MailSent);
-                FactorySingletonDal.GetInstance.UpdatingOrder(order);// as if this function of DAL receives the new Status and the num of order;
-                return "The mail is sent";
-            }
 
-            catch (KeyNotFoundException k)
-            {
-                throw k;
+                MailMessage mail = new MailMessage();
+                string SiteMail = "mmm1.ppp112345@gmail.com";
+                GuestRequest request = GetListOfRequests().Where(x => x.GuestRequestKey == order.GuestRequestKey).FirstOrDefault();
+                string GuestMail = request.guest.MailAddress;
+                string PasswordMail = "mp1234567";
+
+                mail.To.Add(GuestMail);
+                mail.From = new MailAddress(SiteMail);
+                mail.Subject = "הצעת ארוח ממערכת גן עדן";
+                HostingUnit unit = GetUnit(order.HostingUnitKey);
+                mail.Body = GetMailBody(request, unit);
+                mail.IsBodyHtml = true;
+
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.gmail.com";
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new System.Net.NetworkCredential(SiteMail, PasswordMail);
+                smtp.EnableSsl = true;
+                smtp.Port = 587;
+
+
+                try
+                {
+                    smtp.Send(mail);
+                    try
+                    {
+                        ChangeStatusOfOrder(order, StatusO.MailSent);
+                        FactorySingletonDal.GetInstance.UpdatingOrder(order);// as if this function of DAL receives the new Status and the num of order;
+                        return "המייל נשלח בהצלחה";
+                    }
+
+                    catch (KeyNotFoundException k)
+                    {
+                        throw k;
+                    }
+                    catch (InvalidOperationException y)
+                    {
+                        throw y;
+                    }
+                }
+                catch (SmtpFailedRecipientsException x)
+                {
+                    throw x;
+                }
+
+
             }
-            catch (InvalidOperationException y)
-            {
-                throw y;
-            }
+        }
+        private string GetMailBody(GuestRequest request, HostingUnit unit)
+        {
+            return string.Format(@"
+                    <html>
+                        <body>
+                            שלום {0} ,<br/>
+                            נמצאה התאמה מיחידה  {1}
+                        </body>
+                    </html>
+            ", request.guest.PrivateName + " " + request.guest.FamilyName,
+            unit.HostingUnitName);
         }
         /// <summary>
         /// The function that marks in the calendar that the dates are no more available
@@ -304,32 +353,35 @@ namespace BL
         /// <param name="desiredStatus"></param>
         public void checksExpiredOrders()
         {
-            int key;
-            List<Order> orders= FactorySingletonDal.GetInstance.GetAllOrders();
-            foreach(Order order in orders)
-            {
-                key = order.GuestRequestKey;
-                if (FactorySingletonDal.GetInstance.GetGuestRequest(key).Status == StatusGR.ClosedBecauseExpired)
-                {
-                    ChangeStatusOfOrder(order,StatusO.ClosedBecauseExpired);
+            //int key;
+            //List<Order> orders= FactorySingletonDal.GetInstance.GetAllOrders();
+            //foreach(Order order in orders)
+            //{
+            //    key = order.GuestRequestKey;
+            //    if (FactorySingletonDal.GetInstance.GetGuestRequest(key).Status == StatusGR.ClosedBecauseExpired)
+            //    {
+            //        ChangeStatusOfOrder(order,StatusO.ClosedBecauseExpired);
 
-                }
-            }
+            //    }
+            //}
         }
         public void checksExpiredRequests()
         {
-            List<GuestRequest> requests = FactorySingletonDal.GetInstance.GetAllGuestRequests();
+            /*List<GuestRequest> requests = FactorySingletonDal.GetInstance.GetAllGuestRequests();
             foreach (GuestRequest request in requests)
             {
                 if (request.EntryDate<=DateTime.Now)
                 {
                     ChangeStatusOfRequest(request.GuestRequestKey, StatusGR.ClosedBecauseExpired);
                 }
-            }
+            }*/
         }
         public void UpdateRequest(GuestRequest request)
         {
             FactorySingletonDal.GetInstance.UpdatingGuestRequest(request);
+           // foreach(var order in MyDAL.GetAllOrders())
+               // if(request.GuestRequestKey==order.GuestRequestKey)
+                    
         }
         public void UpdateOrder(Order order)
         {
@@ -562,6 +614,8 @@ namespace BL
             if (unit.Pool == false && request.Pool == Options.Must)
                 return false;
             if (request.Area != unit.Area)
+                return false;
+            if (request.Type != unit.Type)
                 return false;
             if (unit.SubArea != request.SubArea)
                 return false;
@@ -927,28 +981,31 @@ namespace BL
             }
 
         }
-        public void DelOrder(Order order)
-        {
-            try
-            {
-                FactorySingletonDal.GetInstance.DelOrder(order);
-            }
-            catch
-            {
+        //public void DelOrder(Order order)
+        //{
+        //    try
+        //    {
+        //        FactorySingletonDal.GetInstance.DelOrder(order);
+        //    }
+        //    catch
+        //    {
 
-            }
-        }
-        public void DelRequest(GuestRequest request)
-        {
-            try
-            {
-                FactorySingletonDal.GetInstance.DelRequest(request);
-            }
-            catch (Exception)
-            {
+        //    }
+        //}
+        //public void DelRequest(GuestRequest request)
+        //{
+        //    try
+        //    {
+        //        FactorySingletonDal.GetInstance.DelRequest(request);
+        //        foreach (var order in MyDAL.GetAllOrders())
+        //            if (request.GuestRequestKey == request.GuestRequestKey)
+        //                ChangeStatusOfOrder(order, StatusO.ClosedBecauseofClient);
+        //    }
+        //    catch (Exception)
+        //    {
 
-            }
-        }
+        //    }
+        //}
         public Guest GetGuest(string mail)
         {
             List<GuestRequest> requests = FactorySingletonDal.GetInstance.GetAllGuestRequests();

@@ -14,7 +14,7 @@ namespace BE
         public string FamilyName { get; set; }
         public string MailAddress { get; set; }
         public string PhoneNumber { get; set; }
-        public BankBranch BankBranchDetails { get; set; }
+        //public BankBranch BankBranchDetails { get; set; }
         public int BankAccountNumber { get; set; }
         public bool CollectionClearance { get; set; }
         public override string ToString()
@@ -26,7 +26,7 @@ namespace BE
             information += " PhoneNumber: " + PhoneNumber + '\n';
             //information += "BankBranchDetails:" + BankBranchDetails.ToString();
             information += "BankAccountNumber:" + BankAccountNumber + '\n';
-            information += "CollectionClearance: " + CollectionClearance + '\n';
+            //information += "CollectionClearance: " + CollectionClearance + '\n';
             return information;
         }
     }

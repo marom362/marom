@@ -80,7 +80,7 @@ namespace DS
         };
     
 
-    public static List<Guest> Guests = new List<Guest>();
+    /*public static List<Guest> Guests = new List<Guest>();
         public static List<Host> Hosts = new List<Host>()
         {
             new Host()
@@ -113,7 +113,7 @@ namespace DS
 
             }
 
-        };
+        };*/
         public static List<GuestRequest> GuestRequests = new List<GuestRequest>()
         {
             new GuestRequest()
@@ -146,7 +146,7 @@ namespace DS
                GuestRequestKey=100000003,
                guest=new Guest(){PrivateName= "Shachar",
                FamilyName= "Biton",
-               MailAddress="shacharB@gmail.com",
+               MailAddress="ma@g.m",
                BankAccountNumber=12366,
                passward="shachar"},
                Status= StatusGR.Open,
@@ -170,7 +170,7 @@ namespace DS
                GuestRequestKey=100000004,
                guest=new Guest(){PrivateName= "Moria",
                FamilyName= "Ariel",
-               MailAddress="maromsulami@gmail.com",
+               MailAddress="moriaA@gmail.com",
                BankAccountNumber =664435,
                passward="moriaA"},
                Status= StatusGR.Open,
@@ -199,7 +199,7 @@ namespace DS
                 HostingUnitKey=200000004,
                 GuestRequestKey=100000002,
                 OrderKey=10000001,
-                Status=StatusO.ClosedByClientsResponse,
+                Status=StatusO.MailSent,
                 CreateDate=new DateTime(2020,1,1),
                 OrderDate=new DateTime(2020,1,22),
             },
@@ -242,58 +242,58 @@ namespace DS
             }
         };
 
-        public static List<BankBranch> BankBranchs = new List<BankBranch>()
-        {
-            new BankBranch()
-            {
-                BankNumber=122,
-                BankName ="הפועלים",
-                BranchNumber = 35,
-                BranchAddress = "הרצל 7",
-                BranchCity = "קרית אונו",
+        //public static List<BankBranch> BankBranchs = new List<BankBranch>()
+        //{
+        //    new BankBranch()
+        //    {
+        //        BankNumber=122,
+        //        BankName ="הפועלים",
+        //        BranchNumber = 35,
+        //        BranchAddress = "הרצל 7",
+        //        BranchCity = "קרית אונו",
 
-            },
+        //    },
 
-            new BankBranch()
-            {
-                 BankNumber=456,
-                BankName ="לאומי",
-                BranchNumber = 76,
-                BranchAddress = "כנפי נשרים 10",
-                BranchCity = "ירושלים",
+        //    new BankBranch()
+        //    {
+        //         BankNumber=456,
+        //        BankName ="לאומי",
+        //        BranchNumber = 76,
+        //        BranchAddress = "כנפי נשרים 10",
+        //        BranchCity = "ירושלים",
 
-            },
+        //    },
 
-            new BankBranch()
-            {
-                BankNumber=390,
-                BankName ="דיסקונט",
-                BranchNumber = 24,
-                BranchAddress = "יגאל אלון 5",
-                BranchCity = "פתח תקווה",
+        ////    new BankBranch()
+        ////    {
+        ////        BankNumber=390,
+        ////        BankName ="דיסקונט",
+        ////        BranchNumber = 24,
+        ////        BranchAddress = "יגאל אלון 5",
+        ////        BranchCity = "פתח תקווה",
 
-            },
+        ////    },
 
-            new BankBranch()
-            {
-                BankNumber=650,
-                BankName ="איגוד",
-                BranchNumber = 59,
-                BranchAddress = "ביאליק 20",
-                BranchCity = "תל אביב",
+        //    new BankBranch()
+        //    {
+        //        BankNumber=650,
+        //        BankName ="איגוד",
+        //        BranchNumber = 59,
+        //        BranchAddress = "ביאליק 20",
+        //        BranchCity = "תל אביב",
 
-            },
+        //    },
 
-            new BankBranch()
-            {
-                BankNumber=720,
-                BankName ="הבינלאומי",
-                BranchNumber = 22,
-                BranchAddress = "בן גוריון 18",
-                BranchCity = "הרצליה",
+        //    new BankBranch()
+        //    {
+        //        BankNumber=720,
+        //        BankName ="הבינלאומי",
+        //        BranchNumber = 22,
+        //        BranchAddress = "בן גוריון 18",
+        //        BranchCity = "הרצליה",
 
-            }
-        };
+        //    }
+        //};
         
     }
 }
