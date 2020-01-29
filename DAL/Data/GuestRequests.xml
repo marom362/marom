@@ -1,6 +1,29 @@
 <?xml version="1.0"?>
 <ArrayOfGuestRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <GuestRequest>
+    <GuestRequestKey>10000005</GuestRequestKey>
+    <guest>
+      <FamilyName>Ivanov</FamilyName>
+      <PhoneNumber>0537190183</PhoneNumber>
+      <BankAccountNumber>15</BankAccountNumber>
+      <CollectionClearance>false</CollectionClearance>
+    </guest>
+    <Status>Open</Status>
+    <RegistrationDate>2020-01-29T00:00:00+02:00</RegistrationDate>
+    <EntryDate>0001-01-01T00:00:00</EntryDate>
+    <ReleaseDate>0001-01-01T00:00:00</ReleaseDate>
+    <Area>Center</Area>
+    <SubArea>Jerusalem</SubArea>
+    <Type>Hotel</Type>
+    <Adults>5</Adults>
+    <Children>5</Children>
+    <Pool>NotIntresting</Pool>
+    <Jacuzz>Must</Jacuzz>
+    <Garden>NotIntresting</Garden>
+    <ChildrensAttractions>NotIntresting</ChildrensAttractions>
+    <NumGuests>10</NumGuests>
+  </GuestRequest>
+  <GuestRequest>
     <GuestRequestKey>10000007</GuestRequestKey>
     <guest>
       <FamilyName>Ivanov</FamilyName>
@@ -89,28 +112,5 @@
     <Garden>Must</Garden>
     <ChildrensAttractions>Must</ChildrensAttractions>
     <NumGuests>0</NumGuests>
-  </GuestRequest>
-  <GuestRequest>
-    <GuestRequestKey>10000005</GuestRequestKey>
-    <guest>
-      <FamilyName>Ivanov</FamilyName>
-      <PhoneNumber>0537190183</PhoneNumber>
-      <BankAccountNumber>15</BankAccountNumber>
-      <CollectionClearance>false</CollectionClearance>
-    </guest>
-    <Status>ClosedBecauseExpired</Status>
-    <RegistrationDate>2020-01-29T00:00:00+02:00</RegistrationDate>
-    <EntryDate>0001-01-01T00:00:00</EntryDate>
-    <ReleaseDate>0001-01-01T00:00:00</ReleaseDate>
-    <Area>Center</Area>
-    <SubArea>Jerusalem</SubArea>
-    <Type>Hotel</Type>
-    <Adults>5</Adults>
-    <Children>5</Children>
-    <Pool>NotIntresting</Pool>
-    <Jacuzz>Must</Jacuzz>
-    <Garden>NotIntresting</Garden>
-    <ChildrensAttractions>NotIntresting</ChildrensAttractions>
-    <NumGuests>10</NumGuests>
   </GuestRequest>
 </ArrayOfGuestRequest>

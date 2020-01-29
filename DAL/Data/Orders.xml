@@ -3,6 +3,14 @@
   <Order>
     <HostingUnitKey>10000038</HostingUnitKey>
     <GuestRequestKey>10000005</GuestRequestKey>
+    <OrderKey>10000003</OrderKey>
+    <Status>NotDealed</Status>
+    <CreateDate>2020-01-29T00:00:00+02:00</CreateDate>
+    <OrderDate>0001-01-01T00:00:00</OrderDate>
+  </Order>
+  <Order>
+    <HostingUnitKey>10000038</HostingUnitKey>
+    <GuestRequestKey>10000005</GuestRequestKey>
     <OrderKey>10000004</OrderKey>
     <Status>NotDealed</Status>
     <CreateDate>2020-01-29T00:00:00+02:00</CreateDate>
@@ -37,14 +45,6 @@
     <GuestRequestKey>10000005</GuestRequestKey>
     <OrderKey>10000006</OrderKey>
     <Status>MailSent</Status>
-    <CreateDate>2020-01-29T00:00:00+02:00</CreateDate>
-    <OrderDate>0001-01-01T00:00:00</OrderDate>
-  </Order>
-  <Order>
-    <HostingUnitKey>10000038</HostingUnitKey>
-    <GuestRequestKey>10000005</GuestRequestKey>
-    <OrderKey>10000003</OrderKey>
-    <Status>ClosedBecauseExpired</Status>
     <CreateDate>2020-01-29T00:00:00+02:00</CreateDate>
     <OrderDate>0001-01-01T00:00:00</OrderDate>
   </Order>

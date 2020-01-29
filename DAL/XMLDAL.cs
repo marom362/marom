@@ -18,7 +18,7 @@ namespace DAL
 
         //DataBase
 
-        static readonly string ProjectPath = Directory.GetParent(Directory.GetParent(Environment.CurrentDirectory.ToString()).FullName).FullName;//path of xml files
+        static readonly string ProjectPath = @"C:\Users\marom\Documents\מתמטיקה-סמסטר אלול\Project_3289_4525_doteNet5780\DAL";//path of xml files
         XElement configRoot;
         private readonly string configPath = ProjectPath + "/Data/config.xml";
         XElement Orders;
@@ -32,8 +32,11 @@ namespace DAL
         XElement BankBranches;
         private readonly string BankBranchesPath = ProjectPath + "/Data/BankBranches.xml";
         XElement Guests;
+        XElement aaas;
+        private readonly string aaasPath = ProjectPath + "/Data/aaa.xml";
         private readonly string GuestsPath = ProjectPath + "/Data/Guests.xml";
         private static List<Order> ListOfOrders = new List<Order>();
+        private static List<aaa> ListOfaaas = new List<aaa>();
         private static List<GuestRequest> ListOfRequests = new List<GuestRequest>();
         private List<Host> ListOfHosts = new List<Host>();
         private static List<HostingUnit> ListOfUnits = new List<HostingUnit>();
@@ -99,10 +102,16 @@ namespace DAL
                 Hosts = new XElement("Hosts");
                 Hosts.Save(HostsPath);
             }
+
             if (!File.Exists(HostingUnitsPath))
             {
                 HostingUnits = new XElement("HostingUnits");
                 HostingUnits.Save(HostingUnitsPath);
+            }
+            if (!File.Exists(aaasPath))
+            {
+                aaas = new XElement("aaas");
+                aaas.Save(aaasPath);
             }
             if (!File.Exists(GuestsPath))
             {
@@ -140,6 +149,7 @@ namespace DAL
             {
                 ListOfHosts = new List<Host>();
             }
+            
             try
             {
                 ListOfOrders = LoadFromXML<List<Order>>(OrdersPath);
@@ -155,6 +165,14 @@ namespace DAL
             catch (InvalidOperationException)
             {
                 ListOfRequests = new List<GuestRequest>();
+            }
+            try
+            {
+                ListOfaaas = LoadFromXML<List<aaa>>(aaasPath);
+            }
+            catch (InvalidOperationException)
+            {
+                ListOfaaas = new List<aaa>();
             }
             try
             {
@@ -209,11 +227,9 @@ namespace DAL
 
                 try
                 {
-                    var myFile = File.Open(path, FileMode.Open);
-                    myFile.Close();
                     FileStream file = new FileStream(path, FileMode.Open);
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-                    T result = (T)xmlSerializer.Deserialize(file);
+                    XmlSerializer xmlSer = new XmlSerializer(typeof(T));
+                    T result = (T)xmlSer.Deserialize(file);
                     file.Close();
                     return result;
                 }
@@ -315,7 +331,7 @@ namespace DAL
             {
                 if (GetHostingUnit(hu.HostingUnitKey) == null)
                 {
-                    hu = Copy(hu);
+                    //hu = Copy(hu);
                     List<HostingUnit> units = GetAllHostingUnits();
                     units.Add(hu);
                     SaveToXML<List<HostingUnit>>(ListOfUnits, HostingUnitsPath);
@@ -355,6 +371,7 @@ namespace DAL
         {
             if (GetOrder(order.OrderKey) == null)
             {
+                order.OrderKey = ++Configuration.OrderKey;
                 order = Copy(order);
                 ListOfOrders.Add(order);
                 SaveToXML<List<Order>>(ListOfOrders, OrdersPath);
@@ -408,7 +425,35 @@ namespace DAL
         }
         public List<HostingUnit> GetAllHostingUnits()
         {
-            return ListOfUnits;//I've no idea whether it works
+           // return ListOfUnits;//I've no idea whether it works
+            LoadData();
+            List<HostingUnit> ArrayOfHostingUnits;
+            try
+            {
+                ArrayOfHostingUnits = (from p in HostingUnits.Elements()
+                                       select new HostingUnit()
+                                       {
+                                           HostingUnitKey = Convert.ToInt32(p.Element("HostingUnitKey").Value),
+                                           HostingUnitName =p.Element("HostingUnitName").Value,
+                                           //Type = p.Element("Type", Typ).Value,
+                            }).ToList();
+            }
+            catch
+            {
+                ArrayOfHostingUnits = null;
+            }
+            return ArrayOfHostingUnits;
+        }
+        private void LoadData()
+        {
+            try
+            {
+                HostingUnits = XElement.Load(HostingUnitsPath);
+            }
+            catch
+            {
+                Console.WriteLine("File upload problem");
+            }
         }
         public List<BankBranch> GetAllBankBranches()
         {
@@ -463,10 +508,10 @@ namespace DAL
             temp.Pool = unit.Pool;
             temp.SubArea = unit.SubArea;
             temp.Type = unit.Type;
-            bool[,] tempMatrix = new bool[12, 31];
-            for (int i = 0; i < 12; i++)
-                for (int j = 0; j < 31; j++)
-                    tempMatrix[i, j] = unit.Diary[i, j];
+            //bool[,] tempMatrix = new bool[12, 31];
+            //for (int i = 0; i < 12; i++)
+            //    for (int j = 0; j < 31; j++)
+            //        tempMatrix[i, j] = unit.Diary[i, j];
             configRoot.Save(configPath);
             //SaveConfigToXml();
             SaveNewKeys();

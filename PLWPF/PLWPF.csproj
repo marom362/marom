@@ -133,15 +133,5 @@
   <ItemGroup>
     <Resource Include="icons8-beach-30.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Data\BankBranches.xml" />
-    <Resource Include="Data\config.xml" />
-    <Resource Include="Data\config_.xml" />
-    <Resource Include="Data\GuestRequests.xml" />
-    <Resource Include="Data\Guests.xml" />
-    <Resource Include="Data\HostingUnits.xml" />
-    <Resource Include="Data\Hosts.xml" />
-    <Resource Include="Data\Orders.xml" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

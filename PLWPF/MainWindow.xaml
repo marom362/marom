@@ -545,13 +545,13 @@
             <TextBlock HorizontalAlignment="Center" Margin="1091,385,136.6,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="40" Width="166" FontSize="20" FontWeight="Bold" Foreground="#FF215958"><Run FlowDirection="RightToLeft" Text="מקסימום אורחים"/></TextBlock>
             <TextBlock HorizontalAlignment="Center" Margin="1093,450,176.6,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" Width="124" FontWeight="Bold" FontSize="20" Foreground="#FF215958"><Run FlowDirection="RightToLeft" Text="שם יחידה:"/></TextBlock>
         </Grid>
-        <Grid Name ="MastersGrid" Visibility ="Collapsed" HorizontalAlignment="Stretch" MinHeight="672" Margin="0,0,-0.4,-87.6" VerticalAlignment="Top" MinWidth="1425" Grid.ColumnSpan="2" Height="858">
+        <Grid Name ="MastersGrid" Visibility ="Visible" HorizontalAlignment="Stretch" MinHeight="672" Margin="0,0,-0.4,-87.6" VerticalAlignment="Top" MinWidth="1425" Grid.ColumnSpan="2" Height="858">
             <TabControl HorizontalAlignment="Stretch" Height="800" Margin="0,0,0,0" VerticalAlignment="Top" Width="1400">
                 <TabControl.Background>
                     <ImageBrush ImageSource="Image3.png"/>
                 </TabControl.Background>
                 <TabItem Header="orders" Width="200">
-                    <Grid Name ="ordersMastersGrid" Visibility ="Visible" HorizontalAlignment="Left" Height="672" Margin="0,-2,-33,-1" VerticalAlignment="Top" Width="1425">
+                    <Grid Name ="ordersMastersGrid" Visibility ="Visible" HorizontalAlignment="Left" MinHeight="800" VerticalAlignment="Top" MinWidth="1000" Margin="285,0,-205.6,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="14*"/>
                             <ColumnDefinition Width="18*"/>
@@ -561,17 +561,9 @@
 
                         <TextBox  Name ="ComissionBox"  HorizontalAlignment="Left"   FontSize="18" Height="48" Background="#DDA0DD" Margin="1166.8,129,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110" Grid.Column="3"/>
                         <TextBlock Name ="ComissionBlock" HorizontalAlignment="Left"  FontSize="18" Height="48" Background="#DDA0DD" Margin="1166.8,35,0,0" TextWrapping="Wrap" Text="סך עמלות" VerticalAlignment="Top" Width="110" Grid.Column="3"/>
-                        <DataGrid Name ="Tables" HorizontalAlignment="Left" AutoGenerateColumns="False" Background="#D8BFD8" Height="627" Opacity="0.9" BorderBrush="#BA55D3" BorderThickness="15" Margin="23,35,0,0" VerticalAlignment="Top" Width="1125" RenderTransformOrigin="0.5,0.5" Grid.Column="2" Grid.ColumnSpan="2">
-                            <DataGrid.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform Angle="-0.6"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </DataGrid.RenderTransform>
+                        <DataGrid Name ="Tables" HorizontalAlignment="Left" AutoGenerateColumns="False" Background="#D8BFD8" Height="627" Opacity="0.9" BorderBrush="#BA55D3" BorderThickness="15" Margin="10.6,43,0,0" VerticalAlignment="Top" Width="1125" RenderTransformOrigin="0.5,0.5" Grid.Column="3">
                             <DataGrid.Columns >
-                                <DataGridTextColumn Header = "מספר הזמנה" Width ="100" Binding = "{Binding HostingUnitKey}" />
+                                <DataGridTextColumn Header = "מספר הזמנה" Width ="100" Binding = "{Binding OrderKey}" />
                                 <DataGridTextColumn Header="סטטוס" Width="100" Binding="{Binding Status}" />
                                 <DataGridTemplateColumn Width="825" Header="פרטי יחידה"/>
 

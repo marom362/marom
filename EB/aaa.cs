@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace BE
 {
-    public class HostingUnit
+    public class aaa
     {
+
         public int HostingUnitKey { get; set; }
         public Areas Area { get; set; }
         public bool Pool { get; set; }
@@ -20,19 +20,17 @@ namespace BE
         public Types Type { get; set; }
         public int numOfMaxGuests { get; set; }
         public Host Owner { get; set; }
-        [XmlIgnore]
-        public bool[,] Diary { get; private set; }
-        // instead of DiaryDto'
-        [XmlArray("Diary")]
-        public bool[] DiaryDto
+        public bool[,] Diary = new bool[12, 31];
+        /*public bool this[DateTime i]
         {
-            get { return Diary.Flatten(); }
-            set { Diary = value.Expand(5); }
-        }
+            get { return Diary[i.Month - 1, i.Day - 1]; }
+            set { Diary[i.Month - 1, i.Day - 1] = value; }
+        }*/
         public override string ToString()
         {
-            string s = "HostingUnitKey: " + HostingUnitKey.ToString() + '\n' + " Owner: " + Owner.ToString() + '\n' + " HostingUnitName: " + HostingUnitName + "HostingUnitType"+ Type +"\nArea: " + "SubArea: " + SubArea + Area.ToString() + "\nJacuzzi: " + Jacuzz + "\nPool: " + Pool + '\n';
+            string s = "HostingUnitKey: " + HostingUnitKey.ToString() + '\n' + " Owner: " + Owner.ToString() + '\n' + " HostingUnitName: " + HostingUnitName + "HostingUnitType" + Type + "\nArea: " + "SubArea: " + SubArea + Area.ToString() + "\nJacuzzi: " + Jacuzz + "\nPool: " + Pool + '\n';
             return s;
         }
     }
+    
 }

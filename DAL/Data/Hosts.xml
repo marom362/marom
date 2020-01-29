@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<ArrayOfHost xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Host>
+    <HostKey>333222555</HostKey>
+    <PrivateName>Ivan</PrivateName>
+    <FamilyName>Petrov</FamilyName>
+    <FhoneNumber>082550302</FhoneNumber>
+    <BankAccountNumber>0</BankAccountNumber>
+    <CollectionClearance>false</CollectionClearance>
+  </Host>
+  <Host>
+    <HostKey>323232323</HostKey>
+    <FamilyName>Sidorov</FamilyName>
+    <MailAddress>ddd@gmail.com</MailAddress>
+    <BankAccountNumber>0</BankAccountNumber>
+    <CollectionClearance>false</CollectionClearance>
+  </Host>
+  <Host>
+    <HostKey>325789410</HostKey>
+    <PrivateName>Ivan</PrivateName>
+    <FamilyName>Alexandrov</FamilyName>
+    <FhoneNumber>082540322</FhoneNumber>
+    <BankAccountNumber>0</BankAccountNumber>
+    <CollectionClearance>false</CollectionClearance>
+  </Host>
+  <Host>
+    <HostKey>2</HostKey>
+    <PrivateName>marom</PrivateName>
+    <FamilyName>sasa</FamilyName>
+    <FhoneNumber>111111111</FhoneNumber>
+    <MailAddress>1@1.1</MailAddress>
+    <BankAccountNumber>0</BankAccountNumber>
+    <CollectionClearance>false</CollectionClearance>
+    <password>11111</password>
+  </Host>
+</ArrayOfHost>
