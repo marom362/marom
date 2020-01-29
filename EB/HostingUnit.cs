@@ -21,7 +21,7 @@ namespace BE
         public int numOfMaxGuests { get; set; }
         public Host Owner { get; set; }
         [XmlIgnore]
-        public bool[,] Diary { get; private set; }
+        public bool[,] Diary = new bool[12, 31];
         // instead of DiaryDto'
         [XmlArray("Diary")]
         public bool[] DiaryDto

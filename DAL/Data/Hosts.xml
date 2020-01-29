@@ -33,4 +33,34 @@
     <CollectionClearance>false</CollectionClearance>
     <password>11111</password>
   </Host>
+  <Host>
+    <HostKey>9999</HostKey>
+    <PrivateName>9999</PrivateName>
+    <FamilyName>9999</FamilyName>
+    <FhoneNumber>999999999</FhoneNumber>
+    <MailAddress>9@9.9</MailAddress>
+    <BankAccountNumber>0</BankAccountNumber>
+    <CollectionClearance>false</CollectionClearance>
+    <password>9999</password>
+  </Host>
+  <Host>
+    <HostKey>44</HostKey>
+    <PrivateName>44</PrivateName>
+    <FamilyName>44</FamilyName>
+    <FhoneNumber>444444444</FhoneNumber>
+    <MailAddress>4@4.4</MailAddress>
+    <BankAccountNumber>0</BankAccountNumber>
+    <CollectionClearance>false</CollectionClearance>
+    <password>4444</password>
+  </Host>
+  <Host>
+    <HostKey>5</HostKey>
+    <PrivateName>5</PrivateName>
+    <FamilyName>5</FamilyName>
+    <FhoneNumber>55555</FhoneNumber>
+    <MailAddress>5@5.5</MailAddress>
+    <BankAccountNumber>0</BankAccountNumber>
+    <CollectionClearance>false</CollectionClearance>
+    <password>55555</password>
+  </Host>
 </ArrayOfHost>

@@ -11,35 +11,33 @@ namespace BE
     {
         public static T[] Flatten<T>(this T[,] arr)
         {
-            int rows = 13;
-            int columns = 12;
+            int rows = 12;
+            int columns = 31;
             T[] arrFlattened = new T[rows * columns];
-            for (int j = 0; j < rows; j++)
+            for (int i = 0; i < rows; i++)
             {
-                for (int i = 0; i < columns; i++)
+                for (int j = 0; j < columns; j++)
                 {
-                    var test = arr[j, i];
-                    arrFlattened[j * rows + i] = arr[j, i];
+                    var test = arr[i, j];
+                    arrFlattened[i * rows + j] = arr[i, j];
                 }
             }
             return arrFlattened;
         }
-
         public static T[,] Expand<T>(this T[] arr, int rows)
         {
             int length = arr.GetLength(0);
             int columns = length / rows;
             T[,] arrExpanded = new T[rows, columns];
-            for (int j = 0; j < rows; j++)
+            for (int i = 0; i < rows; i++)
             {
-                for (int i = 0; i < columns; i++)
+                for (int j = 0; j < columns; j++)
                 {
-                    arrExpanded[j, i] = arr[j * rows + i];
+                    arrExpanded[i, j] = arr[i * rows + j];
                 }
             }
             return arrExpanded;
         }
 
     }
-
 }

@@ -227,9 +227,11 @@ namespace DAL
 
                 try
                 {
+                    var myFile = File.Open(path, FileMode.Open);
+                    myFile.Close();
                     FileStream file = new FileStream(path, FileMode.Open);
-                    XmlSerializer xmlSer = new XmlSerializer(typeof(T));
-                    T result = (T)xmlSer.Deserialize(file);
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+                    T result = (T)xmlSerializer.Deserialize(file);
                     file.Close();
                     return result;
                 }
@@ -255,7 +257,6 @@ namespace DAL
                 //LoadFromXML<T>(path);
             }
             throw new InvalidOperationException();
-
 
         }
 
@@ -333,8 +334,9 @@ namespace DAL
                 {
                     //hu = Copy(hu);
                     List<HostingUnit> units = GetAllHostingUnits();
+                    hu.HostingUnitKey = ++Configuration.HostingUnitKey;
                     units.Add(hu);
-                    SaveToXML<List<HostingUnit>>(ListOfUnits, HostingUnitsPath);
+                    SaveToXML<List<HostingUnit>>(units, HostingUnitsPath);
                     if (HostingUnits == null)
                     {
                         HostingUnits = new XElement("HostingUnits");
@@ -425,24 +427,24 @@ namespace DAL
         }
         public List<HostingUnit> GetAllHostingUnits()
         {
-           // return ListOfUnits;//I've no idea whether it works
-            LoadData();
-            List<HostingUnit> ArrayOfHostingUnits;
-            try
-            {
-                ArrayOfHostingUnits = (from p in HostingUnits.Elements()
-                                       select new HostingUnit()
-                                       {
-                                           HostingUnitKey = Convert.ToInt32(p.Element("HostingUnitKey").Value),
-                                           HostingUnitName =p.Element("HostingUnitName").Value,
-                                           //Type = p.Element("Type", Typ).Value,
-                            }).ToList();
-            }
-            catch
-            {
-                ArrayOfHostingUnits = null;
-            }
-            return ArrayOfHostingUnits;
+           return ListOfUnits;//I've no idea whether it works
+            //LoadData();
+            //List<HostingUnit> ArrayOfHostingUnits;
+            //try
+            //{
+            //    ArrayOfHostingUnits = (from p in HostingUnits.Elements()
+            //                           select new HostingUnit()
+            //                           {
+            //                               HostingUnitKey = Convert.ToInt32(p.Element("HostingUnitKey").Value),
+            //                               HostingUnitName =p.Element("HostingUnitName").Value,
+            //                               //Type = p.Element("Type", Typ).Value,
+            //                }).ToList();
+            //}
+            //catch
+            //{
+            //    ArrayOfHostingUnits = null;
+            //}
+            //return ArrayOfHostingUnits;
         }
         private void LoadData()
         {

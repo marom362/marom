@@ -48,4 +48,28 @@
     <CreateDate>2020-01-29T00:00:00+02:00</CreateDate>
     <OrderDate>0001-01-01T00:00:00</OrderDate>
   </Order>
+  <Order>
+    <HostingUnitKey>10000052</HostingUnitKey>
+    <GuestRequestKey>0</GuestRequestKey>
+    <OrderKey>10000009</OrderKey>
+    <Status>NotDealed</Status>
+    <CreateDate>0001-01-01T00:00:00</CreateDate>
+    <OrderDate>0001-01-01T00:00:00</OrderDate>
+  </Order>
+  <Order>
+    <HostingUnitKey>10000052</HostingUnitKey>
+    <GuestRequestKey>10000010</GuestRequestKey>
+    <OrderKey>10000010</OrderKey>
+    <Status>NotDealed</Status>
+    <CreateDate>0001-01-01T00:00:00</CreateDate>
+    <OrderDate>0001-01-01T00:00:00</OrderDate>
+  </Order>
+  <Order>
+    <HostingUnitKey>10000053</HostingUnitKey>
+    <GuestRequestKey>10000010</GuestRequestKey>
+    <OrderKey>10000011</OrderKey>
+    <Status>NotDealed</Status>
+    <CreateDate>0001-01-01T00:00:00</CreateDate>
+    <OrderDate>0001-01-01T00:00:00</OrderDate>
+  </Order>
 </ArrayOfOrder>
