@@ -47,7 +47,7 @@ namespace BL
                         isExist = true;
                 if (isExist)
                     throw new InvalidOperationException();
-                else FactorySingletonDal.GetInstance.AddGuestRequest(request);
+                else MyDAL.AddGuestRequest(request);
                 AddOrdersForNewRequest(request);
             }
             catch (InvalidOperationException x)
@@ -105,7 +105,7 @@ namespace BL
         {
             try
             {
-                FactorySingletonDal.GetInstance.AddHostingUnit(unit);
+                MyDAL.AddHostingUnit(unit);
                 AddOrdersForNewUnit(unit);
             }
             catch (InvalidOperationException x)
@@ -252,7 +252,7 @@ namespace BL
 
                 mail.To.Add(GuestMail);
                 mail.From = new MailAddress(SiteMail);
-                mail.Subject = "הצעת ארוח ממערכת גן עדן";
+                mail.Subject = "הצעת אירוח מאתר נופש";
                 HostingUnit unit = GetUnit(order.HostingUnitKey);
                 mail.Body = GetMailBody(request, unit);
                 mail.IsBodyHtml = true;
@@ -271,7 +271,7 @@ namespace BL
                     try
                     {
                         ChangeStatusOfOrder(order, StatusO.MailSent);
-                        FactorySingletonDal.GetInstance.UpdatingOrder(order);// as if this function of DAL receives the new Status and the num of order;
+                        //FactorySingletonDal.GetInstance.UpdatingOrder(order);// as if this function of DAL receives the new Status and the num of order;
                         return "המייל נשלח בהצלחה";
                     }
 
@@ -299,10 +299,11 @@ namespace BL
                         <body>
                             שלום {0} ,<br/>
                             נמצאה התאמה מיחידה  {1}
+ תוכל ליצור קשר עם בעל היחידה
                         </body>
                     </html>
             ", request.guest.PrivateName + " " + request.guest.FamilyName,
-            unit.HostingUnitName);
+            unit.ToString());
         }
         /// <summary>
         /// The function that marks in the calendar that the dates are no more available
@@ -379,8 +380,17 @@ namespace BL
         public void UpdateRequest(GuestRequest request)
         {
             FactorySingletonDal.GetInstance.UpdatingGuestRequest(request);
-           // foreach(var order in MyDAL.GetAllOrders())
-               // if(request.GuestRequestKey==order.GuestRequestKey)
+            foreach (var order in MyDAL.GetAllOrders())
+            {
+                if (request.GuestRequestKey == order.GuestRequestKey)
+                    if (!IsFitting(GetUnit(order.HostingUnitKey), GetRequest(order.GuestRequestKey))) ;
+                    else MyDAL.DelOrder(order);
+
+            }
+            MyDAL.UpdatingGuestRequest(request);
+            AddOrdersForNewRequest(request);
+            
+
                     
         }
         public void UpdateOrder(Order order)
@@ -628,7 +638,7 @@ namespace BL
                 Order order = new Order();
                 order.HostingUnitKey = unit.HostingUnitKey;
                 order.GuestRequestKey = request.GuestRequestKey;
-                order.OrderKey = ++Configuration.OrderKey;
+                //order.OrderKey = ++Configuration.OrderKey;
                 FactorySingletonDal.GetInstance.AddOrder(order);
             }
             catch (InvalidOperationException x)
@@ -770,7 +780,18 @@ namespace BL
         {
             try
             {
-                FactorySingletonDal.GetInstance.UpdatingHostUnit(unit);
+                
+                foreach (var order in MyDAL.GetAllOrders())
+                {
+                    if (order.HostingUnitKey == unit.HostingUnitKey && (order.Status == StatusO.MailSent || order.Status == StatusO.ClosedByClientsResponse))
+                        if (!IsFitting(GetUnit(order.HostingUnitKey), GetRequest(order.GuestRequestKey)))
+                            throw new Exception("אין אפשרות לשנות פרטים בגלל הזמנות פתוחות של היחידה");
+                        else MyDAL.DelOrder(order);
+                    
+                }
+                MyDAL.UpdatingHostUnit(unit);
+                AddOrdersForNewUnit(unit);
+
             }
             catch(Exception x)
             {
@@ -942,7 +963,7 @@ namespace BL
             
             try
             {
-                return FactorySingletonDal.GetInstance.GetAllOrders().Where(x =>
+                return MyDAL.GetAllOrders().Where(x =>
                 GetUnit(x.HostingUnitKey).Owner.HostKey ==key).ToList();
             }
             catch (Exception)
@@ -957,8 +978,12 @@ namespace BL
                 return false;
             try
             {
-                FactorySingletonDal.GetInstance.DelHostingUnit(unit);
-                
+                MyDAL.DelHostingUnit(unit);
+                foreach(var order in MyDAL.GetAllOrders())
+                {
+                    if (order.HostingUnitKey == unit.HostingUnitKey)
+                        DelOrder(order);
+                }
             }
             catch (Exception )
             {
@@ -972,7 +997,7 @@ namespace BL
         {
             try
             {
-                return FactorySingletonDal.GetInstance.GetHostingUnit(key);
+                return MyDAL.GetHostingUnit(key);
 
             }
             catch (Exception)
@@ -981,31 +1006,31 @@ namespace BL
             }
 
         }
-        //public void DelOrder(Order order)
-        //{
-        //    try
-        //    {
-        //        FactorySingletonDal.GetInstance.DelOrder(order);
-        //    }
-        //    catch
-        //    {
+        public void DelOrder(Order order)
+        {
+            try
+            {
+                MyDAL.DelOrder(order);
+            }
+            catch
+            {
 
-        //    }
-        //}
-        //public void DelRequest(GuestRequest request)
-        //{
-        //    try
-        //    {
-        //        FactorySingletonDal.GetInstance.DelRequest(request);
-        //        foreach (var order in MyDAL.GetAllOrders())
-        //            if (request.GuestRequestKey == request.GuestRequestKey)
-        //                ChangeStatusOfOrder(order, StatusO.ClosedBecauseofClient);
-        //    }
-        //    catch (Exception)
-        //    {
+            }
+        }
+        public void DelRequest(GuestRequest request)
+        {
+            try
+            {
+                FactorySingletonDal.GetInstance.DelRequest(request);
+                foreach (var order in MyDAL.GetAllOrders())
+                    if (request.GuestRequestKey == request.GuestRequestKey)
+                        ChangeStatusOfOrder(order, StatusO.ClosedBecauseofClient);
+            }
+            catch (Exception)
+            {
 
-        //    }
-        //}
+            }
+        }
         public Guest GetGuest(string mail)
         {
             List<GuestRequest> requests = FactorySingletonDal.GetInstance.GetAllGuestRequests();

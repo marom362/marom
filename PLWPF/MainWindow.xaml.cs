@@ -683,13 +683,16 @@ namespace PLWPF
             {
 
                 int num=MyBl.OrderClosed((Order)((Button)sender).DataContext);
+                if (num < 0)
+                    throw new Exception("אין אפשרות לשנות סטטוס של יחידה מפני שעדיים לא נשלח מייל ללקוח");
                 orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
                 MessageBox.Show(" עמלה בסך " + num + " שח הועברה מחשבונך בעקבות סגרת העיסקה " , "", MessageBoxButton.OK, MessageBoxImage.Information);
 
 
             }
-            catch (Exception)
+            catch (Exception a)
             {
+                MessageBox.Show(a.Message, "", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
         }
@@ -784,14 +787,14 @@ namespace PLWPF
                     {
                         MessageBox.Show("אין אפשרות למחוק יחידה זו", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                    //else
-                    //{
-                    //    foreach (Order order in orders)
-                    //        if (order.HostingUnitKey == unit.HostingUnitKey)
-                    //            FactorySingletonBL.GetInstance.DelOrder(order);
-                    //    Updateorders();
-                        
-                    //}
+                    else
+                    {
+                       // foreach (Order order in orders)
+                          //  if (order.HostingUnitKey == unit.HostingUnitKey)
+                          //      FactorySingletonBL.GetInstance.DelOrder(order);
+                        Updateorders();
+
+                    }
                 }
                 
             }
@@ -802,20 +805,26 @@ namespace PLWPF
             }
 
         }
-        ////private void DelRequest_Click(object sender, RoutedEventArgs e)
-        //{
-        //    GuestRequest request = (GuestRequest)((Button)sender).DataContext;
-        //    try
-        //    {
-        //        FactorySingletonBL.GetInstance.DelRequest(request);
-        //        UserGuestRequest.ItemsSource = FactorySingletonBL.GetInstance.GetRequestsOfGuest(currentGuest.MailAddress);
-        //    }
-        //    catch(Exception)
-        //    {
+        private void DelRequest_Click(object sender, RoutedEventArgs e)
+        {
+            GuestRequest request = (GuestRequest)((Button)sender).DataContext;
+            try
+            {
+                MyBl.DelRequest(request);
+                UserGuestRequest.ItemsSource = MyBl.GetRequestsOfGuest(currentGuest.MailAddress);
+                foreach(var order in MyBl.GetListOfOrders())
+                {
+                    if (order.GuestRequestKey == request.GuestRequestKey)
+                        MyBl.ChangeStatusOfOrder(order, StatusO.ClosedBecauseofClient);
+                }
+                
+            }
+            catch(Exception)
+            {
 
-        //    }
+            }
             
-        //}
+        }
         
 
         private void BackToUserHost_Click(object sender, RoutedEventArgs e)
@@ -908,32 +917,10 @@ namespace PLWPF
             AddUnit.Visibility = Visibility.Collapsed;
             updatUnit.Visibility = Visibility.Visible;
 
-            /*try
-            {
-                if (MyBl.Unit((HostingUnit)((Button)sender).DataContext))
-                {
-                    units.ItemsSource = MyBl.AllUnitsOfOneHost(currentHost.HostKey);
-                    orders.ItemsSource = MyBl.GetAllOrdersOfHost(currentHost.HostKey);
-                }
-
-                else
-                {
-                    canNotBeDeletedGrid.Visibility = Visibility.Visible;
-                    CanNotBeDeleted.Text = "אין אפשרות למחוק יחידה זו";
-                }
-            }
-            catch (Exception)
-            {
-                canNotBeDeletedGrid.Visibility = Visibility.Visible;
-                CanNotBeDeleted.Text = "you can't delete this unit";
-            }*/
 
         }
 
-        private void OKNoDelet_Click(object sender, RoutedEventArgs e)
-        {
-            canNotBeDeletedGrid.Visibility = Visibility.Collapsed;
-        }
+        
 
         private void updatUnit_Click_1(object sender, RoutedEventArgs e)
         {
@@ -1138,8 +1125,8 @@ namespace PLWPF
             
             //insertArea.SelectedIndex = int.Parse((Areas)currentRequest.Area);
             //insertype.SelectedItem = currentRequest.Type;
-            insertNumOFAdults.Text = currentRequest.Adults.ToString();
-            insertNumOfChildren.Text = currentRequest.Children.ToString(); ;
+            //insertNumOFAdults.Text = currentRequest.Adults.ToString();
+           // insertNumOfChildren.Text = currentRequest.Children.ToString(); ;
             //insertRequestDates.SelectedDates.First(currentRequest.EntryDate) = currentRequest.EntryDate; ;
         }
 

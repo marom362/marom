@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="aaa.cs" />
     <Compile Include="BankBranch.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="enums.cs" />

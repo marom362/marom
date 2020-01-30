@@ -107,8 +107,8 @@ namespace BL
         void checksExpiredOrders();
         void checksExpiredRequests();
         void UpdateRequest(GuestRequest request);
-        //void DelOrder(Order order);
-        //void DelRequest(GuestRequest request);
+        void DelOrder(Order order);
+        void DelRequest(GuestRequest request);
         Guest GetGuest(string mail);
         List<GuestRequest> GetRequestsOfGuest(string mail);
         HostingUnit GetUnit(int key);

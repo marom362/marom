@@ -326,14 +326,14 @@
                 </DataGrid.BorderBrush>
                 <DataGrid.Columns >
                     <DataGridTextColumn Header = "מספר דרישה" Width ="180" Binding = "{Binding GuestRequestKey}" />
-                    <DataGridTextColumn Header="סטטוס" Width="100" Binding="{Binding Status}" />
-                    <!--<DataGridTemplateColumn x:Name="DelRequest" Header="מחק דרישה" >
+                    <DataGridTextColumn Header="סטטוס" MinWidth="100" Binding="{Binding Status}" />
+                    <DataGridTemplateColumn x:Name="DelRequest" Header="מחק דרישה" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button  Content="מחק" BorderThickness="0" IsEnabled="True" Click="DelRequest_Click" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>-->
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn x:Name="toUpdateRequest" Header="עדכן דרישה" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -447,14 +447,7 @@
                             <SolidColorBrush Color="#FFDDDDDD" Opacity="0"/>
                         </Button.Background>
                     </Button>
-                    <Grid Name="canNotBeDeletedGrid" Visibility="Collapsed" HorizontalAlignment="Center" Height="317" Margin="166,278,765,0" VerticalAlignment="Top" Width="457" Grid.ColumnSpan="2" >
-                        <Grid.Background>
-                            <ImageBrush ImageSource="Image1.png"/>
-                        </Grid.Background>
-                        <TextBlock Name="CanNotBeDeleted" HorizontalAlignment="Center" Margin="61,48,43,0" FontSize="24" FontWeight="Medium" Foreground="#800000" TextWrapping="Wrap" Text="אי אפשר למחוק את היחידה כי קיימות הזמנות פתוחות עליה" VerticalAlignment="Top" Height="200" Width="353"/>
-                        <Button Name="OKNoDelet" Content="אישור" Background ="#FF4500" FontWeight="DemiBold" Foreground="#FFFFE0" HorizontalAlignment="Center" Margin="344,267,10,0" VerticalAlignment="Top" MinWidth="75" Click="OKNoDelet_Click" Height="40" RenderTransformOrigin="0.24,0.364" Width="103"/>
-                        <Button Content="X" Background ="Red" HorizontalAlignment="Left" Height="47" Margin="398,1,0,0" VerticalAlignment="Top" Width="59" Click="OKNoDelet_Click"/>
-                    </Grid>
+                    
                 </Grid>
             </TabItem>
             <TabItem Header="הזמנות" Width="200" Height="50" FontSize="20" BorderBrush="#FF161256" FontWeight="Bold" Foreground="#FF161256">
@@ -470,7 +463,7 @@
                     <Grid.Background>
                         <ImageBrush ImageSource="SeaPicyure.jpg"/>
                     </Grid.Background>
-                    <DataGrid Name="orders" AutoGenerateColumns="False" CanUserAddRows="True" HorizontalAlignment="Center" Height="474" ItemsSource="{Binding MyHostingUnits}" Margin="130,111,148,0" VerticalAlignment="Top" Width="1110" SelectionChanged="Orders_SelectionChanged" Grid.ColumnSpan="2">
+                    <DataGrid Name="orders" AutoGenerateColumns="False" CanUserAddRows="False" HorizontalAlignment="Center" Height="474" ItemsSource="{Binding MyHostingUnits}" Margin="130,111,148,0" VerticalAlignment="Top" Width="1110" SelectionChanged="Orders_SelectionChanged" Grid.ColumnSpan="2">
                         <DataGrid.Background>
                             <SolidColorBrush Color="White" Opacity="0.7"/>
                         </DataGrid.Background>
@@ -492,10 +485,10 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="פרטי הזמנה">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="פרטי יחידה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="OrderDetails_Click" />
+                                        <Button Content="פרטי הזמנה" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="OrderDetails_Click" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -545,7 +538,7 @@
             <TextBlock HorizontalAlignment="Center" Margin="1091,385,136.6,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="40" Width="166" FontSize="20" FontWeight="Bold" Foreground="#FF215958"><Run FlowDirection="RightToLeft" Text="מקסימום אורחים"/></TextBlock>
             <TextBlock HorizontalAlignment="Center" Margin="1093,450,176.6,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" Width="124" FontWeight="Bold" FontSize="20" Foreground="#FF215958"><Run FlowDirection="RightToLeft" Text="שם יחידה:"/></TextBlock>
         </Grid>
-        <Grid Name ="MastersGrid" Visibility ="Visible" HorizontalAlignment="Stretch" MinHeight="672" Margin="0,0,-0.4,-87.6" VerticalAlignment="Top" MinWidth="1425" Grid.ColumnSpan="2" Height="858">
+        <Grid Name ="MastersGrid" Visibility ="Collapsed" HorizontalAlignment="Stretch" MinHeight="672" Margin="0,0,-0.4,-87.6" VerticalAlignment="Top" MinWidth="1425" Grid.ColumnSpan="2" Height="858">
             <TabControl HorizontalAlignment="Stretch" Height="800" Margin="0,0,0,0" VerticalAlignment="Top" Width="1400">
                 <TabControl.Background>
                     <ImageBrush ImageSource="Image3.png"/>
@@ -561,7 +554,7 @@
 
                         <TextBox  Name ="ComissionBox"  HorizontalAlignment="Left"   FontSize="18" Height="48" Background="#DDA0DD" Margin="1166.8,129,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="110" Grid.Column="3"/>
                         <TextBlock Name ="ComissionBlock" HorizontalAlignment="Left"  FontSize="18" Height="48" Background="#DDA0DD" Margin="1166.8,35,0,0" TextWrapping="Wrap" Text="סך עמלות" VerticalAlignment="Top" Width="110" Grid.Column="3"/>
-                        <DataGrid Name ="Tables" HorizontalAlignment="Left" AutoGenerateColumns="False" Background="#D8BFD8" Height="627" Opacity="0.9" BorderBrush="#BA55D3" BorderThickness="15" Margin="10.6,43,0,0" VerticalAlignment="Top" Width="1125" RenderTransformOrigin="0.5,0.5" Grid.Column="3">
+                        <DataGrid Name ="Tables" HorizontalAlignment="Left" AutoGenerateColumns="False" Background="#D8BFD8" Height="627" Opacity="0.9" BorderBrush="#BA55D3" BorderThickness="15" Margin="-84,35,0,0" VerticalAlignment="Top" Width="1125" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="4">
                             <DataGrid.Columns >
                                 <DataGridTextColumn Header = "מספר הזמנה" Width ="100" Binding = "{Binding OrderKey}" />
                                 <DataGridTextColumn Header="סטטוס" Width="100" Binding="{Binding Status}" />

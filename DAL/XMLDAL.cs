@@ -18,25 +18,22 @@ namespace DAL
 
         //DataBase
 
-        static readonly string ProjectPath = @"C:\Users\marom\Documents\מתמטיקה-סמסטר אלול\Project_3289_4525_doteNet5780\DAL";//path of xml files
+        static readonly string ProjectPath = Directory.GetParent(Directory.GetParent(Environment.CurrentDirectory.ToString()).FullName).FullName;//path of xml files
         XElement configRoot;
-        private readonly string configPath = ProjectPath + "/Data/config.xml";
+        private readonly string configPath = ProjectPath + "/../DAl/Data/config.xml";
         XElement Orders;
-        private readonly string OrdersPath = ProjectPath + "/Data/Orders.xml";
+        private readonly string OrdersPath = ProjectPath + "/../DAl/Data/Orders.xml";
         XElement GuestRequests;
-        private readonly string GuestRequestsPath = ProjectPath + "/Data/GuestRequests.xml";
+        private readonly string GuestRequestsPath = ProjectPath + "/../DAl/Data/GuestRequests.xml";
         XElement Hosts;
-        private readonly string HostsPath = ProjectPath + "/Data/Hosts.xml";
+        private readonly string HostsPath = ProjectPath + "/../DAl/Data/Hosts.xml";
         XElement HostingUnits;
-        private readonly string HostingUnitsPath = ProjectPath + "/Data/HostingUnits.xml";
+        private readonly string HostingUnitsPath = ProjectPath + "/../DAl/Data/HostingUnits.xml";
         XElement BankBranches;
-        private readonly string BankBranchesPath = ProjectPath + "/Data/BankBranches.xml";
+        private readonly string BankBranchesPath = ProjectPath + "/../DAl/Data/BankBranches.xml";
         XElement Guests;
-        XElement aaas;
-        private readonly string aaasPath = ProjectPath + "/Data/aaa.xml";
-        private readonly string GuestsPath = ProjectPath + "/Data/Guests.xml";
+        private readonly string GuestsPath = ProjectPath + "/../DAl/Data/Guests.xml";
         private static List<Order> ListOfOrders = new List<Order>();
-        private static List<aaa> ListOfaaas = new List<aaa>();
         private static List<GuestRequest> ListOfRequests = new List<GuestRequest>();
         private List<Host> ListOfHosts = new List<Host>();
         private static List<HostingUnit> ListOfUnits = new List<HostingUnit>();
@@ -108,11 +105,7 @@ namespace DAL
                 HostingUnits = new XElement("HostingUnits");
                 HostingUnits.Save(HostingUnitsPath);
             }
-            if (!File.Exists(aaasPath))
-            {
-                aaas = new XElement("aaas");
-                aaas.Save(aaasPath);
-            }
+            
             if (!File.Exists(GuestsPath))
             {
                 Guests = new XElement("Guests");
@@ -168,18 +161,11 @@ namespace DAL
             }
             try
             {
-                ListOfaaas = LoadFromXML<List<aaa>>(aaasPath);
-            }
-            catch (InvalidOperationException)
-            {
-                ListOfaaas = new List<aaa>();
-            }
-            try
-            {
                 ListOfUnits = LoadFromXML<List<HostingUnit>>(HostingUnitsPath);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException )
             {
+                
                 ListOfUnits = new List<HostingUnit>();
             }
 
@@ -332,12 +318,10 @@ namespace DAL
             {
                 if (GetHostingUnit(hu.HostingUnitKey) == null)
                 {
-                    //hu = Copy(hu);
-                    List<HostingUnit> units = GetAllHostingUnits();
-                    hu.HostingUnitKey = ++Configuration.HostingUnitKey;
-                    units.Add(hu);
-                    SaveToXML<List<HostingUnit>>(units, HostingUnitsPath);
-                    if (HostingUnits == null)
+                    hu = Copy(hu);
+                    ListOfUnits.Add(hu);
+                    SaveToXML<List<HostingUnit>>(ListOfUnits, HostingUnitsPath);
+                    /*if (HostingUnits == null)
                     {
                         HostingUnits = new XElement("HostingUnits");
                         HostingUnits.Save(HostingUnitsPath);
@@ -351,10 +335,8 @@ namespace DAL
                         hostU.Serialize(file, hu);
                         //hostU.Serialize(, hu);
                         //ListOfUnits.Add(hu);
-                    }
-                    HostingUnits.Add(hu);
-
-                    SaveToXML<List<HostingUnit>>(ListOfUnits, HostingUnitsPath);
+                    }*/
+                    
                     //foreach (HostingUnit un in units)
                     //{
                     //    System.Xml.Serialization.XmlSerializer hostU = new System.Xml.Serialization.XmlSerializer(typeof(HostingUnit));
@@ -367,7 +349,9 @@ namespace DAL
                 else throw new InvalidOperationException("Unit already exists");
             }
             catch (IOException)
-            { }
+            {
+                
+            }
         }
         public void AddOrder(Order order)
         {
@@ -477,6 +461,7 @@ namespace DAL
             temp.EntryDate = request.EntryDate;
             temp.guest = request.guest;
             temp.GuestRequestKey = CurrentRequestNum;
+            request.GuestRequestKey = CurrentRequestNum;
             CurrentRequestNum++; ;
             temp.Jacuzz = request.Jacuzz;
             temp.NumGuests = request.NumGuests;
@@ -502,6 +487,7 @@ namespace DAL
             temp.ChildrenAtraction = unit.ChildrenAtraction;
             temp.Area = unit.Area;
             temp.HostingUnitKey = CurrentUnitNum;
+            unit.HostingUnitKey = CurrentUnitNum;
             CurrentUnitNum++;
             temp.HostingUnitName = unit.HostingUnitName;
             temp.Jacuzz = unit.Jacuzz;
@@ -551,7 +537,7 @@ namespace DAL
         //update
         public void UpdatingHostUnit(HostingUnit hu)
         {
-            HostingUnit CurrentUnit = GetHostingUnit(hu.HostingUnitKey);
+            var CurrentUnit =ListOfUnits.Where(x=> x.HostingUnitKey==hu.HostingUnitKey).FirstOrDefault();
             if (CurrentUnit == null)
                 throw new InvalidOperationException("The unit doesn't exist");
 
@@ -562,7 +548,7 @@ namespace DAL
         }
         public void UpdatingGuestRequest(GuestRequest gr)
         {
-            GuestRequest current = GetGuestRequest(gr.GuestRequestKey);
+            var current = ListOfRequests.Where(g=> g.GuestRequestKey==gr.GuestRequestKey).FirstOrDefault();
             if (current == null)
                 throw new KeyNotFoundException("The request doesn't exist");
             else
@@ -575,7 +561,7 @@ namespace DAL
         }
         public void UpdatingOrder(Order order)
         {
-            Order current = GetOrder(order.OrderKey);
+            var current = ListOfOrders.Where(or=> or.OrderKey==order.OrderKey).FirstOrDefault();
             if (current == null)
                 throw new KeyNotFoundException("The Order doesn't exist");
             ListOfOrders.Remove(current);
@@ -601,14 +587,33 @@ namespace DAL
         // deleting
         public void DelHostingUnit(HostingUnit unit)
         {
-            if (!ListOfUnits.Exists(u => u.HostingUnitKey == unit.HostingUnitKey))
+            var hunit = ListOfUnits.Where(u => u.HostingUnitKey == unit.HostingUnitKey).FirstOrDefault();
+            if(hunit==null)
                 throw new InvalidOperationException("The unit does not exist");
-            ListOfUnits.Remove(unit);
+            ListOfUnits.Remove(hunit);
             SaveToXML<List<HostingUnit>>(ListOfUnits, HostingUnitsPath);
         }
+        public void DelOrder(Order or)
+        {
+            var order = ListOfOrders.Where(o => o.OrderKey == or.OrderKey).FirstOrDefault();
+            if (order == null)
+                throw new InvalidOperationException("The unit does not exist");
+            ListOfOrders.Remove(order);
+            SaveToXML<List<Order>>(ListOfOrders, OrdersPath);
+        }
+        public void DelRequest(GuestRequest request)
+        {
+            var grequest = ListOfRequests.Where(r => r.GuestRequestKey == request.GuestRequestKey).FirstOrDefault();
+            if (grequest == null)
+                throw new InvalidOperationException("The unit does not exist");
+            ListOfRequests.Remove(grequest);
+            SaveToXML<List<GuestRequest>>(ListOfRequests, GuestRequestsPath);
+        }
+
         public void DelHost(Host host)
         {
-            if (ListOfHosts.Exists(h => h.HostKey == host.HostKey))
+            var ho = ListOfHosts.Where(h => h.HostKey == host.HostKey).FirstOrDefault();
+            if (ho!=null)
             {
                 //bool d = true;
                 // bool deleted = ListOfHosts.Remove(new Host {HostKey = host.HostKey});;

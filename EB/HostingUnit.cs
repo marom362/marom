@@ -27,11 +27,11 @@ namespace BE
         public bool[] DiaryDto
         {
             get { return Diary.Flatten(); }
-            set { Diary = value.Expand(5); }
+            set { Diary = value.Expand(31); }
         }
         public override string ToString()
         {
-            string s = "HostingUnitKey: " + HostingUnitKey.ToString() + '\n' + " Owner: " + Owner.ToString() + '\n' + " HostingUnitName: " + HostingUnitName + "HostingUnitType"+ Type +"\nArea: " + "SubArea: " + SubArea + Area.ToString() + "\nJacuzzi: " + Jacuzz + "\nPool: " + Pool + '\n';
+            string s = "HostingUnitKey: " + HostingUnitKey.ToString() + '\n' + " Owner: " + Owner.ToString() + '\n' + " HostingUnitName: " + HostingUnitName + "HostingUnitType" + Type + "\nArea: " + "SubArea: " + SubArea + Area.ToString() + "\nJacuzzi: " + Jacuzz + "\nPool: " + Pool + '\n' + "\nGarden: " + Garden + "\nChildrenAtraction: " + ChildrenAtraction + '\n';
             return s;
         }
     }

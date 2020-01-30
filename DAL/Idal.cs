@@ -30,7 +30,7 @@ namespace DAL
         void UpdatingHost(Host host);
         Host GetHost(int key);
         List<Host> GetAllHosts();
-        //void DelOrder(Order order);
-        //void DelRequest(GuestRequest request);
+        void DelOrder(Order order);
+        void DelRequest(GuestRequest request);
     }
 }
